@@ -97,7 +97,7 @@ void parse_args(config * conf, int argc, char ** argv) {
         }
     }
     if ((optind + 1) > argc) {
-        fprintf(stderr, "ERROR: Please provide the number of elements of the "
+        fprintf(stderr, "ERROR: Please provide the number of elements "
                 "as an argument\n");
         help();
         exit(1);

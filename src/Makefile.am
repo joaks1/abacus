@@ -1,6 +1,7 @@
 bin_PROGRAMS = \
 	eureject \
-	dpdraw
+	dpdraw \
+	intpart
 
 eureject_SOURCES = \
 	eureject.c \
@@ -15,8 +16,6 @@ eureject_SOURCES = \
 	parsing.c \
 	parsing.h
 
-eureject_LDADD = @MATHLDADD@
-
 dpdraw_SOURCES = \
 	dpdraw.c \
 	dpdraw.h \
@@ -26,4 +25,12 @@ dpdraw_SOURCES = \
 	partition_combinatorics.c \
 	partition_combinatorics.h
 
-dpdraw_LDADD = @MATHLDADD@
+intpart_SOURCES = \
+	intpart.c \
+	intpart.h \
+	intpart_main.c \
+	array_utils.c \
+	array_utils.h \
+	partition_combinatorics.c \
+	partition_combinatorics.h
+
