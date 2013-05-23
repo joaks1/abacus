@@ -7,14 +7,16 @@ TESTS = \
 	check_stats_utils \
 	check_math_utils \
 	check_parsing \
-	check_partition_combinatorics
+	check_partition_combinatorics \
+	check_eureject
 
 check_PROGRAMS = \
 	check_array_utils \
 	check_stats_utils \
 	check_math_utils \
 	check_parsing \
-	check_partition_combinatorics
+	check_partition_combinatorics \
+	check_eureject
 
 check_array_utils_SOURCES = \
 	check_array_utils.c \
@@ -60,4 +62,16 @@ check_partition_combinatorics_SOURCES = \
 
 check_partition_combinatorics_CFLAGS = @CHECK_CFLAGS@
 check_partition_combinatorics_LDADD =  @CHECK_LIBS@ @MATHLDADD@
+
+check_eureject_SOURCES = \
+	check_eureject.c \
+	$(top_builddir)/src/array_utils.c \
+	$(top_builddir)/src/stats_utils.c \
+	$(top_builddir)/src/math_utils.c \
+	$(top_builddir)/src/parsing.c \
+	test_utils.c \
+	test_utils.h
+
+check_eureject_CFLAGS = @CHECK_CFLAGS@
+check_eureject_LDADD =  @CHECK_LIBS@ @MATHLDADD@
 
