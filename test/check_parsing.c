@@ -95,7 +95,7 @@ START_TEST (test_parse_observed_stats_file_extra_line) {
 }
 END_TEST
 
-Suite * array_utils_suite(void) {
+Suite * parsing_suite(void) {
     Suite * s = suite_create("parsing");
 
     TCase * tc_parse_header = tcase_create("parse_header_test_case");
@@ -115,7 +115,7 @@ Suite * array_utils_suite(void) {
 
 int main(void) {
     int number_failed;
-    Suite * s = array_utils_suite();
+    Suite * s = parsing_suite();
     SRunner * sr = srunner_create(s);
     srunner_run_all(sr, CK_VERBOSE);
     number_failed = srunner_ntests_failed(sr);

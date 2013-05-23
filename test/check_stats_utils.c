@@ -383,7 +383,7 @@ START_TEST (test_standardize_vector) {
 END_TEST;
 
 
-Suite * array_utils_suite(void) {
+Suite * stats_utils_suite(void) {
     Suite * s = suite_create("stats_utils");
 
     TCase * tc_sample_sum = tcase_create("sample_sum_test_case");
@@ -424,7 +424,7 @@ Suite * array_utils_suite(void) {
 
 int main(void) {
     int number_failed;
-    Suite * s = array_utils_suite();
+    Suite * s = stats_utils_suite();
     SRunner * sr = srunner_create(s);
     srunner_run_all(sr, CK_VERBOSE);
     number_failed = srunner_ntests_failed(sr);

@@ -37,7 +37,7 @@ START_TEST(test_get_euclidean_distance) {
 }
 END_TEST
 
-Suite * array_utils_suite(void) {
+Suite * math_utils_suite(void) {
     Suite * s = suite_create("math_utils");
 
     TCase * tc_get_euclidean_distance = tcase_create(
@@ -50,7 +50,7 @@ Suite * array_utils_suite(void) {
 
 int main(void) {
     int number_failed;
-    Suite * s = array_utils_suite();
+    Suite * s = math_utils_suite();
     SRunner * sr = srunner_create(s);
     srunner_run_all(sr, CK_VERBOSE);
     number_failed = srunner_ntests_failed(sr);

@@ -6,13 +6,15 @@ TESTS = \
 	check_array_utils \
 	check_stats_utils \
 	check_math_utils \
-	check_parsing
+	check_parsing \
+	check_partition_combinatorics
 
 check_PROGRAMS = \
 	check_array_utils \
 	check_stats_utils \
 	check_math_utils \
-	check_parsing
+	check_parsing \
+	check_partition_combinatorics
 
 check_array_utils_SOURCES = \
 	check_array_utils.c \
@@ -49,4 +51,13 @@ check_parsing_SOURCES = \
 
 check_parsing_CFLAGS = @CHECK_CFLAGS@
 check_parsing_LDADD =  @CHECK_LIBS@
+
+check_partition_combinatorics_SOURCES = \
+	check_partition_combinatorics.c \
+	$(top_builddir)/src/array_utils.c \
+	test_utils.c \
+	test_utils.h
+
+check_partition_combinatorics_CFLAGS = @CHECK_CFLAGS@
+check_partition_combinatorics_LDADD =  @CHECK_LIBS@ @MATHLDADD@
 
