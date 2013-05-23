@@ -4,7 +4,6 @@
 #include "../src/partition_combinatorics.c"
 #include "test_utils.h"
 
-
 START_TEST (test_cumulative_number_of_int_partitions_by_k_n0) {
     int n, ip;
     i_array * counts;
@@ -516,6 +515,112 @@ START_TEST (test_number_of_int_partitions_n22) {
 }
 END_TEST
 
+
+START_TEST (test_draw_int_partition_category_n1) {
+    gsl_rng * rng;
+    rng = get_rng(0);
+    int i, n, ret, target, sum, reps;
+    double e, p, ep;
+    e = 0.000001;
+    n = 1;
+    target = 1;
+    reps = 100;
+    for (i = 0; i < reps; i++) {
+        ret = draw_int_partition_category(rng, n);
+        if (ret == target) sum++;
+    }
+    ep = 1.0;
+    p = sum / (double)reps;
+    ck_assert_msg((almost_equal(p, ep, e) != 0),
+            "target freq was %lf, expecting %lf", p, ep);
+    free_rng(rng);
+}
+END_TEST
+
+START_TEST (test_draw_int_partition_category_n2) {
+    gsl_rng * rng;
+    rng = get_rng(0);
+    int i, n, ret, target, sum, reps;
+    double e, p, ep;
+    e = 0.01;
+    n = 2;
+    target = 1;
+    reps = 100000;
+    for (i = 0; i < reps; i++) {
+        ret = draw_int_partition_category(rng, n);
+        if (ret == target) sum++;
+    }
+    ep = 0.5;
+    p = sum / (double)reps;
+    ck_assert_msg((almost_equal(p, ep, e) != 0),
+            "target freq was %lf, expecting %lf", p, ep);
+    free_rng(rng);
+}
+END_TEST
+
+START_TEST (test_draw_int_partition_category_n3) {
+    gsl_rng * rng;
+    rng = get_rng(0);
+    int i, n, ret, target, sum, reps;
+    double e, p, ep;
+    e = 0.01;
+    n = 3;
+    target = 1;
+    reps = 100000;
+    for (i = 0; i < reps; i++) {
+        ret = draw_int_partition_category(rng, n);
+        if (ret == target) sum++;
+    }
+    ep = 0.3333333;
+    p = sum / (double)reps;
+    ck_assert_msg((almost_equal(p, ep, e) != 0),
+            "target freq was %lf, expecting %lf", p, ep);
+    free_rng(rng);
+}
+END_TEST
+
+START_TEST (test_draw_int_partition_category_n7) {
+    gsl_rng * rng;
+    rng = get_rng(0);
+    int i, n, ret, target, sum, reps;
+    double e, p, ep;
+    e = 0.01;
+    n = 7;
+    target = 3;
+    reps = 100000;
+    for (i = 0; i < reps; i++) {
+        ret = draw_int_partition_category(rng, n);
+        if (ret == target) sum++;
+    }
+    ep = 4 / (double)15;
+    p = sum / (double)reps;
+    ck_assert_msg((almost_equal(p, ep, e) != 0),
+            "target freq was %lf, expecting %lf", p, ep);
+    free_rng(rng);
+}
+END_TEST
+
+START_TEST (test_draw_int_partition_category_n22) {
+    gsl_rng * rng;
+    rng = get_rng(0);
+    int i, n, ret, target, sum, reps;
+    double e, p, ep;
+    e = 0.01;
+    n = 22;
+    target = 6;
+    reps = 100000;
+    for (i = 0; i < reps; i++) {
+        ret = draw_int_partition_category(rng, n);
+        if (ret == target) sum++;
+    }
+    ep = 136 / (double)1002;
+    p = sum / (double)reps;
+    ck_assert_msg((almost_equal(p, ep, e) != 0),
+            "target freq was %lf, expecting %lf", p, ep);
+    free_rng(rng);
+}
+END_TEST
+
 Suite * partition_combinatorics_suite(void) {
     Suite * s = suite_create("partition_combinatorics");
 
@@ -589,6 +694,19 @@ Suite * partition_combinatorics_suite(void) {
     tcase_add_test(tc_num_partitions,
             test_number_of_int_partitions_n22);
     suite_add_tcase(s, tc_num_partitions);
+
+    TCase * tc_draw_cat = tcase_create("draw_int_partition_category");
+    tcase_add_test(tc_num_partitions,
+            test_draw_int_partition_category_n1);
+    tcase_add_test(tc_num_partitions,
+            test_draw_int_partition_category_n2);
+    tcase_add_test(tc_num_partitions,
+            test_draw_int_partition_category_n3);
+    tcase_add_test(tc_num_partitions,
+            test_draw_int_partition_category_n7);
+    tcase_add_test(tc_num_partitions,
+            test_draw_int_partition_category_n22);
+    suite_add_tcase(s, tc_draw_cat);
 
     return s;
 }
