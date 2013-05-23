@@ -1,6 +1,11 @@
 dist_noinst_DATA = \
 	data/observed_stats_extra_line.txt \
-	data/observed_stats.txt
+	data/observed_stats.txt \
+	data/test_parameter_stat_samples.txt \
+	data/test_parameter_stat_samples.missing_cell.txt \
+	data/test_parameter_stat_samples2.txt \
+	data/test_parameter_stat_samples3.txt \
+	data/test_parameter_stat_samples4.txt
 
 TESTS = \
 	check_array_utils \
