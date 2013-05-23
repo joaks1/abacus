@@ -10,6 +10,7 @@ START_TEST (test_cumulative_number_of_int_partitions_by_k_n0) {
     counts = init_i_array(1);
     n = 0;
     ip = cumulative_number_of_int_partitions_by_k(n, counts); // SIGABRT
+    free_i_array(counts);
 }
 END_TEST
 
@@ -22,6 +23,7 @@ START_TEST (test_cumulative_number_of_int_partitions_by_k_n1) {
     ck_assert_int_eq(ip, 1);
     ck_assert_int_eq(counts->length, n);
     ck_assert_int_eq(get_i_array(counts, 0), 1);
+    free_i_array(counts);
 }
 END_TEST
     
@@ -35,6 +37,7 @@ START_TEST (test_cumulative_number_of_int_partitions_by_k_n2) {
     ck_assert_int_eq(counts->length, n);
     ck_assert_int_eq(get_i_array(counts, 0), 1);
     ck_assert_int_eq(get_i_array(counts, 1), 2);
+    free_i_array(counts);
 }
 END_TEST
 
@@ -49,6 +52,7 @@ START_TEST (test_cumulative_number_of_int_partitions_by_k_n3) {
     ck_assert_int_eq(get_i_array(counts, 0), 1);
     ck_assert_int_eq(get_i_array(counts, 1), 2);
     ck_assert_int_eq(get_i_array(counts, 2), 3);
+    free_i_array(counts);
 }
 END_TEST
 
@@ -64,6 +68,7 @@ START_TEST (test_cumulative_number_of_int_partitions_by_k_n4) {
     ck_assert_int_eq(get_i_array(counts, 1), 3);
     ck_assert_int_eq(get_i_array(counts, 2), 4);
     ck_assert_int_eq(get_i_array(counts, 3), 5);
+    free_i_array(counts);
 }
 END_TEST
 
@@ -82,6 +87,7 @@ START_TEST (test_cumulative_number_of_int_partitions_by_k_n7) {
     ck_assert_int_eq(get_i_array(counts, 4), 13);
     ck_assert_int_eq(get_i_array(counts, 5), 14);
     ck_assert_int_eq(get_i_array(counts, 6), 15);
+    free_i_array(counts);
 }
 END_TEST
 
@@ -91,6 +97,7 @@ START_TEST (test_number_of_int_partitions_by_k_n0) {
     counts = init_i_array(1);
     n = 0;
     ip = number_of_int_partitions_by_k(n, counts); // SIGABRT
+    free_i_array(counts);
 }
 END_TEST
 
@@ -103,6 +110,7 @@ START_TEST (test_number_of_int_partitions_by_k_n1) {
     ck_assert_int_eq(ip, 1);
     ck_assert_int_eq(counts->length, n);
     ck_assert_int_eq(get_i_array(counts, 0), 1);
+    free_i_array(counts);
 }
 END_TEST
     
@@ -116,6 +124,7 @@ START_TEST (test_number_of_int_partitions_by_k_n2) {
     ck_assert_int_eq(counts->length, n);
     ck_assert_int_eq(get_i_array(counts, 0), 1);
     ck_assert_int_eq(get_i_array(counts, 1), 1);
+    free_i_array(counts);
 }
 END_TEST
 
@@ -130,6 +139,7 @@ START_TEST (test_number_of_int_partitions_by_k_n3) {
     ck_assert_int_eq(get_i_array(counts, 0), 1);
     ck_assert_int_eq(get_i_array(counts, 1), 1);
     ck_assert_int_eq(get_i_array(counts, 2), 1);
+    free_i_array(counts);
 }
 END_TEST
 
@@ -145,6 +155,7 @@ START_TEST (test_number_of_int_partitions_by_k_n4) {
     ck_assert_int_eq(get_i_array(counts, 1), 2);
     ck_assert_int_eq(get_i_array(counts, 2), 1);
     ck_assert_int_eq(get_i_array(counts, 3), 1);
+    free_i_array(counts);
 }
 END_TEST
 
@@ -163,6 +174,7 @@ START_TEST (test_number_of_int_partitions_by_k_n7) {
     ck_assert_int_eq(get_i_array(counts, 4), 2);
     ck_assert_int_eq(get_i_array(counts, 5), 1);
     ck_assert_int_eq(get_i_array(counts, 6), 1);
+    free_i_array(counts);
 }
 END_TEST
 
@@ -172,6 +184,7 @@ START_TEST (test_cumulative_frequency_of_int_partitions_by_k_n0) {
     probs = init_d_array(1);
     n = 0;
     tp = cumulative_frequency_of_int_partitions_by_k(n, probs); // SIGABRT
+    free_d_array(probs);
 }
 END_TEST
 
@@ -191,6 +204,7 @@ START_TEST (test_cumulative_frequency_of_int_partitions_by_k_n1) {
     ck_assert_msg((almost_equal(get_d_array(probs, i), ep, e) != 0),
             "cat %d has probability is %lf, not %lf",
             i+1, get_d_array(probs, i), ep);
+    free_d_array(probs);
 }
 END_TEST
     
@@ -214,6 +228,7 @@ START_TEST (test_cumulative_frequency_of_int_partitions_by_k_n2) {
     ck_assert_msg((almost_equal(get_d_array(probs, i), ep, e) != 0),
             "cat %d has probability is %lf, not %lf",
             i+1, get_d_array(probs, i), ep);
+    free_d_array(probs);
 }
 END_TEST
 
@@ -241,6 +256,7 @@ START_TEST (test_cumulative_frequency_of_int_partitions_by_k_n3) {
     ck_assert_msg((almost_equal(get_d_array(probs, i), ep, e) != 0),
             "cat %d has probability is %lf, not %lf",
             i+1, get_d_array(probs, i), ep);
+    free_d_array(probs);
 }
 END_TEST
 
@@ -273,6 +289,7 @@ START_TEST (test_cumulative_frequency_of_int_partitions_by_k_n4) {
     ck_assert_msg((almost_equal(get_d_array(probs, i), ep, e) != 0),
             "cat %d has probability is %lf, not %lf",
             i+1, get_d_array(probs, i), ep);
+    free_d_array(probs);
 }
 END_TEST
 
@@ -317,6 +334,7 @@ START_TEST (test_cumulative_frequency_of_int_partitions_by_k_n7) {
     ck_assert_msg((almost_equal(get_d_array(probs, i), ep, e) != 0),
             "cat %d has probability is %lf, not %lf",
             i+1, get_d_array(probs, i), ep);
+    free_d_array(probs);
 }
 END_TEST
 
@@ -326,6 +344,7 @@ START_TEST (test_frequency_of_int_partitions_by_k_n0) {
     probs = init_d_array(1);
     n = 0;
     tp = frequency_of_int_partitions_by_k(n, probs); // SIGABRT
+    free_d_array(probs);
 }
 END_TEST
 
@@ -345,6 +364,7 @@ START_TEST (test_frequency_of_int_partitions_by_k_n1) {
     ck_assert_msg((almost_equal(get_d_array(probs, i), ep, e) != 0),
             "cat %d has probability is %lf, not %lf",
             i+1, get_d_array(probs, i), ep);
+    free_d_array(probs);
 }
 END_TEST
     
@@ -368,6 +388,7 @@ START_TEST (test_frequency_of_int_partitions_by_k_n2) {
     ck_assert_msg((almost_equal(get_d_array(probs, i), ep, e) != 0),
             "cat %d has probability is %lf, not %lf",
             i+1, get_d_array(probs, i), ep);
+    free_d_array(probs);
 }
 END_TEST
 
@@ -395,6 +416,7 @@ START_TEST (test_frequency_of_int_partitions_by_k_n3) {
     ck_assert_msg((almost_equal(get_d_array(probs, i), ep, e) != 0),
             "cat %d has probability is %lf, not %lf",
             i+1, get_d_array(probs, i), ep);
+    free_d_array(probs);
 }
 END_TEST
 
@@ -427,6 +449,7 @@ START_TEST (test_frequency_of_int_partitions_by_k_n4) {
     ck_assert_msg((almost_equal(get_d_array(probs, i), ep, e) != 0),
             "cat %d has probability is %lf, not %lf",
             i+1, get_d_array(probs, i), ep);
+    free_d_array(probs);
 }
 END_TEST
 
@@ -471,6 +494,7 @@ START_TEST (test_frequency_of_int_partitions_by_k_n7) {
     ck_assert_msg((almost_equal(get_d_array(probs, i), ep, e) != 0),
             "cat %d has probability is %lf, not %lf",
             i+1, get_d_array(probs, i), ep);
+    free_d_array(probs);
 }
 END_TEST
 
@@ -525,6 +549,7 @@ START_TEST (test_draw_int_partition_category_n1) {
     n = 1;
     target = 1;
     reps = 100;
+    sum = 0;
     for (i = 0; i < reps; i++) {
         ret = draw_int_partition_category(rng, n);
         if (ret == target) sum++;
@@ -546,6 +571,7 @@ START_TEST (test_draw_int_partition_category_n2) {
     n = 2;
     target = 1;
     reps = 100000;
+    sum = 0;
     for (i = 0; i < reps; i++) {
         ret = draw_int_partition_category(rng, n);
         if (ret == target) sum++;
@@ -567,6 +593,7 @@ START_TEST (test_draw_int_partition_category_n3) {
     n = 3;
     target = 1;
     reps = 100000;
+    sum = 0;
     for (i = 0; i < reps; i++) {
         ret = draw_int_partition_category(rng, n);
         if (ret == target) sum++;
@@ -588,6 +615,7 @@ START_TEST (test_draw_int_partition_category_n7) {
     n = 7;
     target = 3;
     reps = 100000;
+    sum = 0;
     for (i = 0; i < reps; i++) {
         ret = draw_int_partition_category(rng, n);
         if (ret == target) sum++;
@@ -609,6 +637,7 @@ START_TEST (test_draw_int_partition_category_n22) {
     n = 22;
     target = 6;
     reps = 100000;
+    sum = 0;
     for (i = 0; i < reps; i++) {
         ret = draw_int_partition_category(rng, n);
         if (ret == target) sum++;
@@ -620,6 +649,320 @@ START_TEST (test_draw_int_partition_category_n22) {
     free_rng(rng);
 }
 END_TEST
+
+
+START_TEST (test_dirichlet_process_draw_n10_a1) {
+    gsl_rng * rng;
+    rng = get_rng(0);
+    i_array * elements;
+    int i, n, idx1, idx2, sum, reps, ret;
+    double e, p, ep, alpha;
+    e = 0.01;
+    n = 10;
+    alpha = 1.0;
+    reps = 100000;
+    sum = 0;
+    elements = init_i_array(n);
+    for (i = 0; i < reps; i++) {
+        ret = dirichlet_process_draw(rng, n, alpha, elements);
+        ck_assert_msg(((ret > 0) && (ret <= n)), "invalid number of "
+                "categories: %d", ret);
+        idx1 = gsl_rng_uniform_int(rng, n);
+        idx2 = gsl_rng_uniform_int(rng, n);
+        while(idx1 == idx2) {
+            idx2 = gsl_rng_uniform_int(rng, n);
+        }
+        if (get_i_array(elements, idx1) == get_i_array(elements, idx2)) {
+            sum++;
+        }
+    }
+    ep = 1 / (1.0 + alpha);
+    p = sum / (double)reps;
+    ck_assert_msg((almost_equal(p, ep, e) != 0),
+            "target freq was %lf, expecting %lf", p, ep);
+    free_i_array(elements);
+    free_rng(rng);
+}
+END_TEST
+
+START_TEST (test_dirichlet_process_draw_n10_a3) {
+    gsl_rng * rng;
+    rng = get_rng(0);
+    i_array * elements;
+    int i, n, idx1, idx2, sum, reps, ret;
+    double e, p, ep, alpha;
+    e = 0.01;
+    n = 10;
+    alpha = 3.0;
+    reps = 100000;
+    sum = 0;
+    elements = init_i_array(n);
+    for (i = 0; i < reps; i++) {
+        ret = dirichlet_process_draw(rng, n, alpha, elements);
+        ck_assert_msg(((ret > 0) && (ret <= n)), "invalid number of "
+                "categories: %d", ret);
+        idx1 = gsl_rng_uniform_int(rng, n);
+        idx2 = gsl_rng_uniform_int(rng, n);
+        while(idx1 == idx2) {
+            idx2 = gsl_rng_uniform_int(rng, n);
+        }
+        if (get_i_array(elements, idx1) == get_i_array(elements, idx2)) {
+            sum++;
+        }
+    }
+    ep = 1 / (1.0 + alpha);
+    p = sum / (double)reps;
+    ck_assert_msg((almost_equal(p, ep, e) != 0),
+            "target freq was %lf, expecting %lf", p, ep);
+    free_i_array(elements);
+    free_rng(rng);
+}
+END_TEST
+
+START_TEST (test_dirichlet_process_draw_n5_a3) {
+    gsl_rng * rng;
+    rng = get_rng(0);
+    i_array * elements;
+    int i, n, idx1, idx2, sum, reps, ret;
+    double e, p, ep, alpha;
+    e = 0.01;
+    n = 5;
+    alpha = 3.0;
+    reps = 100000;
+    sum = 0;
+    elements = init_i_array(n);
+    for (i = 0; i < reps; i++) {
+        ret = dirichlet_process_draw(rng, n, alpha, elements);
+        ck_assert_msg(((ret > 0) && (ret <= n)), "invalid number of "
+                "categories: %d", ret);
+        idx1 = gsl_rng_uniform_int(rng, n);
+        idx2 = gsl_rng_uniform_int(rng, n);
+        while(idx1 == idx2) {
+            idx2 = gsl_rng_uniform_int(rng, n);
+        }
+        if (get_i_array(elements, idx1) == get_i_array(elements, idx2)) {
+            sum++;
+        }
+    }
+    ep = 1 / (1.0 + alpha);
+    p = sum / (double)reps;
+    ck_assert_msg((almost_equal(p, ep, e) != 0),
+            "target freq was %lf, expecting %lf", p, ep);
+    free_i_array(elements);
+    free_rng(rng);
+}
+END_TEST
+
+START_TEST (test_dirichlet_process_draw_n10_a9) {
+    gsl_rng * rng;
+    rng = get_rng(0);
+    i_array * elements;
+    int i, n, idx1, idx2, sum, reps, ret;
+    double e, p, ep, alpha;
+    e = 0.01;
+    n = 10;
+    alpha = 9.0;
+    reps = 100000;
+    sum = 0;
+    elements = init_i_array(n);
+    for (i = 0; i < reps; i++) {
+        ret = dirichlet_process_draw(rng, n, alpha, elements);
+        ck_assert_msg(((ret > 0) && (ret <= n)), "invalid number of "
+                "categories: %d", ret);
+        idx1 = gsl_rng_uniform_int(rng, n);
+        idx2 = gsl_rng_uniform_int(rng, n);
+        while(idx1 == idx2) {
+            idx2 = gsl_rng_uniform_int(rng, n);
+        }
+        if (get_i_array(elements, idx1) == get_i_array(elements, idx2)) {
+            sum++;
+        }
+    }
+    ep = 1 / (1.0 + alpha);
+    p = sum / (double)reps;
+    ck_assert_msg((almost_equal(p, ep, e) != 0),
+            "target freq was %lf, expecting %lf", p, ep);
+    free_i_array(elements);
+    free_rng(rng);
+}
+END_TEST
+
+START_TEST (test_generate_int_partitions_n0) {
+    int n;
+    n = 0;
+    i_array_2d * partitions = init_i_array_2d(1,1);
+    partitions = generate_int_partitions(n);
+    free_i_array_2d(partitions);
+}
+END_TEST
+
+START_TEST (test_generate_int_partitions_n1) {
+    int n;
+    n = 1;
+    i_array * expected = init_i_array(1);
+    i_array_2d * partitions = init_i_array_2d(1,1);
+    partitions = generate_int_partitions(n);
+    ck_assert_int_eq(partitions->length, 1);
+    append_i_array(expected, 1);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, 0),
+            expected) != 0),
+            "unexpected partition");
+    free_i_array(expected);
+    free_i_array_2d(partitions);
+}
+END_TEST
+
+START_TEST (test_generate_int_partitions_n4) {
+    int n, i;
+    n = 4;
+    i_array * expected = init_i_array(1);
+    i_array_2d * partitions = init_i_array_2d(1,1);
+    partitions = generate_int_partitions(n);
+    ck_assert_int_eq(partitions->length, 5);
+    i = 0;
+    expected->length = 0;
+    append_i_array(expected, 4);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 1;
+    expected->length = 0;
+    append_i_array(expected, 3);
+    append_i_array(expected, 1);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 2;
+    expected->length = 0;
+    append_i_array(expected, 2);
+    append_i_array(expected, 2);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 3;
+    expected->length = 0;
+    append_i_array(expected, 2);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 4;
+    expected->length = 0;
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    free_i_array(expected);
+    free_i_array_2d(partitions);
+}
+END_TEST
+
+START_TEST (test_generate_int_partitions_n6) {
+    int n, i;
+    n = 6;
+    i_array * expected = init_i_array(1);
+    i_array_2d * partitions = init_i_array_2d(1,1);
+    partitions = generate_int_partitions(n);
+    ck_assert_int_eq(partitions->length, 11);
+    i = 0;
+    expected->length = 0;
+    append_i_array(expected, 6);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 1;
+    expected->length = 0;
+    append_i_array(expected, 5);
+    append_i_array(expected, 1);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 2;
+    expected->length = 0;
+    append_i_array(expected, 4);
+    append_i_array(expected, 2);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 3;
+    expected->length = 0;
+    append_i_array(expected, 4);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 4;
+    expected->length = 0;
+    append_i_array(expected, 3);
+    append_i_array(expected, 3);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 5;
+    expected->length = 0;
+    append_i_array(expected, 3);
+    append_i_array(expected, 2);
+    append_i_array(expected, 1);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 6;
+    expected->length = 0;
+    append_i_array(expected, 3);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 7;
+    expected->length = 0;
+    append_i_array(expected, 2);
+    append_i_array(expected, 2);
+    append_i_array(expected, 2);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 8;
+    expected->length = 0;
+    append_i_array(expected, 2);
+    append_i_array(expected, 2);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 9;
+    expected->length = 0;
+    append_i_array(expected, 2);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    i = 10;
+    expected->length = 0;
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    append_i_array(expected, 1);
+    ck_assert_msg((i_arrays_equal(get_i_array_2d(partitions, i),
+            expected) != 0),
+            "unexpected partition");
+    free_i_array(expected);
+    free_i_array_2d(partitions);
+}
+END_TEST
+
 
 Suite * partition_combinatorics_suite(void) {
     Suite * s = suite_create("partition_combinatorics");
@@ -707,6 +1050,30 @@ Suite * partition_combinatorics_suite(void) {
     tcase_add_test(tc_num_partitions,
             test_draw_int_partition_category_n22);
     suite_add_tcase(s, tc_draw_cat);
+
+    TCase * tc_dirichlet_process_draw = tcase_create("dirichlet_process_draw");
+    tcase_add_test(tc_dirichlet_process_draw,
+            test_dirichlet_process_draw_n10_a1);
+    tcase_add_test(tc_dirichlet_process_draw,
+            test_dirichlet_process_draw_n10_a3);
+    tcase_add_test(tc_dirichlet_process_draw,
+            test_dirichlet_process_draw_n5_a3);
+    tcase_add_test(tc_dirichlet_process_draw,
+            test_dirichlet_process_draw_n10_a9);
+    suite_add_tcase(s, tc_dirichlet_process_draw);
+
+    TCase * tc_generate_int_partitions = tcase_create(
+            "generate_int_partitions");
+    tcase_add_test_raise_signal(tc_generate_int_partitions,
+            test_generate_int_partitions_n0,
+            SIGABRT);
+    tcase_add_test(tc_generate_int_partitions,
+            test_generate_int_partitions_n1);
+    tcase_add_test(tc_generate_int_partitions,
+            test_generate_int_partitions_n4);
+    tcase_add_test(tc_generate_int_partitions,
+            test_generate_int_partitions_n6);
+    suite_add_tcase(s, tc_generate_int_partitions);
 
     return s;
 }
