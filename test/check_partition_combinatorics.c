@@ -476,6 +476,46 @@ START_TEST (test_frequency_of_int_partitions_by_k_n7) {
 END_TEST
 
 
+START_TEST (test_number_of_int_partitions_neg) {
+    int n, ret;
+    n = -1;
+    ret = number_of_int_partitions(n);
+    ck_assert_int_eq(ret, 0);
+}
+END_TEST
+
+START_TEST (test_number_of_int_partitions_n0) {
+    int n, ret;
+    n = 0;
+    ret = number_of_int_partitions(n);
+    ck_assert_int_eq(ret, 1);
+}
+END_TEST
+
+START_TEST (test_number_of_int_partitions_n1) {
+    int n, ret;
+    n = 1;
+    ret = number_of_int_partitions(n);
+    ck_assert_int_eq(ret, 1);
+}
+END_TEST
+
+START_TEST (test_number_of_int_partitions_n7) {
+    int n, ret;
+    n = 7;
+    ret = number_of_int_partitions(n);
+    ck_assert_int_eq(ret, 15);
+}
+END_TEST
+
+START_TEST (test_number_of_int_partitions_n22) {
+    int n, ret;
+    n = 22;
+    ret = number_of_int_partitions(n);
+    ck_assert_int_eq(ret, 1002);
+}
+END_TEST
+
 Suite * partition_combinatorics_suite(void) {
     Suite * s = suite_create("partition_combinatorics");
 
@@ -536,6 +576,19 @@ Suite * partition_combinatorics_suite(void) {
     tcase_add_test(tc_partition_freqs,
             test_frequency_of_int_partitions_by_k_n7);
     suite_add_tcase(s, tc_partition_freqs);
+
+    TCase * tc_num_partitions = tcase_create("number_of_partitions");
+    tcase_add_test(tc_num_partitions,
+            test_number_of_int_partitions_neg);
+    tcase_add_test(tc_num_partitions,
+            test_number_of_int_partitions_n0);
+    tcase_add_test(tc_num_partitions,
+            test_number_of_int_partitions_n1);
+    tcase_add_test(tc_num_partitions,
+            test_number_of_int_partitions_n7);
+    tcase_add_test(tc_num_partitions,
+            test_number_of_int_partitions_n22);
+    suite_add_tcase(s, tc_num_partitions);
 
     return s;
 }
