@@ -20,4 +20,19 @@
 
 #include "test_utils.h"
 
+gsl_rng * get_rng(int seed) {
+    const gsl_rng_type * mt = gsl_rng_mt19937;
+    gsl_rng * rng = gsl_rng_alloc(mt);
+    if (seed < 1) {
+        srand(time(NULL));
+        gsl_rng_set(rng, rand());
+        return rng;
+    }
+    gsl_rng_set(rng, rand());
+    return rng;
+}
+
+void free_rng(gsl_rng * rng) {
+    gsl_rng_free(rng);
+}
 

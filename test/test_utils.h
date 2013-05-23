@@ -21,8 +21,12 @@
 #ifndef TEST_UTILS_H
 #define TEST_UTILS_H
 
+#include <time.h>
+#include <gsl/gsl_rng.h>
 #include "../src/stats_utils.h"
 
+gsl_rng * get_rng(int seed);
+void free_rng(gsl_rng * rng);
 
 #endif /* TEST_UTILS_H */
 
