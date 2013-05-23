@@ -368,13 +368,13 @@ void parse_args(config * conf, int argc, char ** argv) {
 }
 
 sample_array * reject(const s_array * paths,
-        c_array * line_buffer,
+        const c_array * line_buffer,
         const i_array * stat_indices,
-        d_array * std_observed_stats,
-        d_array * means,
-        d_array * std_devs,
+        const d_array * std_observed_stats,
+        const d_array * means,
+        const d_array * std_devs,
         int num_retain,
-        s_array * header) {
+        const s_array * header) {
     FILE * f;
     int i, line_num, ncols, sample_idx;
     s_array * line_array;
@@ -423,6 +423,7 @@ void summarize_stat_samples(const s_array * paths,
         d_array * std_devs,
         int num_to_sample,
         int expected_num_columns) {
+    assert(ss_array->length == stat_indices->length);
     FILE * f;
     int i, line_num, ncols, get_stats_return;
     s_array * line_array;

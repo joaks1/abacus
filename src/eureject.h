@@ -83,13 +83,13 @@ void help();
 void print_config(const config * c);
 void parse_args(config * conf, int argc, char ** argv);
 sample_array * reject(const s_array * paths,
-        c_array * line_buffer,
+        const c_array * line_buffer,
         const i_array * stat_indices,
-        d_array * std_observed_stats,
-        d_array * means,
-        d_array * std_devs,
+        const d_array * std_observed_stats,
+        const d_array * means,
+        const d_array * std_devs,
         int num_retain,
-        s_array * header);
+        const s_array * header);
 void summarize_stat_samples(const s_array * paths,
         c_array * line_buffer,
         const i_array * stat_indices,
