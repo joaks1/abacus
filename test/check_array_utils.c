@@ -900,6 +900,59 @@ START_TEST (test_get_i_array_2d_fail) {
 }
 END_TEST
 
+START_TEST (test_split_str) {
+    int ret;
+    s_array * words;
+    s_array * exp;
+    words = init_s_array(1);
+    exp = init_s_array(1);
+    char * string = "one.1\ttwo.2\tthree.3\0";
+    append_s_array(exp, "one.1");
+    append_s_array(exp, "two.2");
+    append_s_array(exp, "three.3");
+    ret = split_str(string, words, 3);
+    write_s_array(words);
+    ck_assert_int_eq(ret, 0);
+    ck_assert_int_eq(words->length, 3);
+    ck_assert_msg((s_arrays_equal(words, exp) != 0),
+            "unexpected result of `split_str`");
+    ret = split_str(string, words, 3);
+    ck_assert_int_eq(ret, 0);
+    ret = split_str(string, words, 4);
+    ck_assert_int_eq(ret, 3);
+    ck_assert_msg((s_arrays_equal(words, exp) != 0),
+            "unexpected result of `split_str`");
+    free_s_array(words);
+    free_s_array(exp);
+}
+END_TEST
+
+START_TEST (test_split_str_d) {
+    int ret;
+    d_array * v;
+    d_array * exp;
+    v = init_d_array(1);
+    exp = init_d_array(1);
+    char * string = "1.01\t0.009\t2.0e2";
+    append_d_array(exp, 1.01);
+    append_d_array(exp, 0.009);
+    append_d_array(exp, 200.0);
+    ret = split_str_d(string, v, 0);
+    ck_assert_int_eq(ret, 0);
+    ck_assert_int_eq(v->length, 3);
+    ck_assert_msg((d_arrays_equal(v, exp, 0.000001) != 0),
+            "unexpected result of `split_str_d`");
+    ret = split_str_d(string, v, 3);
+    ck_assert_int_eq(ret, 0);
+    ret = split_str_d(string, v, 4);
+    ck_assert_int_eq(ret, 3);
+    ck_assert_msg((d_arrays_equal(v, exp, 0.000001) != 0),
+            "unexpected result of `split_str_d`");
+    free_d_array(v);
+    free_d_array(exp);
+}
+END_TEST
+
 
 Suite * array_utils_suite(void) {
     Suite * s = suite_create("array_utils");
@@ -978,6 +1031,11 @@ Suite * array_utils_suite(void) {
     TCase * tc_get_doubles = tcase_create("get_doubles_test_case");
     tcase_add_test(tc_get_doubles, test_get_doubles);
     suite_add_tcase(s, tc_get_doubles);
+
+    TCase * tc_split_str = tcase_create("split_str_test_case");
+    tcase_add_test(tc_split_str, test_split_str);
+    tcase_add_test(tc_split_str, test_split_str_d);
+    suite_add_tcase(s, tc_split_str);
 
     return s;
 }

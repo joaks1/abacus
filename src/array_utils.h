@@ -95,6 +95,7 @@ int i_arrays_equal(const i_array * v1, const i_array * v2);
 int s_arrays_equal(const s_array * v1, const s_array * v2);
 
 int split_str(char * string, s_array * words, int expected_num);
+int split_str_d(char * string, d_array * v, int expected_num);
 void get_matching_indices(const s_array * search_strings,
         const s_array * target_strings,
         i_array * indices);
