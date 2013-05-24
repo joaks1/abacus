@@ -76,11 +76,11 @@ sample * init_sample(
     return s;
 }
 
-void write_sample(const sample * s, const int include_distance) {
+void write_sample(FILE * stream, const sample * s, const int include_distance) {
     if (include_distance != 0) {
-        fprintf(stdout, "%lf\t", s->distance);
+        fprintf(stream, "%lf\t", s->distance);
     }
-    write_s_array(s->line_array);
+    write_s_array(stream, s->line_array);
 }
 
 void free_sample(sample * s) {
@@ -151,14 +151,15 @@ void rshift_samples(sample_array * s, int index) {
     s->length += inc;
 }
 
-void write_sample_array(const sample_array * s, const int include_distance) {
+void write_sample_array(FILE * stream, const sample_array * s,
+        const int include_distance) {
     int i;
     if (include_distance != 0) {
-        fprintf(stdout, "distance\t");
+        fprintf(stream, "distance\t");
     }
-    write_s_array(s->header);
+    write_s_array(stream, s->header);
     for (i = 0; i < s->length; i++) {
-        write_sample(s->a[i], include_distance);
+        write_sample(stream, s->a[i], include_distance);
     }
 }
 
@@ -496,9 +497,9 @@ int eureject_main(int argc, char ** argv) {
         free_sample_sum_array(sample_sums);
     }
     if (conf->num_retain < 1) {
-        write_s_array(obs_header);
-        write_d_array(conf->means);
-        write_d_array(conf->std_devs);
+        write_s_array(stdout, obs_header);
+        write_d_array(stdout, conf->means);
+        write_d_array(stdout, conf->std_devs);
         free_i_array(indices);
         free_c_array(line_buffer);
         free_s_array(obs_header);
@@ -511,7 +512,7 @@ int eureject_main(int argc, char ** argv) {
     retained_samples = reject(conf->sim_paths, line_buffer, indices,
             obs_stats, conf->means, conf->std_devs, conf->num_retain,
             sim_header);
-    write_sample_array(retained_samples, conf->include_distance);
+    write_sample_array(stdout, retained_samples, conf->include_distance);
     free_sample_array(retained_samples);
     free_i_array(indices);
     free_c_array(line_buffer);

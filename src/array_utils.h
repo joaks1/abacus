@@ -63,7 +63,7 @@ void append_d_array(d_array * v, double x);
 void extend_d_array(d_array * dest, const d_array * to_add);
 double get_d_array(const d_array * v, int index);
 void set_d_array(d_array * v, int index, double x);
-void write_d_array(const d_array * v);
+void write_d_array(FILE * stream, const d_array * v);
 void free_d_array(d_array * v);
 
 c_array * init_c_array(int length);
@@ -77,7 +77,7 @@ void append_i_array(i_array * v, int x);
 void extend_i_array(i_array * dest, const i_array * to_add);
 int get_i_array(const i_array * v, int index);
 void set_i_array(i_array * v, int index, int x);
-void write_i_array(const i_array * v);
+void write_i_array(FILE * stream, const i_array * v);
 void free_i_array(i_array * v);
 
 s_array * init_s_array(int length);
@@ -86,7 +86,7 @@ void append_s_array(s_array * v, const char * x);
 void extend_s_array(s_array * dest, const s_array * to_add);
 char * get_s_array(const s_array * v, int index);
 void set_s_array(s_array * v, int index, const char * s);
-void write_s_array(const s_array * v);
+void write_s_array(FILE * stream, const s_array * v);
 void free_s_array(s_array * v);
 
 int almost_equal(const double x, const double y, const double error);

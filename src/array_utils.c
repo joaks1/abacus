@@ -207,28 +207,28 @@ char * get_c_array(const c_array * v) {
     return (v->a);
 }
 
-void write_d_array(const d_array * v) {
+void write_d_array(FILE * stream, const d_array * v) {
     int i;
     for (i = 0; i < (v->length - 1); i++) {
-        fprintf(stdout, "%lf\t", v->a[i]);
+        fprintf(stream, "%lf\t", v->a[i]);
     }
-    fprintf(stdout, "%lf\n", v->a[(v->length - 1)]);
+    fprintf(stream, "%lf\n", v->a[(v->length - 1)]);
 }
 
-void write_i_array(const i_array * v) {
+void write_i_array(FILE * stream, const i_array * v) {
     int i;
     for (i = 0; i < (v->length - 1); i++) {
-        fprintf(stdout, "%d\t", v->a[i]);
+        fprintf(stream, "%d\t", v->a[i]);
     }
-    fprintf(stdout, "%d\n", v->a[(v->length - 1)]);
+    fprintf(stream, "%d\n", v->a[(v->length - 1)]);
 }
 
-void write_s_array(const s_array * v) {
+void write_s_array(FILE * stream, const s_array * v) {
     int i;
     for (i = 0; i < (v->length - 1); i++) {
-        fprintf(stdout, "%s\t", get_s_array(v, i));
+        fprintf(stream, "%s\t", get_s_array(v, i));
     }
-    fprintf(stdout, "%s\n", get_s_array(v, (v->length - 1)));
+    fprintf(stream, "%s\n", get_s_array(v, (v->length - 1)));
 }
 
 void free_d_array(d_array * v) {

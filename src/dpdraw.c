@@ -158,7 +158,7 @@ int dpdraw_main(int argc, char ** argv) {
                 conf->alpha,
                 elements);
         assert((num_cats > 0) && (num_cats <= conf->num_elements));
-        write_i_array(elements);
+        write_i_array(stdout, elements);
     }
     gsl_rng_free(rng);
     free_i_array(elements);

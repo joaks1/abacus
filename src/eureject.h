@@ -73,12 +73,13 @@ sample * init_sample(
         const d_array * means,
         const d_array * std_devs);
 void free_sample(sample * s);
-void write_sample(const sample * s, const int include_distance);
+void write_sample(FILE * stream, const sample * s, const int include_distance);
 sample_array * init_sample_array(int length);
 void free_sample_array(sample_array * v);
 int process_sample(sample_array * samples, sample * s);
 void rshift_samples(sample_array * s, int index);
-void write_sample_array(const sample_array * s, const int include_distance);
+void write_sample_array(FILE * stream, const sample_array * s,
+        const int include_distance);
 void help();
 void print_config(const config * c);
 void parse_args(config * conf, int argc, char ** argv);

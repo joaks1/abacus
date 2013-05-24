@@ -110,12 +110,12 @@ int intpart_main(int argc, char ** argv) {
         for (i = 1; i <= conf->num_elements; i++) {
             append_i_array(header, i);
         }
-        write_i_array(header);
+        write_i_array(stdout, header);
         ip = number_of_int_partitions_by_k(conf->num_elements, counts);
         total_prob = frequency_of_int_partitions_by_k(conf->num_elements, probs);
         assert(almost_equal(total_prob, 1.0, 0.000001));
-        write_i_array(counts);
-        write_d_array(probs);
+        write_i_array(stdout, counts);
+        write_d_array(stdout, probs);
         free_i_array(header);
         free_i_array(counts);
         free_d_array(probs);
@@ -126,7 +126,7 @@ int intpart_main(int argc, char ** argv) {
     i_array_2d * partitions;
     partitions = generate_int_partitions(conf->num_elements);
     for (i = 0; i < partitions->length; i++) {
-        write_i_array(get_i_array_2d(partitions, i));
+        write_i_array(stdout, get_i_array_2d(partitions, i));
     }
     free_i_array_2d(partitions);
     free_config(conf);

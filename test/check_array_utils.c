@@ -911,7 +911,6 @@ START_TEST (test_split_str) {
     append_s_array(exp, "two.2");
     append_s_array(exp, "three.3");
     ret = split_str(string, words, 3);
-    write_s_array(words);
     ck_assert_int_eq(ret, 0);
     ck_assert_int_eq(words->length, 3);
     ck_assert_msg((s_arrays_equal(words, exp) != 0),
