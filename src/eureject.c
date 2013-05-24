@@ -367,7 +367,6 @@ sample_array * reject(const s_array * paths,
             s = init_sample(get_s_array(paths, i), line_num, line_array,
                     stat_indices, std_observed_stats, means, std_devs);
             sample_idx = process_sample(retained_samples, s);
-            printf("sample_idx: %d\n", sample_idx);
             if (sample_idx < 0) {
                 free_sample(s);
             }
