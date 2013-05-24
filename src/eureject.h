@@ -34,15 +34,15 @@
 #include "array_utils.h"
 #include "parsing.h"
 
-#define VERSION "0.1"
+#define VERSION "0.2"
 
 typedef struct config_ {
     c_array * observed_path;
+    c_array * summary_path;
     s_array * sim_paths;
     int num_retain;
     int num_subsample;
-    int means_provided;
-    int std_devs_provided;
+    int summary_provided;
     d_array * means;
     d_array * std_devs;
     int include_distance;

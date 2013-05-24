@@ -26,12 +26,12 @@ config * init_config() {
     c = (typeof(*c) *) malloc(sizeof(*c));
     c->num_retain = 1000;
     c->num_subsample = 10000;
-    c->means_provided = 0;
-    c->std_devs_provided = 0;
+    c->summary_provided = 0;
     c->means = init_d_array(1);
     c->std_devs = init_d_array(1);
     c->sim_paths = init_s_array(1);
     c->observed_path = init_c_array(63);
+    c->summary_path = init_c_array(63);
     c->include_distance = 0;
     return c;
 }
@@ -41,6 +41,7 @@ void free_config(config * c) {
     free_d_array(c->std_devs);
     free_s_array(c->sim_paths);
     free_c_array(c->observed_path);
+    free_c_array(c->summary_path);
     free(c);
     c = NULL;
 }
@@ -141,6 +142,9 @@ void rshift_samples(sample_array * s, int index) {
         s->a[s->length] = s->a[(s->length - 1)];
         inc = 1;
     }
+    else {
+        free_sample(s->a[(s->length - 1)]);
+    }
     for (i = (s->length - 1); i > index; i--) {
         s->a[i] = s->a[i - 1];
     }
@@ -173,8 +177,7 @@ void help() {
     char *version = VERSION;
     printf("EuReject Version %s\n\n", version);
     printf("Usage:\n");
-    printf("  eureject -o OBSERVED-FILE [ -k INT -n INT -d ] \\\n");
-    printf("      [ -m MEAN1,MEAN2,... -s STDEV1,STDEV2,... ] \\\n");
+    printf("  eureject -f OBS-FILE [-k INT] [-n INT] [-d] [-s SUM-FILE] \\\n");
     printf("      SIMS-FILE1 [ SIMS-FILE2 [...] ]\n\n");
     printf("Options:\n");
     printf(" -f  Path to file containing observed summary statistics\n");
@@ -186,14 +189,13 @@ void help() {
     printf("     standard deviations for standardizing the statistics.\n");
     printf("     This option is ignored if `-m` and `-s` are provided.\n");
     printf("     Default: 10000\n");
-    printf(" -m  Comma-separated list of means to use for standardizing\n");
-    printf("     statistics. The number of means must match the number of\n");
-    printf("     columns in the observed stats file, and must be in the\n");
-    printf("     same order. Must be used with `-s`.\n");
-    printf(" -s  Comma-separated list of standard deviations to use for\n");
-    printf("     standardizing statistics. The number of means must match\n");
-    printf("     the number of columns in the observed stats file, and must\n");
-    printf("     be in the same order. Must be used with `-m`.\n");
+    printf(" -s  Tab-delimited file containing the means and standard\n");
+    printf("     deviations to use for standardizing statistics. The file\n");
+    printf("     must contain the same header as the file with the observed\n");
+    printf("     summarys statistics (`-f`), with unique names identifying\n");
+    printf("     the statistics in each column. This header must be\n");
+    printf("     followed by a line containing the means for each statistic\n");
+    printf("     and a third line containing the standard deviations.\n");
     printf(" -e  Report Euclidean distances of retained samples in the\n");
     printf("     first column of the output. Default is not to report\n");
     printf("     the distance column.\n");
@@ -213,7 +215,7 @@ void print_config(const config * c) {
     fprintf(stderr, "%s\n", get_s_array(c->sim_paths,
                 (c->sim_paths->length-1)));
     fprintf(stderr, "Means for standardization: ");
-    if (c->means_provided == 0) {
+    if (c->summary_provided == 0) {
         fprintf(stderr, "None\n");
     }
     else {
@@ -223,7 +225,7 @@ void print_config(const config * c) {
         fprintf(stderr, "%f\n", c->means->a[(c->means->length-1)]);
     }
     fprintf(stderr, "Standard deviations for standardization: ");
-    if (c->std_devs_provided == 0) {
+    if (c->summary_provided == 0) {
         fprintf(stderr, "None\n");
     }
     else {
@@ -245,7 +247,7 @@ void parse_args(config * conf, int argc, char ** argv) {
     conf->means->length = 0;
     conf->std_devs->length = 0;
     conf->sim_paths->length = 0;
-    while((i = getopt(argc, argv, "f:k:n:m:s:eh")) != -1) {
+    while((i = getopt(argc, argv, "f:k:n:s:eh")) != -1) {
         switch(i) {
             case 'f':
                 assign_c_array(conf->observed_path, optarg);
@@ -264,33 +266,9 @@ void parse_args(config * conf, int argc, char ** argv) {
                     exit(1);
                 }
                 break;
-            case 'm':
-                j = 0;
-                conf->means_provided = 1;
-                p = strtok(optarg, ",");
-                while (p != NULL) {
-                    append_d_array(conf->means, strtod(p, &end_ptr));
-                    if (end_ptr == p) {
-                        fprintf(stderr, "ERROR: mean %d is not a valid "
-                                "number\n", (j + 1));
-                    }
-                    p = strtok(NULL, ",");
-                    j += 1;
-                }
-                break;
             case 's':
-                j = 0;
-                conf->std_devs_provided = 1;
-                p = strtok(optarg, ",");
-                while (p != NULL) {
-                    append_d_array(conf->std_devs, strtod(p, &end_ptr));
-                    if (end_ptr == p) {
-                        fprintf(stderr, "ERROR: standard deviation %d is not "
-                                "a valid number\n", (j + 1));
-                    }
-                    p = strtok(NULL, ",");
-                    j += 1;
-                }
+                conf->summary_provided = 1;
+                assign_c_array(conf->summary_path, optarg);
                 break;
             case 'e':
                 conf->include_distance = 1;
@@ -309,10 +287,6 @@ void parse_args(config * conf, int argc, char ** argv) {
                             "argument\n", optopt);
                 }
                 else if (optopt == 'n') {
-                    fprintf(stderr, "ERROR: option `-%c' requires an "
-                            "argument\n", optopt);
-                }
-                else if (optopt == 'm') {
                     fprintf(stderr, "ERROR: option `-%c' requires an "
                             "argument\n", optopt);
                 }
@@ -336,7 +310,7 @@ void parse_args(config * conf, int argc, char ** argv) {
     for (i = optind, j = 0; i < argc; i++, j++) {
         append_s_array(conf->sim_paths, argv[i]);
     }
-    if (conf->means_provided == 1) {
+    if (conf->summary_provided == 1) {
         conf->num_subsample = 0;
     }
     // vetting
@@ -348,19 +322,6 @@ void parse_args(config * conf, int argc, char ** argv) {
     if ((conf->sim_paths->length < 1) ||
             (get_s_array(conf->sim_paths, 0) == NULL)) {
         fprintf(stderr, "ERROR: Please provide at least one simulation file\n");
-        help();
-        exit(1);
-    }
-    if (((conf->means_provided == 0) && (conf->std_devs_provided == 1)) ||
-            ((conf->means_provided == 1) && (conf->std_devs_provided == 0))) {
-        fprintf(stderr, "ERROR: Please specify both means and standard "
-                "deviations for standardization, or neither.\n");
-        help();
-        exit(1);
-    }
-    if (conf->means_provided && (conf->means->length != conf->std_devs->length)) {
-        fprintf(stderr, "ERROR: Please provide equal numbers of means and "
-                "std deviations\n");
         help();
         exit(1);
     }
@@ -405,6 +366,7 @@ sample_array * reject(const s_array * paths,
             s = init_sample(get_s_array(paths, i), line_num, line_array,
                     stat_indices, std_observed_stats, means, std_devs);
             sample_idx = process_sample(retained_samples, s);
+            printf("sample_idx: %d\n", sample_idx);
             if (sample_idx < 0) {
                 free_sample(s);
             }
@@ -471,6 +433,7 @@ void summarize_stat_samples(const s_array * paths,
 int eureject_main(int argc, char ** argv) {
     c_array * line_buffer;
     s_array * obs_header;
+    s_array * summary_header;
     s_array * sim_header;
     s_array * sim_header_comp;
     d_array * obs_stats;
@@ -492,6 +455,20 @@ int eureject_main(int argc, char ** argv) {
 
     parse_observed_stats_file(conf->observed_path->a, line_buffer, obs_header,
             obs_stats);
+
+    if (conf->summary_provided != 0) {
+        summary_header = init_s_array(obs_header->length);
+        parse_summary_file(conf->summary_path->a, line_buffer, summary_header,
+                conf->means, conf->std_devs);
+        heads_match = s_arrays_equal(obs_header, summary_header);
+        if (heads_match == 0) {
+            fprintf(stderr, "ERROR: Files %s and %s have different headers\n",
+                    get_c_array(conf->observed_path),
+                    get_c_array(conf->summary_path));
+        }
+        free_s_array(summary_header);
+    }
+
     sim_header = init_s_array(obs_header->length);
     parse_header(get_s_array(conf->sim_paths, 0), line_buffer, sim_header);
     if (conf->sim_paths->length > 1) {
@@ -500,7 +477,7 @@ int eureject_main(int argc, char ** argv) {
             parse_header(get_s_array(conf->sim_paths, i), line_buffer,
                     sim_header_comp);
             heads_match = s_arrays_equal(sim_header, sim_header_comp);
-            if (heads_match != 1) {
+            if (heads_match == 0) {
                 fprintf(stderr, "ERROR: Files %s and %s have different "
                         "headers\n", get_s_array(conf->sim_paths, 0),
                         get_s_array(conf->sim_paths, i));
@@ -511,7 +488,7 @@ int eureject_main(int argc, char ** argv) {
     }
     indices = init_i_array(obs_header->length);
     get_matching_indices(obs_header, sim_header, indices);
-    if (conf->means_provided == 0) {
+    if (conf->summary_provided == 0) {
         sample_sums = init_sample_sum_array(obs_header->length);
         summarize_stat_samples(conf->sim_paths, line_buffer, indices,
                 sample_sums, conf->means, conf->std_devs, conf->num_subsample,

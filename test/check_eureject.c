@@ -8,8 +8,7 @@
 START_TEST (test_init_free_config) {
     config * c;
     c = init_config();
-    ck_assert_int_eq(c->means_provided, 0);
-    ck_assert_int_eq(c->std_devs_provided, 0);
+    ck_assert_int_eq(c->summary_provided, 0);
     free_config(c);
 }
 END_TEST
