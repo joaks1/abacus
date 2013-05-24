@@ -87,11 +87,58 @@ START_TEST (test_parse_observed_stats_file_extra_line) {
     ck_assert_msg((header->length == 4), "header length is %d, "
             "expecting %d", header->length, 4);
     ck_assert_msg((stats->length == 4), "stats length is %d, "
-            "expecting %d", header->length, 4);
+            "expecting %d", stats->length, 4);
     ret = s_arrays_equal(header, expected_header);
     ck_assert_msg((ret != 0), "parsed header is incorrect");
     ret = d_arrays_equal(stats, expected_stats, e);
     ck_assert_msg((ret != 0), "parsed stats are incorrect");
+}
+END_TEST
+
+START_TEST (test_parse_summary_file) {
+    char * path = "data/observed_stats_extra_line.txt";
+    int ret;
+    double e = 0.000001;
+    c_array * line_buffer;
+    s_array * header;
+    s_array * expected_header;
+    d_array * means;
+    d_array * expected_means;
+    d_array * std_devs;
+    d_array * expected_std_devs;
+    line_buffer = init_c_array(1023);
+    header = init_s_array(1);
+    expected_header = init_s_array(1);
+    append_s_array(expected_header, "stat.1");
+    append_s_array(expected_header, "stat.2");
+    append_s_array(expected_header, "stat.3");
+    append_s_array(expected_header, "stat.4");
+    means = init_d_array(1);
+    expected_means = init_d_array(1);
+    append_d_array(expected_means, 0.1);
+    append_d_array(expected_means, 0.2);
+    append_d_array(expected_means, 0.3);
+    append_d_array(expected_means, 0.4);
+    std_devs = init_d_array(1);
+    expected_std_devs = init_d_array(1);
+    append_d_array(expected_std_devs, 0.4);
+    append_d_array(expected_std_devs, 0.3);
+    append_d_array(expected_std_devs, 0.3);
+    append_d_array(expected_std_devs, 0.4);
+
+    parse_summary_file(path, line_buffer, header, means, std_devs);
+    ck_assert_msg((header->length == 4), "header length is %d, "
+            "expecting %d", header->length, 4);
+    ck_assert_msg((means->length == 4), "means length is %d, "
+            "expecting %d", means->length, 4);
+    ck_assert_msg((std_devs->length == 4), "std devs length is %d, "
+            "expecting %d", std_devs->length, 4);
+    ret = s_arrays_equal(header, expected_header);
+    ck_assert_msg((ret != 0), "parsed header is incorrect");
+    ret = d_arrays_equal(means, expected_means, e);
+    ck_assert_msg((ret != 0), "parsed means are incorrect");
+    ret = d_arrays_equal(std_devs, expected_std_devs, e);
+    ck_assert_msg((ret != 0), "parsed std_devs are incorrect");
 }
 END_TEST
 

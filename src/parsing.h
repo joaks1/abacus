@@ -30,6 +30,8 @@
 void parse_header(const char * path, c_array * line_buffer, s_array * header);
 void parse_observed_stats_file(const char * path, c_array * line_buffer,
         s_array * header, d_array * stats);
+void parse_summary_file(const char * path, c_array * line_buffer,
+        s_array * header, d_array * means, d_array * std_devs);
 
 #endif /* PARSING_H */
 

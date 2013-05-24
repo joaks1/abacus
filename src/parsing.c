@@ -37,9 +37,6 @@ void parse_header(const char * path, c_array * line_buffer, s_array * header) {
 void parse_observed_stats_file(const char * path, c_array * line_buffer,
         s_array * header, d_array * stats) {
     FILE * f;
-    int column_idx, n;
-    char * ptr;
-    double fmatch;
     (*header).length = 0;
     (*stats).length = 0;
     if ((f = fopen(path, "r")) == NULL) {
@@ -57,16 +54,7 @@ void parse_observed_stats_file(const char * path, c_array * line_buffer,
         fprintf(stderr, "ERROR: found no stats in %s\n", path);
         exit(1);
     }
-    column_idx = 0;
-    ptr = (*line_buffer).a;
-    while(*ptr) {
-        if ((sscanf(ptr, "%lf%n", &fmatch, &n)) == 1) {
-            ptr += n;
-            append_d_array(stats, fmatch);
-            column_idx++;
-        }
-        ++ptr;
-    }
+    split_str_d((*line_buffer).a, stats, 0);
     fclose(f);
     if ((*header).length != (*stats).length) {
         fprintf(stderr, "ERROR: found %d column headers, but %d stats in "
@@ -74,3 +62,45 @@ void parse_observed_stats_file(const char * path, c_array * line_buffer,
         exit(1);
     }
 }
+
+void parse_summary_file(const char * path, c_array * line_buffer,
+        s_array * header, d_array * means, d_array * std_devs) {
+    FILE * f;
+    (*header).length = 0;
+    (*means).length = 0;
+    (*std_devs).length = 0;
+    if ((f = fopen(path, "r")) == NULL) {
+        perror(path);
+        exit(1);
+    }
+    // parse header
+    if ((fgets((*line_buffer).a, (((*line_buffer).capacity) - 1), f)) == NULL) {
+        fprintf(stderr, "ERROR: found no header in %s\n", path);
+        exit(1);
+    }
+    split_str((*line_buffer).a, header, 0);
+    // parse means
+    if ((fgets((*line_buffer).a, (((*line_buffer).capacity) - 1), f)) == NULL) {
+        fprintf(stderr, "ERROR: found no means in %s\n", path);
+        exit(1);
+    }
+    split_str_d((*line_buffer).a, means, 0);
+    if ((*header).length != (*means).length) {
+        fprintf(stderr, "ERROR: found %d column headers, but %d means in "
+                "file %s\n", (*header).length, (*means).length, path);
+        exit(1);
+    }
+    // parse std deviations
+    if ((fgets((*line_buffer).a, (((*line_buffer).capacity) - 1), f)) == NULL) {
+        fprintf(stderr, "ERROR: found no std_devs in %s\n", path);
+        exit(1);
+    }
+    split_str_d((*line_buffer).a, std_devs, 0);
+    fclose(f);
+    if ((*header).length != (*std_devs).length) {
+        fprintf(stderr, "ERROR: found %d column headers, but %d std devs in "
+                "file %s\n", (*header).length, (*std_devs).length, path);
+        exit(1);
+    }
+}
+
