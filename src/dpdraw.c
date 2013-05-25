@@ -34,17 +34,27 @@ void free_config(config * c) {
     free(c);
     c = NULL;
 }
+
+void dpdraw_preamble() {
+    char * version = DPDRAW_VERSION;
+    const char * ab_preamble = abacus_preamble();
+    fprintf(stderr, "%s\n", ab_preamble);
+    fprintf(stderr, "DPDraw Version %s\n\n", version);
+    fprintf(stderr,
+        "    Simulating draws from a Dirichlet process\n\n");
+}
+
 void help() {
-    char *version = VERSION;
-    printf("DPDraw Version %s\n\n", version);
-    printf("Usage:\n");
-    printf("  dpdraw [ -r REPS -a ALPHA -s SEED ] NUM_ELEMENTS\n\n");
-    printf("Options:\n");
-    printf(" -r  Number of replicates. Default 1.\n");
-    printf(" -a  Alpha (concentration) parameter of the Dirichlet process.\n");
-    printf("     Default 1.0.\n");
-    printf(" -s  Random number seed.\n");
-    printf(" -h  Display this help message and exit\n");
+    dpdraw_preamble();
+    fprintf(stderr, "Usage:\n");
+    fprintf(stderr, "  dpdraw [ -r REPS -a ALPHA -s SEED ] NUM_ELEMENTS\n\n");
+    fprintf(stderr, "Options:\n");
+    fprintf(stderr, " -r  Number of replicates. Default 1.\n");
+    fprintf(stderr,
+        " -a  Alpha (concentration) parameter of the Dirichlet process.\n"
+        "     Default 1.0.\n");
+    fprintf(stderr, " -s  Random number seed.\n");
+    fprintf(stderr, " -h  Display this help message and exit\n");
 }
 
 void parse_args(config * conf, int argc, char ** argv) {

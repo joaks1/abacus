@@ -29,8 +29,9 @@
 
 #include "array_utils.h"
 #include "partition_combinatorics.h"
+#include "abacus.h"
 
-#define VERSION "0.1"
+#define DPDRAW_VERSION "0.1.0"
 
 typedef struct config_ {
     int num_elements;
@@ -42,6 +43,7 @@ typedef struct config_ {
 config * init_config();
 void free_config(config * c);
 
+void dpdraw_preamble();
 void help();
 void parse_args(config * conf, int argc, char ** argv);
 

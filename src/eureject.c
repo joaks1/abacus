@@ -174,37 +174,52 @@ void free_sample_array(sample_array * v) {
     v = NULL;
 }
 
+void eureject_preamble() {
+    char * version = EUREJECT_VERSION;
+    const char * ab_preamble = abacus_preamble();
+    fprintf(stderr, "%s\n", ab_preamble);
+    fprintf(stderr, "EuReject Version %s\n\n", version);
+    fprintf(stderr,
+        "    Euclidean-distance based rejection\n\n");
+}
+
 void help() {
-    char *version = VERSION;
-    printf("EuReject Version %s\n\n", version);
-    printf("Usage:\n");
-    printf("  eureject -f OBS-FILE [-k INT] [-n INT] [-d] [-s SUM-FILE] \\\n");
-    printf("      SIMS-FILE1 [ SIMS-FILE2 [...] ]\n\n");
-    printf("Options:\n");
-    printf(" -f  Path to file containing observed summary statistics\n");
-    printf(" -k  Number of samples to keep. Default: 1000.\n");
-    printf("     If set to 0, only the stat means and standard deviations\n");
-    printf("     are calculated and reported (i.e., no rejection is\n");
-    printf("     performed).\n");
-    printf(" -n  Number of samples to use for calculating stat means and\n");
-    printf("     standard deviations for standardizing the statistics.\n");
-    printf("     This option is ignored if `-m` and `-s` are provided.\n");
-    printf("     Default: 10000\n");
-    printf(" -s  Tab-delimited file containing the means and standard\n");
-    printf("     deviations to use for standardizing statistics. The file\n");
-    printf("     must contain the same header as the file with the observed\n");
-    printf("     summarys statistics (`-f`), with unique names identifying\n");
-    printf("     the statistics in each column. This header must be\n");
-    printf("     followed by a line containing the means for each statistic\n");
-    printf("     and a third line containing the standard deviations.\n");
-    printf(" -e  Report Euclidean distances of retained samples in the\n");
-    printf("     first column of the output. Default is not to report\n");
-    printf("     the distance column.\n");
-    printf(" -h  Display this help message and exit\n");
+    eureject_preamble();
+    fprintf(stderr, "Usage:\n");
+    fprintf(stderr,
+        "  eureject -f OBS-FILE [-k INT] [-n INT] [-d] [-s SUM-FILE] \\\n"
+        "      SIMS-FILE1 [ SIMS-FILE2 [...] ]\n\n");
+    fprintf(stderr, "Options:\n");
+    fprintf(stderr,
+        " -f  Path to file containing observed summary statistics\n");
+    fprintf(stderr,
+        " -k  Number of samples to keep. Default: 1000.\n"
+        "     If set to 0, only the stat means and standard deviations\n"
+        "     are calculated and reported (i.e., no rejection is\n"
+        "     performed).\n");
+    fprintf(stderr,
+        " -n  Number of samples to use for calculating stat means and\n"
+        "     standard deviations for standardizing the statistics.\n"
+        "     This option is ignored if `-m` and `-s` are provided.\n"
+        "     Default: 10000\n");
+    fprintf(stderr,
+        " -s  Tab-delimited file containing the means and standard\n"
+        "     deviations to use for standardizing statistics. The file\n"
+        "     must contain the same header as the file with the observed\n"
+        "     summarys statistics (`-f`), with unique names identifying\n"
+        "     the statistics in each column. This header must be\n"
+        "     followed by a line containing the means for each statistic\n"
+        "     and a third line containing the standard deviations.\n");
+    fprintf(stderr,
+        " -e  Report Euclidean distances of retained samples in the\n"
+        "     first column of the output. Default is not to report\n"
+        "     the distance column.\n");
+    fprintf(stderr, " -h  Display this help message and exit\n");
 }
 
 void print_config(const config * c) {
     int i;
+    fprintf(stderr, "SETTINGS\n========\n");
     fprintf(stderr, "Number of samples to retain: %d\n", c->num_retain);
     fprintf(stderr, "Number of samples to use for standardization: %d\n",
             c->num_subsample);

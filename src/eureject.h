@@ -33,8 +33,9 @@
 #include "stats_utils.h"
 #include "array_utils.h"
 #include "parsing.h"
+#include "abacus.h"
 
-#define VERSION "0.2"
+#define EUREJECT_VERSION "0.1.1"
 
 typedef struct config_ {
     c_array * observed_path;
@@ -80,6 +81,7 @@ int process_sample(sample_array * samples, sample * s);
 void rshift_samples(sample_array * s, int index);
 void write_sample_array(FILE * stream, const sample_array * s,
         const int include_distance);
+void eureject_preamble();
 void help();
 void print_config(const config * c);
 void parse_args(config * conf, int argc, char ** argv);
