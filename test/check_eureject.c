@@ -16,6 +16,7 @@ END_TEST
 START_TEST (test_summarize_stat_samples_p1_n4) {
     int i;
     s_array * paths;
+    s_array * paths_used;
     c_array * line_buffer;
     i_array * stat_indices;
     sample_sum_array * ss_array;
@@ -28,6 +29,7 @@ START_TEST (test_summarize_stat_samples_p1_n4) {
     expected_num_cols = 6;
     num_to_sample = 4;
     paths = init_s_array(1);
+    paths_used = init_s_array(1);
     line_buffer = init_c_array(1023);
     stat_indices = init_i_array(4);
     ss_array = init_sample_sum_array(4);
@@ -40,10 +42,12 @@ START_TEST (test_summarize_stat_samples_p1_n4) {
         append_i_array(stat_indices, i);
     }
     summarize_stat_samples(paths, line_buffer, stat_indices, ss_array, means,
-            std_devs, num_to_sample, expected_num_cols);
+            std_devs, num_to_sample, expected_num_cols, paths_used);
     ck_assert_int_eq(means->length, stat_indices->length);
     ck_assert_int_eq(std_devs->length, stat_indices->length);
     ck_assert_int_eq(ss_array->a[0]->n, num_to_sample);
+    ck_assert_msg((s_arrays_equal(paths, paths_used) != 0),
+            "paths used do not match input paths");
     append_d_array(exp_means, 0.25);
     append_d_array(exp_means, 0.2225);
     append_d_array(exp_means, 2.5);
@@ -57,6 +61,7 @@ START_TEST (test_summarize_stat_samples_p1_n4) {
     ck_assert_msg((d_arrays_equal(std_devs, exp_std_devs, 0.000001) != 0),
             "unexpected std deviations");
     free_s_array(paths);
+    free_s_array(paths_used);
     free_c_array(line_buffer);
     free_i_array(stat_indices);
     free_sample_sum_array(ss_array);
@@ -70,6 +75,7 @@ END_TEST
 START_TEST (test_summarize_stat_samples_p1_n3) {
     int i;
     s_array * paths;
+    s_array * paths_used;
     c_array * line_buffer;
     i_array * stat_indices;
     sample_sum_array * ss_array;
@@ -82,6 +88,7 @@ START_TEST (test_summarize_stat_samples_p1_n3) {
     expected_num_cols = 6;
     num_to_sample = 3;
     paths = init_s_array(1);
+    paths_used = init_s_array(1);
     line_buffer = init_c_array(1023);
     stat_indices = init_i_array(4);
     ss_array = init_sample_sum_array(4);
@@ -94,10 +101,12 @@ START_TEST (test_summarize_stat_samples_p1_n3) {
         append_i_array(stat_indices, i);
     }
     summarize_stat_samples(paths, line_buffer, stat_indices, ss_array, means,
-            std_devs, num_to_sample, expected_num_cols);
+            std_devs, num_to_sample, expected_num_cols, paths_used);
     ck_assert_int_eq(means->length, stat_indices->length);
     ck_assert_int_eq(std_devs->length, stat_indices->length);
     ck_assert_int_eq(ss_array->a[0]->n, num_to_sample);
+    ck_assert_msg((s_arrays_equal(paths, paths_used) != 0),
+            "paths used do not match input paths");
     append_d_array(exp_means, 0.2);
     append_d_array(exp_means, 0.22);
     append_d_array(exp_means, 2.0);
@@ -111,6 +120,7 @@ START_TEST (test_summarize_stat_samples_p1_n3) {
     ck_assert_msg((d_arrays_equal(std_devs, exp_std_devs, 0.000001) != 0),
             "unexpected std deviations");
     free_s_array(paths);
+    free_s_array(paths_used);
     free_c_array(line_buffer);
     free_i_array(stat_indices);
     free_sample_sum_array(ss_array);
@@ -124,6 +134,7 @@ END_TEST
 START_TEST (test_summarize_stat_samples_p1_n3_c2) {
     int i;
     s_array * paths;
+    s_array * paths_used;
     c_array * line_buffer;
     i_array * stat_indices;
     sample_sum_array * ss_array;
@@ -136,6 +147,7 @@ START_TEST (test_summarize_stat_samples_p1_n3_c2) {
     expected_num_cols = 6;
     num_to_sample = 3;
     paths = init_s_array(1);
+    paths_used = init_s_array(1);
     line_buffer = init_c_array(1023);
     stat_indices = init_i_array(4);
     ss_array = init_sample_sum_array(2);
@@ -148,10 +160,12 @@ START_TEST (test_summarize_stat_samples_p1_n3_c2) {
         append_i_array(stat_indices, i);
     }
     summarize_stat_samples(paths, line_buffer, stat_indices, ss_array, means,
-            std_devs, num_to_sample, expected_num_cols);
+            std_devs, num_to_sample, expected_num_cols, paths_used);
     ck_assert_int_eq(means->length, stat_indices->length);
     ck_assert_int_eq(std_devs->length, stat_indices->length);
     ck_assert_int_eq(ss_array->a[0]->n, num_to_sample);
+    ck_assert_msg((s_arrays_equal(paths, paths_used) != 0),
+            "paths used do not match input paths");
     append_d_array(exp_means, 0.22);
     append_d_array(exp_means, 3.33333333);
     append_d_array(exp_std_devs, 0.01);
@@ -161,6 +175,7 @@ START_TEST (test_summarize_stat_samples_p1_n3_c2) {
     ck_assert_msg((d_arrays_equal(std_devs, exp_std_devs, 0.000001) != 0),
             "unexpected std deviations");
     free_s_array(paths);
+    free_s_array(paths_used);
     free_c_array(line_buffer);
     free_i_array(stat_indices);
     free_sample_sum_array(ss_array);
@@ -174,6 +189,7 @@ END_TEST
 START_TEST (test_summarize_stat_samples_p2_n3) {
     int i;
     s_array * paths;
+    s_array * paths_used;
     c_array * line_buffer;
     i_array * stat_indices;
     sample_sum_array * ss_array;
@@ -186,6 +202,7 @@ START_TEST (test_summarize_stat_samples_p2_n3) {
     expected_num_cols = 6;
     num_to_sample = 3;
     paths = init_s_array(1);
+    paths_used = init_s_array(1);
     line_buffer = init_c_array(1023);
     stat_indices = init_i_array(4);
     ss_array = init_sample_sum_array(4);
@@ -199,10 +216,13 @@ START_TEST (test_summarize_stat_samples_p2_n3) {
         append_i_array(stat_indices, i);
     }
     summarize_stat_samples(paths, line_buffer, stat_indices, ss_array, means,
-            std_devs, num_to_sample, expected_num_cols);
+            std_devs, num_to_sample, expected_num_cols, paths_used);
     ck_assert_int_eq(means->length, stat_indices->length);
     ck_assert_int_eq(std_devs->length, stat_indices->length);
     ck_assert_int_eq(ss_array->a[0]->n, num_to_sample);
+    ck_assert_int_eq(paths_used->length, 1);
+    ck_assert_msg((*get_s_array(paths, 0) == *get_s_array(paths_used, 0)),
+            "paths used do not match input paths");
     append_d_array(exp_means, 0.2);
     append_d_array(exp_means, 0.22);
     append_d_array(exp_means, 2.0);
@@ -216,6 +236,7 @@ START_TEST (test_summarize_stat_samples_p2_n3) {
     ck_assert_msg((d_arrays_equal(std_devs, exp_std_devs, 0.000001) != 0),
             "unexpected std deviations");
     free_s_array(paths);
+    free_s_array(paths_used);
     free_c_array(line_buffer);
     free_i_array(stat_indices);
     free_sample_sum_array(ss_array);
@@ -229,6 +250,7 @@ END_TEST
 START_TEST (test_summarize_stat_samples_p2_n4) {
     int i;
     s_array * paths;
+    s_array * paths_used;
     c_array * line_buffer;
     i_array * stat_indices;
     sample_sum_array * ss_array;
@@ -241,6 +263,7 @@ START_TEST (test_summarize_stat_samples_p2_n4) {
     expected_num_cols = 6;
     num_to_sample = 4;
     paths = init_s_array(1);
+    paths_used = init_s_array(1);
     line_buffer = init_c_array(1023);
     stat_indices = init_i_array(4);
     ss_array = init_sample_sum_array(4);
@@ -254,10 +277,13 @@ START_TEST (test_summarize_stat_samples_p2_n4) {
         append_i_array(stat_indices, i);
     }
     summarize_stat_samples(paths, line_buffer, stat_indices, ss_array, means,
-            std_devs, num_to_sample, expected_num_cols);
+            std_devs, num_to_sample, expected_num_cols, paths_used);
     ck_assert_int_eq(means->length, stat_indices->length);
     ck_assert_int_eq(std_devs->length, stat_indices->length);
     ck_assert_int_eq(ss_array->a[0]->n, num_to_sample);
+    ck_assert_int_eq(paths_used->length, 1);
+    ck_assert_msg((*get_s_array(paths, 0) == *get_s_array(paths_used, 0)),
+            "paths used do not match input paths");
     append_d_array(exp_means, 0.25);
     append_d_array(exp_means, 0.2225);
     append_d_array(exp_means, 2.5);
@@ -271,6 +297,7 @@ START_TEST (test_summarize_stat_samples_p2_n4) {
     ck_assert_msg((d_arrays_equal(std_devs, exp_std_devs, 0.000001) != 0),
             "unexpected std deviations");
     free_s_array(paths);
+    free_s_array(paths_used);
     free_c_array(line_buffer);
     free_i_array(stat_indices);
     free_sample_sum_array(ss_array);
@@ -284,6 +311,7 @@ END_TEST
 START_TEST (test_summarize_stat_samples_p2_n5) {
     int i;
     s_array * paths;
+    s_array * paths_used;
     c_array * line_buffer;
     i_array * stat_indices;
     sample_sum_array * ss_array;
@@ -296,6 +324,7 @@ START_TEST (test_summarize_stat_samples_p2_n5) {
     expected_num_cols = 6;
     num_to_sample = 5;
     paths = init_s_array(1);
+    paths_used = init_s_array(1);
     line_buffer = init_c_array(1023);
     stat_indices = init_i_array(4);
     ss_array = init_sample_sum_array(4);
@@ -309,10 +338,12 @@ START_TEST (test_summarize_stat_samples_p2_n5) {
         append_i_array(stat_indices, i);
     }
     summarize_stat_samples(paths, line_buffer, stat_indices, ss_array, means,
-            std_devs, num_to_sample, expected_num_cols);
+            std_devs, num_to_sample, expected_num_cols, paths_used);
     ck_assert_int_eq(means->length, stat_indices->length);
     ck_assert_int_eq(std_devs->length, stat_indices->length);
     ck_assert_int_eq(ss_array->a[0]->n, num_to_sample);
+    ck_assert_msg((s_arrays_equal(paths, paths_used) != 0),
+            "paths used do not match input paths");
     append_d_array(exp_means, 0.222);
     append_d_array(exp_means, 0.218);
     append_d_array(exp_means, 4.2);
@@ -326,6 +357,7 @@ START_TEST (test_summarize_stat_samples_p2_n5) {
     ck_assert_msg((d_arrays_equal(std_devs, exp_std_devs, 0.000001) != 0),
             "unexpected std deviations");
     free_s_array(paths);
+    free_s_array(paths_used);
     free_c_array(line_buffer);
     free_i_array(stat_indices);
     free_sample_sum_array(ss_array);
@@ -339,6 +371,7 @@ END_TEST
 START_TEST (test_summarize_stat_samples_p1_n4_missing_cell) {
     int i;
     s_array * paths;
+    s_array * paths_used;
     c_array * line_buffer;
     i_array * stat_indices;
     sample_sum_array * ss_array;
@@ -351,6 +384,7 @@ START_TEST (test_summarize_stat_samples_p1_n4_missing_cell) {
     expected_num_cols = 6;
     num_to_sample = 4;
     paths = init_s_array(1);
+    paths_used = init_s_array(1);
     line_buffer = init_c_array(1023);
     stat_indices = init_i_array(4);
     ss_array = init_sample_sum_array(4);
@@ -363,8 +397,9 @@ START_TEST (test_summarize_stat_samples_p1_n4_missing_cell) {
         append_i_array(stat_indices, i);
     }
     summarize_stat_samples(paths, line_buffer, stat_indices, ss_array, means,
-            std_devs, num_to_sample, expected_num_cols); // exit(1)
+            std_devs, num_to_sample, expected_num_cols, paths_used); // exit(1)
     free_s_array(paths);
+    free_s_array(paths_used);
     free_c_array(line_buffer);
     free_i_array(stat_indices);
     free_sample_sum_array(ss_array);

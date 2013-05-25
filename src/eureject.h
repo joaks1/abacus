@@ -61,6 +61,8 @@ typedef struct sample_array_ {
     int length;
     int capacity;
     s_array * header;
+    s_array * paths_processed;
+    int num_processed;
 } sample_array;
 
 config * init_config();
@@ -83,7 +85,13 @@ void write_sample_array(FILE * stream, const sample_array * s,
         const int include_distance);
 void eureject_preamble();
 void help();
-void print_config(const config * c);
+void write_summary(FILE * stream,
+        const s_array * sum_paths_processed,
+        const int sum_sample_size,
+        const s_array * reject_paths_processed,
+        const int num_samples_processed,
+        const int num_samples_retained);
+void write_config(FILE * stream, const config * c);
 void parse_args(config * conf, int argc, char ** argv);
 sample_array * reject(const s_array * paths,
         const c_array * line_buffer,
@@ -100,7 +108,8 @@ void summarize_stat_samples(const s_array * paths,
         d_array * means,
         d_array * std_devs,
         int num_to_sample,
-        int expected_num_columns);
+        int expected_num_columns,
+        s_array * paths_processed);
 int eureject_main(int argc, char ** argv);
 
 #endif /* EUREJECT_H */

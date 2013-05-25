@@ -80,7 +80,7 @@ void write_sample(FILE * stream, const sample * s, const int include_distance) {
     if (include_distance != 0) {
         fprintf(stream, "%lf\t", s->distance);
     }
-    write_s_array(stream, s->line_array);
+    write_s_array(stream, s->line_array, "\t");
 }
 
 void free_sample(sample * s) {
@@ -105,10 +105,13 @@ sample_array * init_sample_array(int capacity) {
         exit(1);
     }
     v->length = 0;
+    v->num_processed = 0;
+    v->paths_processed = init_s_array(1);
     return v;
 }
 
 int process_sample(sample_array * samples, sample * s) {
+    samples->num_processed++;
     if (samples->length == 0) {
         samples->a[0] = s;
         samples->length++;
@@ -157,7 +160,7 @@ void write_sample_array(FILE * stream, const sample_array * s,
     if (include_distance != 0) {
         fprintf(stream, "distance\t");
     }
-    write_s_array(stream, s->header);
+    write_s_array(stream, s->header, "\t");
     for (i = 0; i < s->length; i++) {
         write_sample(stream, s->a[i], include_distance);
     }
@@ -170,6 +173,7 @@ void free_sample_array(sample_array * v) {
     }
     free(v->a);
     free_s_array(v->header);
+    free_s_array(v->paths_processed);
     free(v);
     v = NULL;
 }
@@ -217,38 +221,66 @@ void help() {
     fprintf(stderr, " -h  Display this help message and exit\n");
 }
 
-void print_config(const config * c) {
-    int i;
-    fprintf(stderr, "SETTINGS\n========\n");
-    fprintf(stderr, "Number of samples to retain: %d\n", c->num_retain);
-    fprintf(stderr, "Number of samples to use for standardization: %d\n",
-            c->num_subsample);
-    fprintf(stderr, "Observed stats path: %s\n", c->observed_path->a);
-    fprintf(stderr, "Path(s) to file(s) with simulated draws: ");
-    for (i = 0; i < (c->sim_paths->length - 1); i++) {
-        fprintf(stderr, "%s, ", get_s_array(c->sim_paths, i));
+void write_summary(FILE * stream,
+        const s_array * sum_paths_processed,
+        const int sum_sample_size,
+        const s_array * reject_paths_processed,
+        const int num_samples_processed,
+        const int num_samples_retained) {
+    fprintf(stream, "=======\nSUMMARY\n=======\n");
+    fprintf(stream, "Files used for calculating means/std deviations: ");
+    if (sum_paths_processed->length < 1) {
+        fprintf(stream, "None\n");
     }
-    fprintf(stderr, "%s\n", get_s_array(c->sim_paths,
+    else {
+        write_s_array(stream, sum_paths_processed, ", ");
+    }
+    fprintf(stream, "Number of samples used for means/std deviations: %d\n",
+            sum_sample_size);
+    fprintf(stream, "Files processed for rejection: ");
+    if (reject_paths_processed->length < 1) {
+        fprintf(stream, "None\n");
+    }
+    else {
+        write_s_array(stream, reject_paths_processed, ", ");
+    }
+    fprintf(stream, "Total number of samples processed during rejection: %d\n",
+            num_samples_processed);
+    fprintf(stream, "Number of samples retained: %d\n", num_samples_retained);
+}
+
+void write_config(FILE * stream, const config * c) {
+    int i;
+    fprintf(stream, "========\nSETTINGS\n========\n");
+    fprintf(stream, "Number of samples to retain: %d\n", c->num_retain);
+    fprintf(stream, "Number of samples to use for standardization: %d\n",
+            c->num_subsample);
+    fprintf(stream, "Observed stats path: %s\n", c->observed_path->a);
+    fprintf(stream, "Path(s) to file(s) with simulated draws: ");
+    for (i = 0; i < (c->sim_paths->length - 1); i++) {
+        fprintf(stream, "%s, ", get_s_array(c->sim_paths, i));
+    }
+    fprintf(stream, "%s\n", get_s_array(c->sim_paths,
                 (c->sim_paths->length-1)));
-    fprintf(stderr, "Means for standardization: ");
+    fprintf(stream, "Means for standardization: ");
     if (c->summary_provided == 0) {
-        fprintf(stderr, "None\n");
+        fprintf(stream, "None\n");
     }
     else {
         for (i = 0; i < (c->means->length - 1); i++) {
-            fprintf(stderr, "%f, ", c->means->a[i]);
+            fprintf(stream, "%f, ", c->means->a[i]);
         }
-        fprintf(stderr, "%f\n", c->means->a[(c->means->length-1)]);
+        fprintf(stream, "%f\n", c->means->a[(c->means->length-1)]);
     }
-    fprintf(stderr, "Standard deviations for standardization: ");
+    fprintf(stream, "Standard deviations for standardization: ");
     if (c->summary_provided == 0) {
-        fprintf(stderr, "None\n");
+        fprintf(stream, "None\n");
     }
     else {
         for (i = 0; i < (c->std_devs->length - 1); i++) {
-            fprintf(stderr, "%f, ", c->std_devs->a[i]);
+            fprintf(stream, "%f, ", c->std_devs->a[i]);
         }
-        fprintf(stderr, "%f\n", c->std_devs->a[(c->std_devs->length-1)]);
+        fprintf(stream, "%f\n", c->std_devs->a[(c->std_devs->length-1)]);
     }
 }
 
@@ -366,6 +398,8 @@ sample_array * reject(const s_array * paths,
             perror(get_s_array(paths, i));
             exit(1);
         }
+        append_s_array(retained_samples->paths_processed,
+                get_s_array(paths, i));
         while (fgets((*line_buffer).a, (((*line_buffer).capacity) - 1),
                     f) != NULL) {
             line_num++;
@@ -399,7 +433,8 @@ void summarize_stat_samples(const s_array * paths,
         d_array * means,
         d_array * std_devs,
         int num_to_sample,
-        int expected_num_columns) {
+        int expected_num_columns,
+        s_array * paths_processed) {
     assert(ss_array->length == stat_indices->length);
     FILE * f;
     int i, line_num, ncols, get_stats_return;
@@ -413,6 +448,7 @@ void summarize_stat_samples(const s_array * paths,
             perror(get_s_array(paths, i));
             exit(1);
         }
+        append_s_array(paths_processed, get_s_array(paths, i));
         while (fgets((*line_buffer).a, (((*line_buffer).capacity) - 1),
                     f) != NULL) {
             line_num++;
@@ -452,25 +488,30 @@ int eureject_main(int argc, char ** argv) {
     s_array * sim_header;
     s_array * sim_header_comp;
     d_array * obs_stats;
-    int i, heads_match;
+    int i, heads_match, sum_sample_size;
     i_array * indices;
     sample_sum_array * sample_sums;
     sample_array * retained_samples;
+    s_array * sum_paths_used;
     config * conf;
     line_buffer = init_c_array(pow(2, 10));
     obs_header = init_s_array(1);
     obs_stats = init_d_array(1);
+    sum_paths_used = init_s_array(1);
     if (argc < 2) {
         help();
         exit(1);
     }
     conf = init_config();
     parse_args(conf, argc, argv);
-    print_config(conf);
+
+    abacus_preamble();
+    write_config(stderr, conf);
 
     parse_observed_stats_file(conf->observed_path->a, line_buffer, obs_header,
             obs_stats);
 
+    // check summary file header
     if (conf->summary_provided != 0) {
         summary_header = init_s_array(obs_header->length);
         parse_summary_file(conf->summary_path->a, line_buffer, summary_header,
@@ -486,6 +527,7 @@ int eureject_main(int argc, char ** argv) {
 
     sim_header = init_s_array(obs_header->length);
     parse_header(get_s_array(conf->sim_paths, 0), line_buffer, sim_header);
+    // check on simulation file headers
     if (conf->sim_paths->length > 1) {
         sim_header_comp = init_s_array(sim_header->length);
         for (i = 1; i < conf->sim_paths->length; i++) {
@@ -503,22 +545,25 @@ int eureject_main(int argc, char ** argv) {
     }
     indices = init_i_array(obs_header->length);
     get_matching_indices(obs_header, sim_header, indices);
+    sum_sample_size = 0;
     if (conf->summary_provided == 0) {
         sample_sums = init_sample_sum_array(obs_header->length);
-        summarize_stat_samples(conf->sim_paths, line_buffer, indices,
-                sample_sums, conf->means, conf->std_devs, conf->num_subsample,
-                sim_header->length);
+        summarize_stat_samples(conf->sim_paths, line_buffer,
+                indices, sample_sums, conf->means, conf->std_devs,
+                conf->num_subsample, sim_header->length, sum_paths_used);
+        sum_sample_size = sample_sums->a[0]->n;
         free_sample_sum_array(sample_sums);
     }
     if (conf->num_retain < 1) {
-        write_s_array(stdout, obs_header);
-        write_d_array(stdout, conf->means);
-        write_d_array(stdout, conf->std_devs);
+        write_s_array(stdout, obs_header, "\t");
+        write_d_array(stdout, conf->means, "\t");
+        write_d_array(stdout, conf->std_devs, "\t");
         free_i_array(indices);
         free_c_array(line_buffer);
         free_s_array(obs_header);
         free_s_array(sim_header);
         free_d_array(obs_stats);
+        free_s_array(sum_paths_used);
         free_config(conf);
         return 0;
     }
@@ -527,12 +572,19 @@ int eureject_main(int argc, char ** argv) {
             obs_stats, conf->means, conf->std_devs, conf->num_retain,
             sim_header);
     write_sample_array(stdout, retained_samples, conf->include_distance);
+    write_summary(stderr,
+        sum_paths_used,
+        sum_sample_size,
+        retained_samples->paths_processed,
+        retained_samples->num_processed,
+        retained_samples->length);
     free_sample_array(retained_samples);
     free_i_array(indices);
     free_c_array(line_buffer);
     free_s_array(obs_header);
     free_s_array(sim_header);
     free_d_array(obs_stats);
+    free_s_array(sum_paths_used);
     free_config(conf);
     return 0;
 }
