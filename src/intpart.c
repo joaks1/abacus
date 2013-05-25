@@ -34,11 +34,12 @@ void free_config(config * c) {
 
 void intpart_preamble() {
     char * version = INTPART_VERSION;
-    const char * ab_preamble = abacus_preamble();
+    char * ab_preamble = abacus_preamble();
     fprintf(stderr, "%s\n", ab_preamble);
     fprintf(stderr, "IntPart Version %s\n\n", version);
     fprintf(stderr,
         "    Integer partitioning\n\n");
+    free(ab_preamble);
 }
 
 void help() {

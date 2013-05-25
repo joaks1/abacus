@@ -20,7 +20,7 @@
 
 #include "abacus.h"
 
-const char * abacus_preamble() {
+char * abacus_preamble() {
     char * s;
     if ((s = (typeof(*s) *) calloc(512, sizeof(*s))) == NULL) {
         perror("out of memory");

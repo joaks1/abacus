@@ -37,11 +37,12 @@ void free_config(config * c) {
 
 void dpdraw_preamble() {
     char * version = DPDRAW_VERSION;
-    const char * ab_preamble = abacus_preamble();
+    char * ab_preamble = abacus_preamble();
     fprintf(stderr, "%s\n", ab_preamble);
     fprintf(stderr, "DPDraw Version %s\n\n", version);
     fprintf(stderr,
         "    Simulating draws from a Dirichlet process\n\n");
+    free(ab_preamble);
 }
 
 void help() {

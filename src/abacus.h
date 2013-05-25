@@ -34,7 +34,7 @@
     "you can redistribute and/or modify it under the terms of the GNU GPL\n" \
     "version 3 or later."
 
-const char * abacus_preamble();
+char * abacus_preamble();
 
 #endif /* ABACUS_H */
 

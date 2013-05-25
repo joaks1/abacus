@@ -182,7 +182,7 @@ void free_sample_array(sample_array * v) {
 
 void eureject_preamble() {
     char * version = EUREJECT_VERSION;
-    const char * ab_preamble = abacus_preamble();
+    char * ab_preamble = abacus_preamble();
     fprintf(stderr, "%s\n", ab_preamble);
     fprintf(stderr, "EuReject Version %s\n\n", version);
     fprintf(stderr,
