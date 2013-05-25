@@ -207,26 +207,26 @@ char * get_c_array(const c_array * v) {
     return (v->a);
 }
 
-void write_d_array(FILE * stream, const d_array * v) {
+void write_d_array(FILE * stream, const d_array * v, const char * sep) {
     int i;
     for (i = 0; i < (v->length - 1); i++) {
-        fprintf(stream, "%lf\t", v->a[i]);
+        fprintf(stream, "%lf%s", v->a[i], sep);
     }
     fprintf(stream, "%lf\n", v->a[(v->length - 1)]);
 }
 
-void write_i_array(FILE * stream, const i_array * v) {
+void write_i_array(FILE * stream, const i_array * v, const char * sep) {
     int i;
     for (i = 0; i < (v->length - 1); i++) {
-        fprintf(stream, "%d\t", v->a[i]);
+        fprintf(stream, "%d%s", v->a[i], sep);
     }
     fprintf(stream, "%d\n", v->a[(v->length - 1)]);
 }
 
-void write_s_array(FILE * stream, const s_array * v) {
+void write_s_array(FILE * stream, const s_array * v, const char * sep) {
     int i;
     for (i = 0; i < (v->length - 1); i++) {
-        fprintf(stream, "%s\t", get_s_array(v, i));
+        fprintf(stream, "%s%s", get_s_array(v, i), sep);
     }
     fprintf(stream, "%s\n", get_s_array(v, (v->length - 1)));
 }
