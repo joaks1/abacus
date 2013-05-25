@@ -70,6 +70,7 @@ c_array * init_c_array(int length);
 void expand_c_array(c_array * v);
 void assign_c_array(c_array * v, const char * s);
 void free_c_array(c_array * v);
+char * get_c_array(const c_array * v);
 
 i_array * init_i_array(int length);
 void expand_i_array(i_array * v);
