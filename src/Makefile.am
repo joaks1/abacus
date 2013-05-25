@@ -14,7 +14,9 @@ eureject_SOURCES = \
 	stats_utils.c \
 	stats_utils.h \
 	parsing.c \
-	parsing.h
+	parsing.h \
+	abacus.c \
+	abacus.h
 
 dpdraw_SOURCES = \
 	dpdraw.c \
@@ -23,7 +25,9 @@ dpdraw_SOURCES = \
 	array_utils.c \
 	array_utils.h \
 	partition_combinatorics.c \
-	partition_combinatorics.h
+	partition_combinatorics.h \
+	abacus.c \
+	abacus.h
 
 intpart_SOURCES = \
 	intpart.c \
@@ -32,5 +36,7 @@ intpart_SOURCES = \
 	array_utils.c \
 	array_utils.h \
 	partition_combinatorics.c \
-	partition_combinatorics.h
+	partition_combinatorics.h \
+	abacus.c \
+	abacus.h
 

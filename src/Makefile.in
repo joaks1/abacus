@@ -63,16 +63,18 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_dpdraw_OBJECTS = dpdraw.$(OBJEXT) dpdraw_main.$(OBJEXT) \
-	array_utils.$(OBJEXT) partition_combinatorics.$(OBJEXT)
+	array_utils.$(OBJEXT) partition_combinatorics.$(OBJEXT) \
+	abacus.$(OBJEXT)
 dpdraw_OBJECTS = $(am_dpdraw_OBJECTS)
 dpdraw_LDADD = $(LDADD)
 am_eureject_OBJECTS = eureject.$(OBJEXT) eureject_main.$(OBJEXT) \
 	array_utils.$(OBJEXT) math_utils.$(OBJEXT) \
-	stats_utils.$(OBJEXT) parsing.$(OBJEXT)
+	stats_utils.$(OBJEXT) parsing.$(OBJEXT) abacus.$(OBJEXT)
 eureject_OBJECTS = $(am_eureject_OBJECTS)
 eureject_LDADD = $(LDADD)
 am_intpart_OBJECTS = intpart.$(OBJEXT) intpart_main.$(OBJEXT) \
-	array_utils.$(OBJEXT) partition_combinatorics.$(OBJEXT)
+	array_utils.$(OBJEXT) partition_combinatorics.$(OBJEXT) \
+	abacus.$(OBJEXT)
 intpart_OBJECTS = $(am_intpart_OBJECTS)
 intpart_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -198,7 +200,9 @@ eureject_SOURCES = \
 	stats_utils.c \
 	stats_utils.h \
 	parsing.c \
-	parsing.h
+	parsing.h \
+	abacus.c \
+	abacus.h
 
 dpdraw_SOURCES = \
 	dpdraw.c \
@@ -207,7 +211,9 @@ dpdraw_SOURCES = \
 	array_utils.c \
 	array_utils.h \
 	partition_combinatorics.c \
-	partition_combinatorics.h
+	partition_combinatorics.h \
+	abacus.c \
+	abacus.h
 
 intpart_SOURCES = \
 	intpart.c \
@@ -216,7 +222,9 @@ intpart_SOURCES = \
 	array_utils.c \
 	array_utils.h \
 	partition_combinatorics.c \
-	partition_combinatorics.h
+	partition_combinatorics.h \
+	abacus.c \
+	abacus.h
 
 all: all-am
 
@@ -308,6 +316,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/abacus.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/array_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpdraw.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpdraw_main.Po@am__quote@

@@ -78,6 +78,7 @@ am_check_eureject_OBJECTS = check_eureject-check_eureject.$(OBJEXT) \
 	check_eureject-stats_utils.$(OBJEXT) \
 	check_eureject-math_utils.$(OBJEXT) \
 	check_eureject-parsing.$(OBJEXT) \
+	check_eureject-abacus.$(OBJEXT) \
 	check_eureject-test_utils.$(OBJEXT)
 check_eureject_OBJECTS = $(am_check_eureject_OBJECTS)
 check_eureject_DEPENDENCIES =
@@ -291,6 +292,7 @@ check_eureject_SOURCES = \
 	$(top_builddir)/src/stats_utils.c \
 	$(top_builddir)/src/math_utils.c \
 	$(top_builddir)/src/parsing.c \
+	$(top_builddir)/src/abacus.c \
 	test_utils.c \
 	test_utils.h
 
@@ -360,6 +362,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_array_utils-check_array_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_array_utils-test_utils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_eureject-abacus.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_eureject-array_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_eureject-check_eureject.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_eureject-math_utils.Po@am__quote@
@@ -491,6 +494,20 @@ check_eureject-parsing.obj: $(top_builddir)/src/parsing.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(top_builddir)/src/parsing.c' object='check_eureject-parsing.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_eureject_CFLAGS) $(CFLAGS) -c -o check_eureject-parsing.obj `if test -f '$(top_builddir)/src/parsing.c'; then $(CYGPATH_W) '$(top_builddir)/src/parsing.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/parsing.c'; fi`
+
+check_eureject-abacus.o: $(top_builddir)/src/abacus.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_eureject_CFLAGS) $(CFLAGS) -MT check_eureject-abacus.o -MD -MP -MF $(DEPDIR)/check_eureject-abacus.Tpo -c -o check_eureject-abacus.o `test -f '$(top_builddir)/src/abacus.c' || echo '$(srcdir)/'`$(top_builddir)/src/abacus.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_eureject-abacus.Tpo $(DEPDIR)/check_eureject-abacus.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(top_builddir)/src/abacus.c' object='check_eureject-abacus.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_eureject_CFLAGS) $(CFLAGS) -c -o check_eureject-abacus.o `test -f '$(top_builddir)/src/abacus.c' || echo '$(srcdir)/'`$(top_builddir)/src/abacus.c
+
+check_eureject-abacus.obj: $(top_builddir)/src/abacus.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_eureject_CFLAGS) $(CFLAGS) -MT check_eureject-abacus.obj -MD -MP -MF $(DEPDIR)/check_eureject-abacus.Tpo -c -o check_eureject-abacus.obj `if test -f '$(top_builddir)/src/abacus.c'; then $(CYGPATH_W) '$(top_builddir)/src/abacus.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/abacus.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_eureject-abacus.Tpo $(DEPDIR)/check_eureject-abacus.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(top_builddir)/src/abacus.c' object='check_eureject-abacus.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_eureject_CFLAGS) $(CFLAGS) -c -o check_eureject-abacus.obj `if test -f '$(top_builddir)/src/abacus.c'; then $(CYGPATH_W) '$(top_builddir)/src/abacus.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/abacus.c'; fi`
 
 check_eureject-test_utils.o: test_utils.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_eureject_CFLAGS) $(CFLAGS) -MT check_eureject-test_utils.o -MD -MP -MF $(DEPDIR)/check_eureject-test_utils.Tpo -c -o check_eureject-test_utils.o `test -f 'test_utils.c' || echo '$(srcdir)/'`test_utils.c

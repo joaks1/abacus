@@ -74,6 +74,7 @@ check_eureject_SOURCES = \
 	$(top_builddir)/src/stats_utils.c \
 	$(top_builddir)/src/math_utils.c \
 	$(top_builddir)/src/parsing.c \
+	$(top_builddir)/src/abacus.c \
 	test_utils.c \
 	test_utils.h
 
