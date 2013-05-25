@@ -32,6 +32,7 @@ config * init_config() {
     c->sim_paths = init_s_array(1);
     c->observed_path = init_c_array(63);
     c->summary_path = init_c_array(63);
+    c->summary_out_path = init_s_array(1);
     c->include_distance = 0;
     return c;
 }
@@ -42,6 +43,7 @@ void free_config(config * c) {
     free_s_array(c->sim_paths);
     free_c_array(c->observed_path);
     free_c_array(c->summary_path);
+    free_s_array(c->summary_out_path);
     free(c);
     c = NULL;
 }
@@ -185,6 +187,7 @@ void eureject_preamble() {
     fprintf(stderr, "EuReject Version %s\n\n", version);
     fprintf(stderr,
         "    Euclidean-distance based rejection\n\n");
+    free(ab_preamble);
 }
 
 void help() {
@@ -214,6 +217,14 @@ void help() {
         "     the statistics in each column. This header must be\n"
         "     followed by a line containing the means for each statistic\n"
         "     and a third line containing the standard deviations.\n");
+    fprintf(stderr,
+        " -o  Output file path for means and standard deviations used for\n"
+        "     standardizing statistics. The means and standard deviations are\n"
+        "     always reported to standard error along with other run info.\n"
+        "     It does not make much sense to use this option in combination\n"
+        "     with `-s` (it will simply recreate the file specified by `-s`).\n"
+        "     This option is nice if you plan to re-use the means/stanard\n"
+        "     deviations, or just want a permanent record of them.\n");
     fprintf(stderr,
         " -e  Report Euclidean distances of retained samples in the\n"
         "     first column of the output. Default is not to report\n"
@@ -267,20 +278,14 @@ void write_config(FILE * stream, const config * c) {
         fprintf(stream, "None\n");
     }
     else {
-        for (i = 0; i < (c->means->length - 1); i++) {
-            fprintf(stream, "%f, ", c->means->a[i]);
-        }
-        fprintf(stream, "%f\n", c->means->a[(c->means->length-1)]);
+        write_d_array(stream, c->means, ", ");
     }
     fprintf(stream, "Standard deviations for standardization: ");
     if (c->summary_provided == 0) {
         fprintf(stream, "None\n");
     }
     else {
-        for (i = 0; i < (c->std_devs->length - 1); i++) {
-            fprintf(stream, "%f, ", c->std_devs->a[i]);
-        }
-        fprintf(stream, "%f\n", c->std_devs->a[(c->std_devs->length-1)]);
+        write_d_array(stream, c->std_devs, ", ");
     }
 }
 
@@ -295,7 +300,7 @@ void parse_args(config * conf, int argc, char ** argv) {
     conf->means->length = 0;
     conf->std_devs->length = 0;
     conf->sim_paths->length = 0;
-    while((i = getopt(argc, argv, "f:k:n:s:eh")) != -1) {
+    while((i = getopt(argc, argv, "f:k:n:s:o:eh")) != -1) {
         switch(i) {
             case 'f':
                 assign_c_array(conf->observed_path, optarg);
@@ -317,6 +322,9 @@ void parse_args(config * conf, int argc, char ** argv) {
             case 's':
                 conf->summary_provided = 1;
                 assign_c_array(conf->summary_path, optarg);
+                break;
+            case 'o':
+                append_s_array(conf->summary_out_path, optarg);
                 break;
             case 'e':
                 conf->include_distance = 1;
@@ -494,6 +502,7 @@ int eureject_main(int argc, char ** argv) {
     sample_array * retained_samples;
     s_array * sum_paths_used;
     config * conf;
+    FILE * summary_out_stream;
     line_buffer = init_c_array(pow(2, 10));
     obs_header = init_s_array(1);
     obs_stats = init_d_array(1);
@@ -505,13 +514,10 @@ int eureject_main(int argc, char ** argv) {
     conf = init_config();
     parse_args(conf, argc, argv);
 
-    abacus_preamble();
-    write_config(stderr, conf);
-
     parse_observed_stats_file(conf->observed_path->a, line_buffer, obs_header,
             obs_stats);
 
-    // check summary file header
+    // parse means and std devs from summary  file
     if (conf->summary_provided != 0) {
         summary_header = init_s_array(obs_header->length);
         parse_summary_file(conf->summary_path->a, line_buffer, summary_header,
@@ -521,13 +527,15 @@ int eureject_main(int argc, char ** argv) {
             fprintf(stderr, "ERROR: Files %s and %s have different headers\n",
                     get_c_array(conf->observed_path),
                     get_c_array(conf->summary_path));
+            help();
+            exit(1);
         }
         free_s_array(summary_header);
     }
 
     sim_header = init_s_array(obs_header->length);
     parse_header(get_s_array(conf->sim_paths, 0), line_buffer, sim_header);
-    // check on simulation file headers
+    // check all simulation file headers
     if (conf->sim_paths->length > 1) {
         sim_header_comp = init_s_array(sim_header->length);
         for (i = 1; i < conf->sim_paths->length; i++) {
@@ -538,6 +546,7 @@ int eureject_main(int argc, char ** argv) {
                 fprintf(stderr, "ERROR: Files %s and %s have different "
                         "headers\n", get_s_array(conf->sim_paths, 0),
                         get_s_array(conf->sim_paths, i));
+                help();
                 exit(1);
             }
         }
@@ -545,40 +554,72 @@ int eureject_main(int argc, char ** argv) {
     }
     indices = init_i_array(obs_header->length);
     get_matching_indices(obs_header, sim_header, indices);
+
+    eureject_preamble();
+    write_config(stderr, conf);
+
+    // calc means and standard devs
     sum_sample_size = 0;
     if (conf->summary_provided == 0) {
+        fprintf(stderr, "\nCalculating means and standard deviations... ");
         sample_sums = init_sample_sum_array(obs_header->length);
         summarize_stat_samples(conf->sim_paths, line_buffer,
                 indices, sample_sums, conf->means, conf->std_devs,
                 conf->num_subsample, sim_header->length, sum_paths_used);
         sum_sample_size = sample_sums->a[0]->n;
         free_sample_sum_array(sample_sums);
+        fprintf(stderr, "Done!\n");
     }
-    if (conf->num_retain < 1) {
-        write_s_array(stdout, obs_header, "\t");
-        write_d_array(stdout, conf->means, "\t");
-        write_d_array(stdout, conf->std_devs, "\t");
-        free_i_array(indices);
-        free_c_array(line_buffer);
-        free_s_array(obs_header);
-        free_s_array(sim_header);
-        free_d_array(obs_stats);
-        free_s_array(sum_paths_used);
-        free_config(conf);
-        return 0;
+
+    // rejection
+    if (conf->num_retain > 0) {
+        fprintf(stderr, "\nPerforming rejection... ");
+        standardize_vector(obs_stats, conf->means, conf->std_devs);
+        retained_samples = reject(conf->sim_paths, line_buffer, indices,
+                obs_stats, conf->means, conf->std_devs, conf->num_retain,
+                sim_header);
+        fprintf(stderr, "Done!\n\n");
     }
-    standardize_vector(obs_stats, conf->means, conf->std_devs);
-    retained_samples = reject(conf->sim_paths, line_buffer, indices,
-            obs_stats, conf->means, conf->std_devs, conf->num_retain,
-            sim_header);
-    write_sample_array(stdout, retained_samples, conf->include_distance);
+
+    // write run stats
     write_summary(stderr,
         sum_paths_used,
         sum_sample_size,
         retained_samples->paths_processed,
         retained_samples->num_processed,
         retained_samples->length);
-    free_sample_array(retained_samples);
+
+    // write means and standard devs
+    if (conf->summary_out_path->length == 1) {
+        if ((summary_out_stream = fopen(get_s_array(conf->summary_out_path, 0),
+                "w")) == NULL) {
+            fprintf(stderr,
+                    "ERROR: Could not open %s for writing means and std devs;\n"
+                    "using standard error instead\n",
+                    get_s_array(conf->summary_out_path, 0));
+        }
+        else {
+            write_s_array(summary_out_stream, obs_header, "\t");
+            write_d_array(summary_out_stream, conf->means, "\t");
+            write_d_array(summary_out_stream, conf->std_devs, "\t");
+            fclose(summary_out_stream);
+        }
+    }
+    fprintf(stderr,
+                  "\n=====================================================\n");
+    fprintf(stderr, "MEANS AND STD DEVIATIONS USED FOR STANDARDIZING STATS\n");
+    fprintf(stderr, "=====================================================\n");
+    write_s_array(stderr, obs_header, "\t");
+    write_d_array(stderr, conf->means, "\t");
+    write_d_array(stderr, conf->std_devs, "\t");
+    fprintf(stderr, "\n");
+
+    // write retained samples
+    if (conf->num_retain > 0) {
+        write_sample_array(stdout, retained_samples, conf->include_distance);
+        free_sample_array(retained_samples);
+    }
+
     free_i_array(indices);
     free_c_array(line_buffer);
     free_s_array(obs_header);
@@ -588,3 +629,4 @@ int eureject_main(int argc, char ** argv) {
     free_config(conf);
     return 0;
 }
+

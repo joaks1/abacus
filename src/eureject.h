@@ -35,11 +35,12 @@
 #include "parsing.h"
 #include "abacus.h"
 
-#define EUREJECT_VERSION "0.1.1"
+#define EUREJECT_VERSION "0.1.2"
 
 typedef struct config_ {
     c_array * observed_path;
     c_array * summary_path;
+    s_array * summary_out_path;
     s_array * sim_paths;
     int num_retain;
     int num_subsample;
