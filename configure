@@ -627,6 +627,8 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 MATHLDADD
+GSL_CFLAGS
+GSL_LIBS
 USE_GSL_FALSE
 USE_GSL_TRUE
 CHECK_LIBS
@@ -1357,8 +1359,14 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --without-gsl           disable build and install of gsl-dependent tools
-                          (dpdraw)
+  --with-gsl=yes/no/DIR   if yes, configure will look for a system-level GSL
+                          installation (this is the default); if no, configure
+                          will only build and install gsl-independent tools;
+                          if a directory is provided, configure will use the
+                          gsl library installed at that location. For example,
+                          if the non-system-level GSL library files you wish
+                          to use are in /home/joebob/lib, then use
+                          --with-gsl=/home/joebob.
 
 Some influential environment variables:
   CC          C compiler command
@@ -4680,165 +4688,182 @@ fi
 #   HAVE_LIBGSL, HAVE_LIBGSLCBGLAS, HAVE_LIBM
 # They will also add '-lgls -lgslcblas -lm' to `LIBS`
 ###############################################################################
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for cos in -lm" >&5
-$as_echo_n "checking for cos in -lm... " >&6; }
-if ${ac_cv_lib_m_cos+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lm  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char cos ();
-int
-main ()
-{
-return cos ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_m_cos=yes
-else
-  ac_cv_lib_m_cos=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_m_cos" >&5
-$as_echo "$ac_cv_lib_m_cos" >&6; }
-if test "x$ac_cv_lib_m_cos" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBM 1
-_ACEOF
-
-  LIBS="-lm $LIBS"
-
-fi
-
 
 
 # Check whether --with-gsl was given.
 if test "${with_gsl+set}" = set; then :
-  withval=$with_gsl;
+  withval=$with_gsl; GSL_ARG="${with_gsl}"
 else
-  with_gsl=yes
+  GSL_ARG=yes
 fi
 
 
-if test "$with_gsl" != no
+GSL_FOUND="no"
+GSL_LIBS=
+GSL_CFLAGS=
+if test "${GSL_ARG}" = "yes"
 then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for cblas_dgemm in -lgslcblas" >&5
-$as_echo_n "checking for cblas_dgemm in -lgslcblas... " >&6; }
-if ${ac_cv_lib_gslcblas_cblas_dgemm+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lgslcblas  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char cblas_dgemm ();
-int
-main ()
-{
-return cblas_dgemm ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_gslcblas_cblas_dgemm=yes
-else
-  ac_cv_lib_gslcblas_cblas_dgemm=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_gslcblas_cblas_dgemm" >&5
-$as_echo "$ac_cv_lib_gslcblas_cblas_dgemm" >&6; }
-if test "x$ac_cv_lib_gslcblas_cblas_dgemm" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGSLCBLAS 1
-_ACEOF
-
-  LIBS="-lgslcblas $LIBS"
-
-fi
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gsl_blas_dgemm in -lgsl" >&5
-$as_echo_n "checking for gsl_blas_dgemm in -lgsl... " >&6; }
-if ${ac_cv_lib_gsl_gsl_blas_dgemm+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lgsl  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char gsl_blas_dgemm ();
-int
-main ()
-{
-return gsl_blas_dgemm ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_gsl_gsl_blas_dgemm=yes
-else
-  ac_cv_lib_gsl_gsl_blas_dgemm=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_gsl_gsl_blas_dgemm" >&5
-$as_echo "$ac_cv_lib_gsl_gsl_blas_dgemm" >&6; }
-if test "x$ac_cv_lib_gsl_gsl_blas_dgemm" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGSL 1
-_ACEOF
-
-  LIBS="-lgsl $LIBS"
-
-fi
-
-    if test "$ac_cv_lib_gsl_gsl_blas_dgemm" = no
+    GSL_CONFIG="gsl-config"
+    { $as_echo "$as_me:${as_lineno-$LINENO}: looking for gsl using $GSL_CONFIG..." >&5
+$as_echo "$as_me: looking for gsl using $GSL_CONFIG..." >&6;}
+    if test -z "`${GSL_CONFIG} --version || echo ''`"
     then
-        as_fn_error $? "cannot find GSL library; you can either designate the path to the gsl library using --with-gsl=/path/to/gsl or build and install only tools that do not require gsl using --without-gsl" "$LINENO" 5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: could not find GSL library with $GSL_CONFIG" >&5
+$as_echo "$as_me: could not find GSL library with $GSL_CONFIG" >&6;}
+    else
+        GSL_LIBS="`${GSL_CONFIG} --libs`"
+        GSL_CFLAGS="`${GSL_CONFIG} --cflags`"
+        GSL_FOUND="yes"
+        { $as_echo "$as_me:${as_lineno-$LINENO}: GSL library found with $GSL_CONFIG" >&5
+$as_echo "$as_me: GSL library found with $GSL_CONFIG" >&6;}
+    fi
+
+    if test "$GSL_FOUND" = "no"
+    then
+        GSL_CONFIG="/usr/bin/gsl-config"
+        { $as_echo "$as_me:${as_lineno-$LINENO}: looking for gsl using $GSL_CONFIG..." >&5
+$as_echo "$as_me: looking for gsl using $GSL_CONFIG..." >&6;}
+        if test -z "`${GSL_CONFIG} --version || echo ''`"
+        then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: could not find GSL library with $GSL_CONFIG" >&5
+$as_echo "$as_me: could not find GSL library with $GSL_CONFIG" >&6;}
+        else
+            GSL_LIBS="`${GSL_CONFIG} --libs`"
+            GSL_CFLAGS="`${GSL_CONFIG} --cflags`"
+            GSL_FOUND="yes"
+            { $as_echo "$as_me:${as_lineno-$LINENO}: GSL library found with $GSL_CONFIG" >&5
+$as_echo "$as_me: GSL library found with $GSL_CONFIG" >&6;}
+        fi
+    fi
+
+    if test "$GSL_FOUND" = "no"
+    then
+        GSL_CONFIG="/usr/local/bin/gsl-config"
+        { $as_echo "$as_me:${as_lineno-$LINENO}: looking for gsl using $GSL_CONFIG..." >&5
+$as_echo "$as_me: looking for gsl using $GSL_CONFIG..." >&6;}
+        if test -z "`${GSL_CONFIG} --version || echo ''`"
+        then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: could not find GSL library with $GSL_CONFIG" >&5
+$as_echo "$as_me: could not find GSL library with $GSL_CONFIG" >&6;}
+        else
+            GSL_LIBS="`${GSL_CONFIG} --libs`"
+            GSL_CFLAGS="`${GSL_CONFIG} --cflags`"
+            GSL_FOUND="yes"
+            { $as_echo "$as_me:${as_lineno-$LINENO}: GSL library found with $GSL_CONFIG" >&5
+$as_echo "$as_me: GSL library found with $GSL_CONFIG" >&6;}
+        fi
+    fi
+
+    if test "$GSL_FOUND" = "no"
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: looking for GSL using pkg-config..." >&5
+$as_echo "$as_me: looking for GSL using pkg-config..." >&6;}
+        if test -z "${PKG_CONFIG}"
+        then
+            # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_PKG_CONFIG+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
+$as_echo "$PKG_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+        fi
+        if test -n "${PKG_CONFIG}"
+        then
+            GSL_CONFIG="${PKG_CONFIG} libgsl"
+            if test -z "`${GSL_CONFIG} --modversion || echo ''`"
+            then
+                { $as_echo "$as_me:${as_lineno-$LINENO}: could not find GSL library with pkg-config" >&5
+$as_echo "$as_me: could not find GSL library with pkg-config" >&6;}
+            else
+                GSL_LIBS="`${GSL_CONFIG} --libs`"
+                GSL_CFLAGS="`${GSL_CONFIG} --cflags`"
+                GSL_FOUND="yes"
+                { $as_echo "$as_me:${as_lineno-$LINENO}: GSL library found with pkg-config" >&5
+$as_echo "$as_me: GSL library found with pkg-config" >&6;}
+            fi
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: could not find pkg-config to search for GSL" >&5
+$as_echo "$as_me: could not find pkg-config to search for GSL" >&6;}
+        fi
+    fi
+
+    if test "$GSL_FOUND" = "no"
+    then
+        as_fn_error $? "could not find GSL library. Either install GSL or designate its location with --with-gsl=path/to/gsl/base/dir. If you do not want to deal with GSL you can also build and install only GSL-independent tools using the --without-gsl configure flag." "$LINENO" 5
+    fi
+
+elif test "${GSL_ARG}" = "no"
+then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: --without-gsl specified; configure will not build and install GSL-dependent tools (dpdraw)." >&5
+$as_echo "$as_me: --without-gsl specified; configure will not build and install GSL-dependent tools (dpdraw)." >&6;}
+else
+    if ! test -d "${GSL_ARG}/lib"
+    then
+        as_fn_error $? "Expecting a directory named $GSL_ARG/lib; please verify --with-gsl argument is correct." "$LINENO" 5
+    else
+        GSL_CONFIG="${GSL_ARG}/bin/gsl-config"
+        { $as_echo "$as_me:${as_lineno-$LINENO}: looking for $GSL_CONFIG..." >&5
+$as_echo "$as_me: looking for $GSL_CONFIG..." >&6;}
+        if test -z "`${GSL_CONFIG} --version || echo ''`"
+        then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: could not find gsl-config at --with-gsl specified location. Trying basic GSL configuration based on location" >&5
+$as_echo "$as_me: could not find gsl-config at --with-gsl specified location. Trying basic GSL configuration based on location" >&6;}
+            GSL_LIBS="-L${GSL_ARG}/lib -lgsl -lgslcblas -lm"
+            GSL_CFLAGS="-I${GSL_ARG}/include"
+            GSL_FOUND="yes"
+        else
+            GSL_LIBS="`${GSL_CONFIG} --libs`"
+            GSL_CFLAGS="`${GSL_CONFIG} --cflags`"
+            GSL_FOUND="yes"
+            { $as_echo "$as_me:${as_lineno-$LINENO}: GSL library found with $GSL_CONFIG" >&5
+$as_echo "$as_me: GSL library found with $GSL_CONFIG" >&6;}
+        fi
     fi
 fi
- if test "$ac_cv_lib_gsl_gsl_blas_dgemm" = yes; then
+
+ if test "$GSL_FOUND" = "yes"; then
   USE_GSL_TRUE=
   USE_GSL_FALSE='#'
 else
   USE_GSL_TRUE='#'
   USE_GSL_FALSE=
 fi
+
+
 
 
 # define flags

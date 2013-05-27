@@ -189,6 +189,8 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 GREP = @GREP@
+GSL_CFLAGS = @GSL_CFLAGS@
+GSL_LIBS = @GSL_LIBS@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -300,7 +302,7 @@ check_parsing_SOURCES = \
 	test_utils.h
 
 check_parsing_CFLAGS = @CHECK_CFLAGS@
-check_parsing_LDADD = @CHECK_LIBS@
+check_parsing_LDADD = @CHECK_LIBS@ @MATHLDADD@
 check_partition_combinatorics_SOURCES = \
 	check_partition_combinatorics.c \
 	$(top_builddir)/src/array_utils.c \
@@ -316,8 +318,8 @@ check_partition_combinatorics_LDADD = @CHECK_LIBS@ @MATHLDADD@
 @USE_GSL_TRUE@	test_rng.c \
 @USE_GSL_TRUE@	test_rng.h
 
-@USE_GSL_TRUE@check_partition_combinatorics_random_CFLAGS = @CHECK_CFLAGS@
-@USE_GSL_TRUE@check_partition_combinatorics_random_LDADD = @CHECK_LIBS@ @MATHLDADD@
+@USE_GSL_TRUE@check_partition_combinatorics_random_CFLAGS = @CHECK_CFLAGS@ @GSL_CFLAGS@
+@USE_GSL_TRUE@check_partition_combinatorics_random_LDADD = @CHECK_LIBS@ @GSL_LIBS@
 check_eureject_SOURCES = \
 	check_eureject.c \
 	$(top_builddir)/src/array_utils.c \

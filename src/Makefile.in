@@ -68,23 +68,26 @@ am__dpdraw_SOURCES_DIST = dpdraw.c dpdraw.h dpdraw_main.c \
 	array_utils.c array_utils.h partition_combinatorics.c \
 	partition_combinatorics.h partition_combinatorics_random.c \
 	partition_combinatorics_random.h abacus.c abacus.h
-@USE_GSL_TRUE@am_dpdraw_OBJECTS = dpdraw.$(OBJEXT) \
-@USE_GSL_TRUE@	dpdraw_main.$(OBJEXT) array_utils.$(OBJEXT) \
-@USE_GSL_TRUE@	partition_combinatorics.$(OBJEXT) \
-@USE_GSL_TRUE@	partition_combinatorics_random.$(OBJEXT) \
-@USE_GSL_TRUE@	abacus.$(OBJEXT)
+@USE_GSL_TRUE@am_dpdraw_OBJECTS = dpdraw-dpdraw.$(OBJEXT) \
+@USE_GSL_TRUE@	dpdraw-dpdraw_main.$(OBJEXT) \
+@USE_GSL_TRUE@	dpdraw-array_utils.$(OBJEXT) \
+@USE_GSL_TRUE@	dpdraw-partition_combinatorics.$(OBJEXT) \
+@USE_GSL_TRUE@	dpdraw-partition_combinatorics_random.$(OBJEXT) \
+@USE_GSL_TRUE@	dpdraw-abacus.$(OBJEXT)
 dpdraw_OBJECTS = $(am_dpdraw_OBJECTS)
-dpdraw_LDADD = $(LDADD)
+dpdraw_DEPENDENCIES =
+dpdraw_LINK = $(CCLD) $(dpdraw_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 am_eureject_OBJECTS = eureject.$(OBJEXT) eureject_main.$(OBJEXT) \
 	array_utils.$(OBJEXT) math_utils.$(OBJEXT) \
 	stats_utils.$(OBJEXT) parsing.$(OBJEXT) abacus.$(OBJEXT)
 eureject_OBJECTS = $(am_eureject_OBJECTS)
-eureject_LDADD = $(LDADD)
+eureject_DEPENDENCIES =
 am_intpart_OBJECTS = intpart.$(OBJEXT) intpart_main.$(OBJEXT) \
 	array_utils.$(OBJEXT) partition_combinatorics.$(OBJEXT) \
 	abacus.$(OBJEXT)
 intpart_OBJECTS = $(am_intpart_OBJECTS)
-intpart_LDADD = $(LDADD)
+intpart_DEPENDENCIES =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
@@ -126,6 +129,8 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 GREP = @GREP@
+GSL_CFLAGS = @GSL_CFLAGS@
+GSL_LIBS = @GSL_LIBS@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -210,6 +215,8 @@ top_srcdir = @top_srcdir@
 @USE_GSL_TRUE@	abacus.c \
 @USE_GSL_TRUE@	abacus.h
 
+@USE_GSL_TRUE@dpdraw_LDADD = @GSL_LIBS@
+@USE_GSL_TRUE@dpdraw_CFLAGS = @GSL_CFLAGS@
 intpart_SOURCES = \
 	intpart.c \
 	intpart.h \
@@ -221,6 +228,7 @@ intpart_SOURCES = \
 	abacus.c \
 	abacus.h
 
+intpart_LDADD = @MATHLDADD@
 eureject_SOURCES = \
 	eureject.c \
 	eureject.h \
@@ -236,6 +244,7 @@ eureject_SOURCES = \
 	abacus.c \
 	abacus.h
 
+eureject_LDADD = @MATHLDADD@
 all: all-am
 
 .SUFFIXES:
@@ -312,7 +321,7 @@ clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 dpdraw$(EXEEXT): $(dpdraw_OBJECTS) $(dpdraw_DEPENDENCIES) $(EXTRA_dpdraw_DEPENDENCIES) 
 	@rm -f dpdraw$(EXEEXT)
-	$(LINK) $(dpdraw_OBJECTS) $(dpdraw_LDADD) $(LIBS)
+	$(dpdraw_LINK) $(dpdraw_OBJECTS) $(dpdraw_LDADD) $(LIBS)
 eureject$(EXEEXT): $(eureject_OBJECTS) $(eureject_DEPENDENCIES) $(EXTRA_eureject_DEPENDENCIES) 
 	@rm -f eureject$(EXEEXT)
 	$(LINK) $(eureject_OBJECTS) $(eureject_LDADD) $(LIBS)
@@ -328,8 +337,12 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/abacus.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/array_utils.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpdraw.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpdraw_main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpdraw-abacus.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpdraw-array_utils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpdraw-dpdraw.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpdraw-dpdraw_main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpdraw-partition_combinatorics.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpdraw-partition_combinatorics_random.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eureject.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eureject_main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/intpart.Po@am__quote@
@@ -337,7 +350,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/math_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parsing.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/partition_combinatorics.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/partition_combinatorics_random.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stats_utils.Po@am__quote@
 
 .c.o:
@@ -353,6 +365,90 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+dpdraw-dpdraw.o: dpdraw.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -MT dpdraw-dpdraw.o -MD -MP -MF $(DEPDIR)/dpdraw-dpdraw.Tpo -c -o dpdraw-dpdraw.o `test -f 'dpdraw.c' || echo '$(srcdir)/'`dpdraw.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/dpdraw-dpdraw.Tpo $(DEPDIR)/dpdraw-dpdraw.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dpdraw.c' object='dpdraw-dpdraw.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -c -o dpdraw-dpdraw.o `test -f 'dpdraw.c' || echo '$(srcdir)/'`dpdraw.c
+
+dpdraw-dpdraw.obj: dpdraw.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -MT dpdraw-dpdraw.obj -MD -MP -MF $(DEPDIR)/dpdraw-dpdraw.Tpo -c -o dpdraw-dpdraw.obj `if test -f 'dpdraw.c'; then $(CYGPATH_W) 'dpdraw.c'; else $(CYGPATH_W) '$(srcdir)/dpdraw.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/dpdraw-dpdraw.Tpo $(DEPDIR)/dpdraw-dpdraw.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dpdraw.c' object='dpdraw-dpdraw.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -c -o dpdraw-dpdraw.obj `if test -f 'dpdraw.c'; then $(CYGPATH_W) 'dpdraw.c'; else $(CYGPATH_W) '$(srcdir)/dpdraw.c'; fi`
+
+dpdraw-dpdraw_main.o: dpdraw_main.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -MT dpdraw-dpdraw_main.o -MD -MP -MF $(DEPDIR)/dpdraw-dpdraw_main.Tpo -c -o dpdraw-dpdraw_main.o `test -f 'dpdraw_main.c' || echo '$(srcdir)/'`dpdraw_main.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/dpdraw-dpdraw_main.Tpo $(DEPDIR)/dpdraw-dpdraw_main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dpdraw_main.c' object='dpdraw-dpdraw_main.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -c -o dpdraw-dpdraw_main.o `test -f 'dpdraw_main.c' || echo '$(srcdir)/'`dpdraw_main.c
+
+dpdraw-dpdraw_main.obj: dpdraw_main.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -MT dpdraw-dpdraw_main.obj -MD -MP -MF $(DEPDIR)/dpdraw-dpdraw_main.Tpo -c -o dpdraw-dpdraw_main.obj `if test -f 'dpdraw_main.c'; then $(CYGPATH_W) 'dpdraw_main.c'; else $(CYGPATH_W) '$(srcdir)/dpdraw_main.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/dpdraw-dpdraw_main.Tpo $(DEPDIR)/dpdraw-dpdraw_main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dpdraw_main.c' object='dpdraw-dpdraw_main.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -c -o dpdraw-dpdraw_main.obj `if test -f 'dpdraw_main.c'; then $(CYGPATH_W) 'dpdraw_main.c'; else $(CYGPATH_W) '$(srcdir)/dpdraw_main.c'; fi`
+
+dpdraw-array_utils.o: array_utils.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -MT dpdraw-array_utils.o -MD -MP -MF $(DEPDIR)/dpdraw-array_utils.Tpo -c -o dpdraw-array_utils.o `test -f 'array_utils.c' || echo '$(srcdir)/'`array_utils.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/dpdraw-array_utils.Tpo $(DEPDIR)/dpdraw-array_utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='array_utils.c' object='dpdraw-array_utils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -c -o dpdraw-array_utils.o `test -f 'array_utils.c' || echo '$(srcdir)/'`array_utils.c
+
+dpdraw-array_utils.obj: array_utils.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -MT dpdraw-array_utils.obj -MD -MP -MF $(DEPDIR)/dpdraw-array_utils.Tpo -c -o dpdraw-array_utils.obj `if test -f 'array_utils.c'; then $(CYGPATH_W) 'array_utils.c'; else $(CYGPATH_W) '$(srcdir)/array_utils.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/dpdraw-array_utils.Tpo $(DEPDIR)/dpdraw-array_utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='array_utils.c' object='dpdraw-array_utils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -c -o dpdraw-array_utils.obj `if test -f 'array_utils.c'; then $(CYGPATH_W) 'array_utils.c'; else $(CYGPATH_W) '$(srcdir)/array_utils.c'; fi`
+
+dpdraw-partition_combinatorics.o: partition_combinatorics.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -MT dpdraw-partition_combinatorics.o -MD -MP -MF $(DEPDIR)/dpdraw-partition_combinatorics.Tpo -c -o dpdraw-partition_combinatorics.o `test -f 'partition_combinatorics.c' || echo '$(srcdir)/'`partition_combinatorics.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/dpdraw-partition_combinatorics.Tpo $(DEPDIR)/dpdraw-partition_combinatorics.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='partition_combinatorics.c' object='dpdraw-partition_combinatorics.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -c -o dpdraw-partition_combinatorics.o `test -f 'partition_combinatorics.c' || echo '$(srcdir)/'`partition_combinatorics.c
+
+dpdraw-partition_combinatorics.obj: partition_combinatorics.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -MT dpdraw-partition_combinatorics.obj -MD -MP -MF $(DEPDIR)/dpdraw-partition_combinatorics.Tpo -c -o dpdraw-partition_combinatorics.obj `if test -f 'partition_combinatorics.c'; then $(CYGPATH_W) 'partition_combinatorics.c'; else $(CYGPATH_W) '$(srcdir)/partition_combinatorics.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/dpdraw-partition_combinatorics.Tpo $(DEPDIR)/dpdraw-partition_combinatorics.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='partition_combinatorics.c' object='dpdraw-partition_combinatorics.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -c -o dpdraw-partition_combinatorics.obj `if test -f 'partition_combinatorics.c'; then $(CYGPATH_W) 'partition_combinatorics.c'; else $(CYGPATH_W) '$(srcdir)/partition_combinatorics.c'; fi`
+
+dpdraw-partition_combinatorics_random.o: partition_combinatorics_random.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -MT dpdraw-partition_combinatorics_random.o -MD -MP -MF $(DEPDIR)/dpdraw-partition_combinatorics_random.Tpo -c -o dpdraw-partition_combinatorics_random.o `test -f 'partition_combinatorics_random.c' || echo '$(srcdir)/'`partition_combinatorics_random.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/dpdraw-partition_combinatorics_random.Tpo $(DEPDIR)/dpdraw-partition_combinatorics_random.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='partition_combinatorics_random.c' object='dpdraw-partition_combinatorics_random.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -c -o dpdraw-partition_combinatorics_random.o `test -f 'partition_combinatorics_random.c' || echo '$(srcdir)/'`partition_combinatorics_random.c
+
+dpdraw-partition_combinatorics_random.obj: partition_combinatorics_random.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -MT dpdraw-partition_combinatorics_random.obj -MD -MP -MF $(DEPDIR)/dpdraw-partition_combinatorics_random.Tpo -c -o dpdraw-partition_combinatorics_random.obj `if test -f 'partition_combinatorics_random.c'; then $(CYGPATH_W) 'partition_combinatorics_random.c'; else $(CYGPATH_W) '$(srcdir)/partition_combinatorics_random.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/dpdraw-partition_combinatorics_random.Tpo $(DEPDIR)/dpdraw-partition_combinatorics_random.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='partition_combinatorics_random.c' object='dpdraw-partition_combinatorics_random.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -c -o dpdraw-partition_combinatorics_random.obj `if test -f 'partition_combinatorics_random.c'; then $(CYGPATH_W) 'partition_combinatorics_random.c'; else $(CYGPATH_W) '$(srcdir)/partition_combinatorics_random.c'; fi`
+
+dpdraw-abacus.o: abacus.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -MT dpdraw-abacus.o -MD -MP -MF $(DEPDIR)/dpdraw-abacus.Tpo -c -o dpdraw-abacus.o `test -f 'abacus.c' || echo '$(srcdir)/'`abacus.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/dpdraw-abacus.Tpo $(DEPDIR)/dpdraw-abacus.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='abacus.c' object='dpdraw-abacus.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -c -o dpdraw-abacus.o `test -f 'abacus.c' || echo '$(srcdir)/'`abacus.c
+
+dpdraw-abacus.obj: abacus.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -MT dpdraw-abacus.obj -MD -MP -MF $(DEPDIR)/dpdraw-abacus.Tpo -c -o dpdraw-abacus.obj `if test -f 'abacus.c'; then $(CYGPATH_W) 'abacus.c'; else $(CYGPATH_W) '$(srcdir)/abacus.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/dpdraw-abacus.Tpo $(DEPDIR)/dpdraw-abacus.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='abacus.c' object='dpdraw-abacus.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dpdraw_CFLAGS) $(CFLAGS) -c -o dpdraw-abacus.obj `if test -f 'abacus.c'; then $(CYGPATH_W) 'abacus.c'; else $(CYGPATH_W) '$(srcdir)/abacus.c'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

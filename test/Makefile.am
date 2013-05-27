@@ -57,7 +57,7 @@ check_parsing_SOURCES = \
 	test_utils.h
 
 check_parsing_CFLAGS = @CHECK_CFLAGS@
-check_parsing_LDADD =  @CHECK_LIBS@
+check_parsing_LDADD =  @CHECK_LIBS@ @MATHLDADD@
 
 check_partition_combinatorics_SOURCES = \
 	check_partition_combinatorics.c \
@@ -77,8 +77,8 @@ check_partition_combinatorics_random_SOURCES = \
 	$(top_builddir)/src/partition_combinatorics.c \
 	test_rng.c \
 	test_rng.h
-check_partition_combinatorics_random_CFLAGS = @CHECK_CFLAGS@
-check_partition_combinatorics_random_LDADD =  @CHECK_LIBS@ @MATHLDADD@
+check_partition_combinatorics_random_CFLAGS = @CHECK_CFLAGS@ @GSL_CFLAGS@
+check_partition_combinatorics_random_LDADD =  @CHECK_LIBS@ @GSL_LIBS@
 endif
 
 check_eureject_SOURCES = \

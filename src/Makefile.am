@@ -16,6 +16,8 @@ dpdraw_SOURCES = \
 	partition_combinatorics_random.h \
 	abacus.c \
 	abacus.h
+dpdraw_LDADD = @GSL_LIBS@
+dpdraw_CFLAGS = @GSL_CFLAGS@
 endif
 
 intpart_SOURCES = \
@@ -28,6 +30,8 @@ intpart_SOURCES = \
 	partition_combinatorics.h \
 	abacus.c \
 	abacus.h
+
+intpart_LDADD = @MATHLDADD@
 
 eureject_SOURCES = \
 	eureject.c \
@@ -43,4 +47,6 @@ eureject_SOURCES = \
 	parsing.h \
 	abacus.c \
 	abacus.h
+
+eureject_LDADD = @MATHLDADD@
 
