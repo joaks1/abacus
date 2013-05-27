@@ -49,7 +49,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = eureject$(EXEEXT) dpdraw$(EXEEXT) intpart$(EXEEXT)
+bin_PROGRAMS = eureject$(EXEEXT) intpart$(EXEEXT) $(am__EXEEXT_1)
+@USE_GSL_TRUE@am__append_1 = dpdraw
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -60,11 +61,18 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
+@USE_GSL_TRUE@am__EXEEXT_1 = dpdraw$(EXEEXT)
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_dpdraw_OBJECTS = dpdraw.$(OBJEXT) dpdraw_main.$(OBJEXT) \
-	array_utils.$(OBJEXT) partition_combinatorics.$(OBJEXT) \
-	abacus.$(OBJEXT)
+am__dpdraw_SOURCES_DIST = dpdraw.c dpdraw.h dpdraw_main.c \
+	array_utils.c array_utils.h partition_combinatorics.c \
+	partition_combinatorics.h partition_combinatorics_random.c \
+	partition_combinatorics_random.h abacus.c abacus.h
+@USE_GSL_TRUE@am_dpdraw_OBJECTS = dpdraw.$(OBJEXT) \
+@USE_GSL_TRUE@	dpdraw_main.$(OBJEXT) array_utils.$(OBJEXT) \
+@USE_GSL_TRUE@	partition_combinatorics.$(OBJEXT) \
+@USE_GSL_TRUE@	partition_combinatorics_random.$(OBJEXT) \
+@USE_GSL_TRUE@	abacus.$(OBJEXT)
 dpdraw_OBJECTS = $(am_dpdraw_OBJECTS)
 dpdraw_LDADD = $(LDADD)
 am_eureject_OBJECTS = eureject.$(OBJEXT) eureject_main.$(OBJEXT) \
@@ -86,7 +94,7 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(dpdraw_SOURCES) $(eureject_SOURCES) $(intpart_SOURCES)
-DIST_SOURCES = $(dpdraw_SOURCES) $(eureject_SOURCES) \
+DIST_SOURCES = $(am__dpdraw_SOURCES_DIST) $(eureject_SOURCES) \
 	$(intpart_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
@@ -189,6 +197,30 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+@USE_GSL_TRUE@dpdraw_SOURCES = \
+@USE_GSL_TRUE@	dpdraw.c \
+@USE_GSL_TRUE@	dpdraw.h \
+@USE_GSL_TRUE@	dpdraw_main.c \
+@USE_GSL_TRUE@	array_utils.c \
+@USE_GSL_TRUE@	array_utils.h \
+@USE_GSL_TRUE@	partition_combinatorics.c \
+@USE_GSL_TRUE@	partition_combinatorics.h \
+@USE_GSL_TRUE@	partition_combinatorics_random.c \
+@USE_GSL_TRUE@	partition_combinatorics_random.h \
+@USE_GSL_TRUE@	abacus.c \
+@USE_GSL_TRUE@	abacus.h
+
+intpart_SOURCES = \
+	intpart.c \
+	intpart.h \
+	intpart_main.c \
+	array_utils.c \
+	array_utils.h \
+	partition_combinatorics.c \
+	partition_combinatorics.h \
+	abacus.c \
+	abacus.h
+
 eureject_SOURCES = \
 	eureject.c \
 	eureject.h \
@@ -201,28 +233,6 @@ eureject_SOURCES = \
 	stats_utils.h \
 	parsing.c \
 	parsing.h \
-	abacus.c \
-	abacus.h
-
-dpdraw_SOURCES = \
-	dpdraw.c \
-	dpdraw.h \
-	dpdraw_main.c \
-	array_utils.c \
-	array_utils.h \
-	partition_combinatorics.c \
-	partition_combinatorics.h \
-	abacus.c \
-	abacus.h
-
-intpart_SOURCES = \
-	intpart.c \
-	intpart.h \
-	intpart_main.c \
-	array_utils.c \
-	array_utils.h \
-	partition_combinatorics.c \
-	partition_combinatorics.h \
 	abacus.c \
 	abacus.h
 
@@ -327,6 +337,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/math_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parsing.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/partition_combinatorics.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/partition_combinatorics_random.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stats_utils.Po@am__quote@
 
 .c.o:

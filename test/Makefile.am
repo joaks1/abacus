@@ -68,6 +68,19 @@ check_partition_combinatorics_SOURCES = \
 check_partition_combinatorics_CFLAGS = @CHECK_CFLAGS@
 check_partition_combinatorics_LDADD =  @CHECK_LIBS@ @MATHLDADD@
 
+if USE_GSL
+TESTS += check_partition_combinatorics_random
+check_PROGRAMS += check_partition_combinatorics_random
+check_partition_combinatorics_random_SOURCES = \
+	check_partition_combinatorics_random.c \
+	$(top_builddir)/src/array_utils.c \
+	$(top_builddir)/src/partition_combinatorics.c \
+	test_rng.c \
+	test_rng.h
+check_partition_combinatorics_random_CFLAGS = @CHECK_CFLAGS@
+check_partition_combinatorics_random_LDADD =  @CHECK_LIBS@ @MATHLDADD@
+endif
+
 check_eureject_SOURCES = \
 	check_eureject.c \
 	$(top_builddir)/src/array_utils.c \

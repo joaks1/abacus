@@ -51,10 +51,14 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 TESTS = check_array_utils$(EXEEXT) check_stats_utils$(EXEEXT) \
 	check_math_utils$(EXEEXT) check_parsing$(EXEEXT) \
-	check_partition_combinatorics$(EXEEXT) check_eureject$(EXEEXT)
+	check_partition_combinatorics$(EXEEXT) check_eureject$(EXEEXT) \
+	$(am__EXEEXT_1)
 check_PROGRAMS = check_array_utils$(EXEEXT) check_stats_utils$(EXEEXT) \
 	check_math_utils$(EXEEXT) check_parsing$(EXEEXT) \
-	check_partition_combinatorics$(EXEEXT) check_eureject$(EXEEXT)
+	check_partition_combinatorics$(EXEEXT) check_eureject$(EXEEXT) \
+	$(am__EXEEXT_1)
+@USE_GSL_TRUE@am__append_1 = check_partition_combinatorics_random
+@USE_GSL_TRUE@am__append_2 = check_partition_combinatorics_random
 subdir = test
 DIST_COMMON = $(dist_noinst_DATA) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -66,6 +70,8 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
+@USE_GSL_TRUE@am__EXEEXT_1 =  \
+@USE_GSL_TRUE@	check_partition_combinatorics_random$(EXEEXT)
 am_check_array_utils_OBJECTS =  \
 	check_array_utils-check_array_utils.$(OBJEXT) \
 	check_array_utils-test_utils.$(OBJEXT)
@@ -109,6 +115,21 @@ check_partition_combinatorics_DEPENDENCIES =
 check_partition_combinatorics_LINK = $(CCLD) \
 	$(check_partition_combinatorics_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+am__check_partition_combinatorics_random_SOURCES_DIST =  \
+	check_partition_combinatorics_random.c \
+	$(top_builddir)/src/array_utils.c \
+	$(top_builddir)/src/partition_combinatorics.c test_rng.c \
+	test_rng.h
+@USE_GSL_TRUE@am_check_partition_combinatorics_random_OBJECTS = check_partition_combinatorics_random-check_partition_combinatorics_random.$(OBJEXT) \
+@USE_GSL_TRUE@	check_partition_combinatorics_random-array_utils.$(OBJEXT) \
+@USE_GSL_TRUE@	check_partition_combinatorics_random-partition_combinatorics.$(OBJEXT) \
+@USE_GSL_TRUE@	check_partition_combinatorics_random-test_rng.$(OBJEXT)
+check_partition_combinatorics_random_OBJECTS =  \
+	$(am_check_partition_combinatorics_random_OBJECTS)
+check_partition_combinatorics_random_DEPENDENCIES =
+check_partition_combinatorics_random_LINK = $(CCLD) \
+	$(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 am_check_stats_utils_OBJECTS =  \
 	check_stats_utils-check_stats_utils.$(OBJEXT) \
 	check_stats_utils-array_utils.$(OBJEXT) \
@@ -128,10 +149,12 @@ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(check_array_utils_SOURCES) $(check_eureject_SOURCES) \
 	$(check_math_utils_SOURCES) $(check_parsing_SOURCES) \
 	$(check_partition_combinatorics_SOURCES) \
+	$(check_partition_combinatorics_random_SOURCES) \
 	$(check_stats_utils_SOURCES)
 DIST_SOURCES = $(check_array_utils_SOURCES) $(check_eureject_SOURCES) \
 	$(check_math_utils_SOURCES) $(check_parsing_SOURCES) \
 	$(check_partition_combinatorics_SOURCES) \
+	$(am__check_partition_combinatorics_random_SOURCES_DIST) \
 	$(check_stats_utils_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
@@ -286,6 +309,15 @@ check_partition_combinatorics_SOURCES = \
 
 check_partition_combinatorics_CFLAGS = @CHECK_CFLAGS@
 check_partition_combinatorics_LDADD = @CHECK_LIBS@ @MATHLDADD@
+@USE_GSL_TRUE@check_partition_combinatorics_random_SOURCES = \
+@USE_GSL_TRUE@	check_partition_combinatorics_random.c \
+@USE_GSL_TRUE@	$(top_builddir)/src/array_utils.c \
+@USE_GSL_TRUE@	$(top_builddir)/src/partition_combinatorics.c \
+@USE_GSL_TRUE@	test_rng.c \
+@USE_GSL_TRUE@	test_rng.h
+
+@USE_GSL_TRUE@check_partition_combinatorics_random_CFLAGS = @CHECK_CFLAGS@
+@USE_GSL_TRUE@check_partition_combinatorics_random_LDADD = @CHECK_LIBS@ @MATHLDADD@
 check_eureject_SOURCES = \
 	check_eureject.c \
 	$(top_builddir)/src/array_utils.c \
@@ -350,6 +382,9 @@ check_parsing$(EXEEXT): $(check_parsing_OBJECTS) $(check_parsing_DEPENDENCIES) $
 check_partition_combinatorics$(EXEEXT): $(check_partition_combinatorics_OBJECTS) $(check_partition_combinatorics_DEPENDENCIES) $(EXTRA_check_partition_combinatorics_DEPENDENCIES) 
 	@rm -f check_partition_combinatorics$(EXEEXT)
 	$(check_partition_combinatorics_LINK) $(check_partition_combinatorics_OBJECTS) $(check_partition_combinatorics_LDADD) $(LIBS)
+check_partition_combinatorics_random$(EXEEXT): $(check_partition_combinatorics_random_OBJECTS) $(check_partition_combinatorics_random_DEPENDENCIES) $(EXTRA_check_partition_combinatorics_random_DEPENDENCIES) 
+	@rm -f check_partition_combinatorics_random$(EXEEXT)
+	$(check_partition_combinatorics_random_LINK) $(check_partition_combinatorics_random_OBJECTS) $(check_partition_combinatorics_random_LDADD) $(LIBS)
 check_stats_utils$(EXEEXT): $(check_stats_utils_OBJECTS) $(check_stats_utils_DEPENDENCIES) $(EXTRA_check_stats_utils_DEPENDENCIES) 
 	@rm -f check_stats_utils$(EXEEXT)
 	$(check_stats_utils_LINK) $(check_stats_utils_OBJECTS) $(check_stats_utils_LDADD) $(LIBS)
@@ -379,6 +414,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_partition_combinatorics-array_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_partition_combinatorics-check_partition_combinatorics.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_partition_combinatorics-test_utils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_partition_combinatorics_random-array_utils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_partition_combinatorics_random-check_partition_combinatorics_random.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_partition_combinatorics_random-partition_combinatorics.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_partition_combinatorics_random-test_rng.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_stats_utils-array_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_stats_utils-check_stats_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_stats_utils-test_utils.Po@am__quote@
@@ -662,6 +701,62 @@ check_partition_combinatorics-test_utils.obj: test_utils.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='test_utils.c' object='check_partition_combinatorics-test_utils.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_CFLAGS) $(CFLAGS) -c -o check_partition_combinatorics-test_utils.obj `if test -f 'test_utils.c'; then $(CYGPATH_W) 'test_utils.c'; else $(CYGPATH_W) '$(srcdir)/test_utils.c'; fi`
+
+check_partition_combinatorics_random-check_partition_combinatorics_random.o: check_partition_combinatorics_random.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -MT check_partition_combinatorics_random-check_partition_combinatorics_random.o -MD -MP -MF $(DEPDIR)/check_partition_combinatorics_random-check_partition_combinatorics_random.Tpo -c -o check_partition_combinatorics_random-check_partition_combinatorics_random.o `test -f 'check_partition_combinatorics_random.c' || echo '$(srcdir)/'`check_partition_combinatorics_random.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_partition_combinatorics_random-check_partition_combinatorics_random.Tpo $(DEPDIR)/check_partition_combinatorics_random-check_partition_combinatorics_random.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='check_partition_combinatorics_random.c' object='check_partition_combinatorics_random-check_partition_combinatorics_random.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -c -o check_partition_combinatorics_random-check_partition_combinatorics_random.o `test -f 'check_partition_combinatorics_random.c' || echo '$(srcdir)/'`check_partition_combinatorics_random.c
+
+check_partition_combinatorics_random-check_partition_combinatorics_random.obj: check_partition_combinatorics_random.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -MT check_partition_combinatorics_random-check_partition_combinatorics_random.obj -MD -MP -MF $(DEPDIR)/check_partition_combinatorics_random-check_partition_combinatorics_random.Tpo -c -o check_partition_combinatorics_random-check_partition_combinatorics_random.obj `if test -f 'check_partition_combinatorics_random.c'; then $(CYGPATH_W) 'check_partition_combinatorics_random.c'; else $(CYGPATH_W) '$(srcdir)/check_partition_combinatorics_random.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_partition_combinatorics_random-check_partition_combinatorics_random.Tpo $(DEPDIR)/check_partition_combinatorics_random-check_partition_combinatorics_random.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='check_partition_combinatorics_random.c' object='check_partition_combinatorics_random-check_partition_combinatorics_random.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -c -o check_partition_combinatorics_random-check_partition_combinatorics_random.obj `if test -f 'check_partition_combinatorics_random.c'; then $(CYGPATH_W) 'check_partition_combinatorics_random.c'; else $(CYGPATH_W) '$(srcdir)/check_partition_combinatorics_random.c'; fi`
+
+check_partition_combinatorics_random-array_utils.o: $(top_builddir)/src/array_utils.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -MT check_partition_combinatorics_random-array_utils.o -MD -MP -MF $(DEPDIR)/check_partition_combinatorics_random-array_utils.Tpo -c -o check_partition_combinatorics_random-array_utils.o `test -f '$(top_builddir)/src/array_utils.c' || echo '$(srcdir)/'`$(top_builddir)/src/array_utils.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_partition_combinatorics_random-array_utils.Tpo $(DEPDIR)/check_partition_combinatorics_random-array_utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(top_builddir)/src/array_utils.c' object='check_partition_combinatorics_random-array_utils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -c -o check_partition_combinatorics_random-array_utils.o `test -f '$(top_builddir)/src/array_utils.c' || echo '$(srcdir)/'`$(top_builddir)/src/array_utils.c
+
+check_partition_combinatorics_random-array_utils.obj: $(top_builddir)/src/array_utils.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -MT check_partition_combinatorics_random-array_utils.obj -MD -MP -MF $(DEPDIR)/check_partition_combinatorics_random-array_utils.Tpo -c -o check_partition_combinatorics_random-array_utils.obj `if test -f '$(top_builddir)/src/array_utils.c'; then $(CYGPATH_W) '$(top_builddir)/src/array_utils.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/array_utils.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_partition_combinatorics_random-array_utils.Tpo $(DEPDIR)/check_partition_combinatorics_random-array_utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(top_builddir)/src/array_utils.c' object='check_partition_combinatorics_random-array_utils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -c -o check_partition_combinatorics_random-array_utils.obj `if test -f '$(top_builddir)/src/array_utils.c'; then $(CYGPATH_W) '$(top_builddir)/src/array_utils.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/array_utils.c'; fi`
+
+check_partition_combinatorics_random-partition_combinatorics.o: $(top_builddir)/src/partition_combinatorics.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -MT check_partition_combinatorics_random-partition_combinatorics.o -MD -MP -MF $(DEPDIR)/check_partition_combinatorics_random-partition_combinatorics.Tpo -c -o check_partition_combinatorics_random-partition_combinatorics.o `test -f '$(top_builddir)/src/partition_combinatorics.c' || echo '$(srcdir)/'`$(top_builddir)/src/partition_combinatorics.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_partition_combinatorics_random-partition_combinatorics.Tpo $(DEPDIR)/check_partition_combinatorics_random-partition_combinatorics.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(top_builddir)/src/partition_combinatorics.c' object='check_partition_combinatorics_random-partition_combinatorics.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -c -o check_partition_combinatorics_random-partition_combinatorics.o `test -f '$(top_builddir)/src/partition_combinatorics.c' || echo '$(srcdir)/'`$(top_builddir)/src/partition_combinatorics.c
+
+check_partition_combinatorics_random-partition_combinatorics.obj: $(top_builddir)/src/partition_combinatorics.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -MT check_partition_combinatorics_random-partition_combinatorics.obj -MD -MP -MF $(DEPDIR)/check_partition_combinatorics_random-partition_combinatorics.Tpo -c -o check_partition_combinatorics_random-partition_combinatorics.obj `if test -f '$(top_builddir)/src/partition_combinatorics.c'; then $(CYGPATH_W) '$(top_builddir)/src/partition_combinatorics.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/partition_combinatorics.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_partition_combinatorics_random-partition_combinatorics.Tpo $(DEPDIR)/check_partition_combinatorics_random-partition_combinatorics.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(top_builddir)/src/partition_combinatorics.c' object='check_partition_combinatorics_random-partition_combinatorics.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -c -o check_partition_combinatorics_random-partition_combinatorics.obj `if test -f '$(top_builddir)/src/partition_combinatorics.c'; then $(CYGPATH_W) '$(top_builddir)/src/partition_combinatorics.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/partition_combinatorics.c'; fi`
+
+check_partition_combinatorics_random-test_rng.o: test_rng.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -MT check_partition_combinatorics_random-test_rng.o -MD -MP -MF $(DEPDIR)/check_partition_combinatorics_random-test_rng.Tpo -c -o check_partition_combinatorics_random-test_rng.o `test -f 'test_rng.c' || echo '$(srcdir)/'`test_rng.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_partition_combinatorics_random-test_rng.Tpo $(DEPDIR)/check_partition_combinatorics_random-test_rng.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='test_rng.c' object='check_partition_combinatorics_random-test_rng.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -c -o check_partition_combinatorics_random-test_rng.o `test -f 'test_rng.c' || echo '$(srcdir)/'`test_rng.c
+
+check_partition_combinatorics_random-test_rng.obj: test_rng.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -MT check_partition_combinatorics_random-test_rng.obj -MD -MP -MF $(DEPDIR)/check_partition_combinatorics_random-test_rng.Tpo -c -o check_partition_combinatorics_random-test_rng.obj `if test -f 'test_rng.c'; then $(CYGPATH_W) 'test_rng.c'; else $(CYGPATH_W) '$(srcdir)/test_rng.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_partition_combinatorics_random-test_rng.Tpo $(DEPDIR)/check_partition_combinatorics_random-test_rng.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='test_rng.c' object='check_partition_combinatorics_random-test_rng.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -c -o check_partition_combinatorics_random-test_rng.obj `if test -f 'test_rng.c'; then $(CYGPATH_W) 'test_rng.c'; else $(CYGPATH_W) '$(srcdir)/test_rng.c'; fi`
 
 check_stats_utils-check_stats_utils.o: check_stats_utils.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_stats_utils_CFLAGS) $(CFLAGS) -MT check_stats_utils-check_stats_utils.o -MD -MP -MF $(DEPDIR)/check_stats_utils-check_stats_utils.Tpo -c -o check_stats_utils-check_stats_utils.o `test -f 'check_stats_utils.c' || echo '$(srcdir)/'`check_stats_utils.c

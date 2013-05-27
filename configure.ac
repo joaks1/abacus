@@ -20,6 +20,8 @@ AM_INIT_AUTOMAKE([1.9 foreign -Wall dist-tarZ tar-ustar filename-length-max=299]
 
 # check for C compiler
 AC_PROG_CC
+# support per-target flags
+AM_PROG_CC_C_O
 
 # check for header files
 AC_HEADER_STDC
@@ -42,9 +44,25 @@ PKG_CHECK_MODULES([CHECK], [check >= 0.9.4], [], [AC_MSG_WARN([check is missing 
 # They will also add '-lgls -lgslcblas -lm' to `LIBS`
 ###############################################################################
 AC_CHECK_LIB([m],[cos])
-AC_CHECK_LIB([gslcblas],[cblas_dgemm])
-AC_CHECK_LIB([gsl],[gsl_blas_dgemm])
-          
+
+AC_ARG_WITH([gsl],
+    [AS_HELP_STRING(
+        [--without-gsl],
+        [disable build and install of gsl-dependent tools (dpdraw)])],
+    [],
+    [with_gsl=yes])
+
+if test "$with_gsl" != no
+then
+    AC_CHECK_LIB([gslcblas],[cblas_dgemm])
+    AC_CHECK_LIB([gsl],[gsl_blas_dgemm])
+    if test "$ac_cv_lib_gsl_gsl_blas_dgemm" = no
+    then
+        AC_MSG_ERROR([cannot find GSL library; you can either designate the path to the gsl library using --with-gsl=/path/to/gsl or build and install only tools that do not require gsl using --without-gsl])
+    fi
+fi
+AM_CONDITIONAL([USE_GSL], [test "$ac_cv_lib_gsl_gsl_blas_dgemm" = yes])
+
 # define flags
 MATHLDADD="-lm"
 AC_SUBST([MATHLDADD])

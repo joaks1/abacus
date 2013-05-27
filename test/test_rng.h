@@ -1,8 +1,8 @@
 /**
- * @file        test_utils.c
+ * @file        test_rng.h
  * @authors     Jamie Oaks
  * @package     msBayes
- * @brief       A collection of functions for testing.
+ * @brief       Random number generators for testing.
  * @copyright   Copyright (C) 2013 Jamie Oaks.
  *   This file is part of msBayes.  msBayes is free software; you can
  *   redistribute it and/or modify it under the terms of the GNU General Public
@@ -18,6 +18,14 @@
  *   with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "test_utils.h"
+#ifndef TEST_RNG_H
+#define TEST_RNG_H
 
+#include <time.h>
+#include <gsl/gsl_rng.h>
+
+gsl_rng * get_rng(int seed);
+void free_rng(gsl_rng * rng);
+
+#endif /* TEST_RNG_H */
 
