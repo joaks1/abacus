@@ -11,6 +11,7 @@ AC_CONFIG_SRCDIR([src/eureject.c])
 
 # designate dir for auxiliary scripts
 AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_MACRO_DIR([build-aux/m4])
 
 # set default install prefix
 AC_PREFIX_DEFAULT([/usr/local])
@@ -22,6 +23,8 @@ AM_INIT_AUTOMAKE([1.9 foreign -Wall dist-tarZ tar-ustar filename-length-max=299]
 AC_PROG_CC
 # support per-target flags
 AM_PROG_CC_C_O
+# add support for libtool flags
+LT_INIT
 
 # check for header files
 AC_HEADER_STDC
@@ -38,10 +41,6 @@ PKG_CHECK_MODULES([CHECK], [check >= 0.9.4], [], [AC_MSG_WARN([check is missing 
 
 ###############################################################################
 # check for GSL
-# (from http://www.gnu.org/software/gsl/manual/html_node/Autoconf-Macros.html)
-# These tests create macros:
-#   HAVE_LIBGSL, HAVE_LIBGSLCBGLAS, HAVE_LIBM
-# They will also add '-lgls -lgslcblas -lm' to `LIBS`
 ###############################################################################
 
 AC_ARG_WITH([gsl],
