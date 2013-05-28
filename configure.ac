@@ -36,12 +36,20 @@ AC_CHECK_FUNCS([pow strtok strncpy calloc sqrt])
 # AM_PATH_CHECK([0.9.0],[],[AC_MSG_WARN([check is missing or old; you will not be able to run the test suite])])
 PKG_CHECK_MODULES([CHECK], [check >= 0.9.4], [], [AC_MSG_WARN([check is missing or old; you will not be able to run the test suite])])
 
+AC_ARG_ENABLE([static],
+    [AS_HELP_STRING(
+        [--enable-static],
+        [build statically linked binaries])],
+    [STATIC_ARG="${enable_static}"],
+    [STATIC_ARG=no])
+
+if ! test "${STATIC_ARG}" = "no"
+then
+    LDFLAGS="${LDFLAGS} -static"
+fi
+
 ###############################################################################
 # check for GSL
-# (from http://www.gnu.org/software/gsl/manual/html_node/Autoconf-Macros.html)
-# These tests create macros:
-#   HAVE_LIBGSL, HAVE_LIBGSLCBGLAS, HAVE_LIBM
-# They will also add '-lgls -lgslcblas -lm' to `LIBS`
 ###############################################################################
 
 AC_ARG_WITH([gsl],
@@ -159,6 +167,8 @@ AC_SUBST([GSL_CFLAGS])
 # define flags
 MATHLDADD="-lm"
 AC_SUBST([MATHLDADD])
+
+AC_SUBST([LDFLAGS])
 
 # declare `config.h` as output header
 AC_CONFIG_HEADERS([config.h])
