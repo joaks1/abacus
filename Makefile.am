@@ -1,8 +1,6 @@
 SUBDIRS = src . test
 EXTRA_DIST = bootstrap.sh configure.ac
 
-ACLOCAL_AMFLAGS = -I build-aux/m4
-
 check-local:
 	mkdir -p "$(abs_top_builddir)/test/data"
 	cp -r "$(abs_top_srcdir)/test/data" "$(abs_top_builddir)/test"
