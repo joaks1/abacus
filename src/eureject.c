@@ -207,8 +207,7 @@ void help() {
     fprintf(stderr,
         " -n  Number of samples to use for calculating stat means and\n"
         "     standard deviations for standardizing the statistics.\n"
-        "     This option is ignored if `-m` and `-s` are provided.\n"
-        "     Default: 10000\n");
+        "     This option is ignored if `-s` is provided. Default: 10000\n");
     fprintf(stderr,
         " -s  Tab-delimited file containing the means and standard\n"
         "     deviations to use for standardizing statistics. The file\n"
