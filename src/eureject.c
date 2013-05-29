@@ -194,8 +194,8 @@ void help() {
     eureject_preamble();
     fprintf(stderr, "Usage:\n");
     fprintf(stderr,
-        "  eureject -f OBS-FILE [-k INT] [-n INT] [-d] [-s SUM-FILE] \\\n"
-        "      SIMS-FILE1 [ SIMS-FILE2 [...] ]\n\n");
+        "  eureject -f OBS-FILE [-k INT] [-n INT] [-e] [-s SUM-FILE] \\\n"
+        "      [-o SUM-OUT-FILE] SIMS-FILE1 [ SIMS-FILE2 [...] ]\n\n");
     fprintf(stderr, "Options:\n");
     fprintf(stderr,
         " -f  Path to file containing observed summary statistics\n");
