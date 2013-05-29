@@ -108,6 +108,7 @@ sample_array * init_sample_array(int capacity) {
     }
     v->length = 0;
     v->num_processed = 0;
+    v->header = init_s_array(64);
     v->paths_processed = init_s_array(1);
     return v;
 }
@@ -397,7 +398,6 @@ sample_array * reject(const s_array * paths,
     sample_array * retained_samples;
     line_array = init_s_array((*header).length);
     retained_samples = init_sample_array(num_retain);
-    retained_samples->header = init_s_array((*header).length);
     extend_s_array(retained_samples->header, header);
     for (i = 0; i < (*paths).length; i++) {
         line_num = 0;
@@ -506,6 +506,7 @@ int eureject_main(int argc, char ** argv) {
     obs_header = init_s_array(1);
     obs_stats = init_d_array(1);
     sum_paths_used = init_s_array(1);
+    retained_samples = init_sample_array(1);
     if (argc < 2) {
         help();
         exit(1);
@@ -572,6 +573,7 @@ int eureject_main(int argc, char ** argv) {
 
     // rejection
     if (conf->num_retain > 0) {
+        free_sample_array(retained_samples);
         fprintf(stderr, "\nPerforming rejection... ");
         standardize_vector(obs_stats, conf->means, conf->std_devs);
         retained_samples = reject(conf->sim_paths, line_buffer, indices,
@@ -616,9 +618,9 @@ int eureject_main(int argc, char ** argv) {
     // write retained samples
     if (conf->num_retain > 0) {
         write_sample_array(stdout, retained_samples, conf->include_distance);
-        free_sample_array(retained_samples);
     }
 
+    free_sample_array(retained_samples);
     free_i_array(indices);
     free_c_array(line_buffer);
     free_s_array(obs_header);
