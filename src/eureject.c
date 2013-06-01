@@ -309,7 +309,7 @@ void parse_args(config * conf, int argc, char ** argv) {
                 conf->num_retain = atoi(optarg);
                 break;
             case 'n':
-                if (atoi(optarg) > 0) {
+                if (atoi(optarg) >= 0) {
                     conf->num_subsample = atoi(optarg);
                     break;
                 }
@@ -365,6 +365,12 @@ void parse_args(config * conf, int argc, char ** argv) {
     }
     for (i = optind, j = 0; i < argc; i++, j++) {
         append_s_array(conf->sim_paths, argv[i]);
+    }
+    if ((conf->num_subsample < 1) && (conf->summary_provided != 1)) {
+        fprintf(stderr, "ERROR: If `-n` is 0, a summary file must be provided "
+                "via `-s`\n");
+        help();
+        exit(1);
     }
     if (conf->summary_provided == 1) {
         conf->num_subsample = 0;
