@@ -213,7 +213,7 @@ void help() {
         " -s  Tab-delimited file containing the means and standard\n"
         "     deviations to use for standardizing statistics. The file\n"
         "     must contain the same header as the file with the observed\n"
-        "     summarys statistics (`-f`), with unique names identifying\n"
+        "     summary statistics (`-f`), with unique names identifying\n"
         "     the statistics in each column. This header must be\n"
         "     followed by a line containing the means for each statistic\n"
         "     and a third line containing the standard deviations.\n");
@@ -223,7 +223,7 @@ void help() {
         "     always reported to standard error along with other run info.\n"
         "     It does not make much sense to use this option in combination\n"
         "     with `-s` (it will simply recreate the file specified by `-s`).\n"
-        "     This option is nice if you plan to re-use the means/stanard\n"
+        "     This option is nice if you plan to re-use the means/standard\n"
         "     deviations, or just want a permanent record of them.\n");
     fprintf(stderr,
         " -e  Report Euclidean distances of retained samples in the\n"
