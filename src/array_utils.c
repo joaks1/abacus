@@ -210,9 +210,9 @@ char * get_c_array(const c_array * v) {
 void write_d_array(FILE * stream, const d_array * v, const char * sep) {
     int i;
     for (i = 0; i < (v->length - 1); i++) {
-        fprintf(stream, "%lf%s", v->a[i], sep);
+        fprintf(stream, "%.12lf%s", v->a[i], sep);
     }
-    fprintf(stream, "%lf\n", v->a[(v->length - 1)]);
+    fprintf(stream, "%.12lf\n", v->a[(v->length - 1)]);
 }
 
 void write_i_array(FILE * stream, const i_array * v, const char * sep) {
