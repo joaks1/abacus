@@ -952,6 +952,32 @@ START_TEST (test_split_str_d) {
 }
 END_TEST
 
+START_TEST (test_split_str_i) {
+    int ret;
+    i_array * v;
+    i_array * exp;
+    v = init_i_array(1);
+    exp = init_i_array(1);
+    char * string = "1\t22\t-432";
+    append_i_array(exp, 1);
+    append_i_array(exp, 22);
+    append_i_array(exp, -432);
+    ret = split_str_i(string, v, 0);
+    ck_assert_int_eq(ret, 0);
+    ck_assert_int_eq(v->length, 3);
+    ck_assert_msg((i_arrays_equal(v, exp) != 0),
+            "unexpected result of `split_str_i`");
+    ret = split_str_i(string, v, 3);
+    ck_assert_int_eq(ret, 0);
+    ret = split_str_i(string, v, 4);
+    ck_assert_int_eq(ret, 3);
+    ck_assert_msg((i_arrays_equal(v, exp) != 0),
+            "unexpected result of `split_str_i`");
+    free_i_array(v);
+    free_i_array(exp);
+}
+END_TEST
+
 
 Suite * array_utils_suite(void) {
     Suite * s = suite_create("array_utils");
@@ -1034,6 +1060,7 @@ Suite * array_utils_suite(void) {
     TCase * tc_split_str = tcase_create("split_str_test_case");
     tcase_add_test(tc_split_str, test_split_str);
     tcase_add_test(tc_split_str, test_split_str_d);
+    tcase_add_test(tc_split_str, test_split_str_i);
     suite_add_tcase(s, tc_split_str);
 
     return s;

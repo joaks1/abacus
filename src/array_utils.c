@@ -348,6 +348,28 @@ int split_str_d(char * string, d_array * v, int expected_num) {
     return 0;
 }
 
+int split_str_i(char * string, i_array * v, int expected_num) {
+    int word_idx, n;
+    char * ptr;
+    int match;
+    word_idx = 0;
+    ptr = string;
+    v->length = 0;
+    while(*ptr) {
+        if ((sscanf(ptr, "%d%n", &match, &n)) == 1) {
+            ptr += n;
+            append_i_array(v, match);
+            word_idx++;
+        }
+        ++ptr;
+    }
+    if ((expected_num > 0) && (expected_num != word_idx)) {
+        if (word_idx == 0) word_idx--;
+        return word_idx;
+    }
+    return 0;
+}
+
 void get_matching_indices(const s_array * search_strings,
         const s_array * target_strings,
         i_array * indices) {
