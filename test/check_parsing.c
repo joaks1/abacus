@@ -192,6 +192,10 @@ Suite * parsing_suite(void) {
             test_parse_observed_stats_file_extra_line);
     suite_add_tcase(s, tc_parse_observed_stats_file);
 
+    TCase * tc_parse_summary_file = tcase_create("parse_summary_file");
+    tcase_add_test(tc_parse_summary_file, test_parse_summary_file);
+    suite_add_tcase(s, tc_parse_summary_file);
+
     return s;
 }
 

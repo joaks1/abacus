@@ -101,7 +101,6 @@ void parse_summary_file(const char * path,
         exit(1);
     }
     split_str_d((*line_buffer).a, std_devs, 0);
-    fclose(f);
     if ((*header).length != (*std_devs).length) {
         fprintf(stderr, "ERROR: found %d column headers, but %d std devs in "
                 "file %s\n", (*header).length, (*std_devs).length, path);
