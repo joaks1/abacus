@@ -625,6 +625,7 @@ int eureject_main(int argc, char ** argv) {
     write_s_array(stderr, obs_header, "\t");
     write_d_array(stderr, conf->means, "\t");
     write_d_array(stderr, conf->std_devs, "\t");
+    write_i_array(stderr, summary_sample_sizes, "\t");
     fprintf(stderr, "\n");
 
     // write retained samples
