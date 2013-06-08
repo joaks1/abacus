@@ -501,7 +501,7 @@ int eureject_main(int argc, char ** argv) {
     s_array * sim_header;
     s_array * sim_header_comp;
     d_array * obs_stats;
-    int i, heads_match;
+    int i, heads_match, sum_sample_size;
     i_array * indices;
     i_array * summary_sample_sizes;
     sample_sum_array * sample_sums;
@@ -568,6 +568,7 @@ int eureject_main(int argc, char ** argv) {
     write_config(stderr, conf);
 
     // calc means and standard devs
+    sum_sample_size = 0;
     if (conf->summary_provided == 0) {
         fprintf(stderr, "\nCalculating means and standard deviations... ");
         sample_sums = init_sample_sum_array(obs_header->length);
@@ -578,6 +579,7 @@ int eureject_main(int argc, char ** argv) {
         for (i = 0; i < sample_sums->length; i++){
             append_i_array(summary_sample_sizes, sample_sums->a[i]->n);
         }
+        sum_sample_size = get_i_array(summary_sample_sizes, 0);
         free_sample_sum_array(sample_sums);
         fprintf(stderr, "Done!\n");
     }
@@ -596,7 +598,7 @@ int eureject_main(int argc, char ** argv) {
     // write run stats
     write_summary(stderr,
         sum_paths_used,
-        get_i_array(summary_sample_sizes, 0),
+        sum_sample_size,
         retained_samples->paths_processed,
         retained_samples->num_processed,
         retained_samples->length);
