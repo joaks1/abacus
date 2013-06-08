@@ -501,8 +501,9 @@ int eureject_main(int argc, char ** argv) {
     s_array * sim_header;
     s_array * sim_header_comp;
     d_array * obs_stats;
-    int i, heads_match, sum_sample_size;
+    int i, heads_match;
     i_array * indices;
+    i_array * summary_sample_sizes;
     sample_sum_array * sample_sums;
     sample_array * retained_samples;
     s_array * sum_paths_used;
@@ -523,11 +524,13 @@ int eureject_main(int argc, char ** argv) {
     parse_observed_stats_file(conf->observed_path->a, line_buffer, obs_header,
             obs_stats);
 
+    summary_sample_sizes = init_i_array(obs_header->length);
+
     // parse means and std devs from summary  file
     if (conf->summary_provided != 0) {
         summary_header = init_s_array(obs_header->length);
         parse_summary_file(conf->summary_path->a, line_buffer, summary_header,
-                conf->means, conf->std_devs);
+                conf->means, conf->std_devs, summary_sample_sizes);
         heads_match = s_arrays_equal(obs_header, summary_header);
         if (heads_match == 0) {
             fprintf(stderr, "ERROR: Files %s and %s have different headers\n",
@@ -565,14 +568,16 @@ int eureject_main(int argc, char ** argv) {
     write_config(stderr, conf);
 
     // calc means and standard devs
-    sum_sample_size = 0;
     if (conf->summary_provided == 0) {
         fprintf(stderr, "\nCalculating means and standard deviations... ");
         sample_sums = init_sample_sum_array(obs_header->length);
         summarize_stat_samples(conf->sim_paths, line_buffer,
                 indices, sample_sums, conf->means, conf->std_devs,
                 conf->num_subsample, sim_header->length, sum_paths_used);
-        sum_sample_size = sample_sums->a[0]->n;
+        summary_sample_sizes->length = 0;
+        for (i = 0; i < sample_sums->length; i++){
+            append_i_array(summary_sample_sizes, sample_sums->a[i]->n);
+        }
         free_sample_sum_array(sample_sums);
         fprintf(stderr, "Done!\n");
     }
@@ -591,7 +596,7 @@ int eureject_main(int argc, char ** argv) {
     // write run stats
     write_summary(stderr,
         sum_paths_used,
-        sum_sample_size,
+        get_i_array(summary_sample_sizes, 0),
         retained_samples->paths_processed,
         retained_samples->num_processed,
         retained_samples->length);
@@ -609,6 +614,7 @@ int eureject_main(int argc, char ** argv) {
             write_s_array(summary_out_stream, obs_header, "\t");
             write_d_array(summary_out_stream, conf->means, "\t");
             write_d_array(summary_out_stream, conf->std_devs, "\t");
+            write_i_array(summary_out_stream, summary_sample_sizes, "\t");
             fclose(summary_out_stream);
         }
     }
@@ -634,6 +640,7 @@ int eureject_main(int argc, char ** argv) {
     free_d_array(obs_stats);
     free_s_array(sum_paths_used);
     free_config(conf);
+    free_i_array(summary_sample_sizes);
     return 0;
 }
 
