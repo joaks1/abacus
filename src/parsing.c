@@ -63,12 +63,17 @@ void parse_observed_stats_file(const char * path, c_array * line_buffer,
     }
 }
 
-void parse_summary_file(const char * path, c_array * line_buffer,
-        s_array * header, d_array * means, d_array * std_devs) {
+void parse_summary_file(const char * path,
+        c_array * line_buffer,
+        s_array * header,
+        d_array * means,
+        d_array * std_devs,
+        i_array * sample_sizes) {
     FILE * f;
     (*header).length = 0;
     (*means).length = 0;
     (*std_devs).length = 0;
+    (*sample_sizes).length = 0;
     if ((f = fopen(path, "r")) == NULL) {
         perror(path);
         exit(1);
@@ -92,7 +97,7 @@ void parse_summary_file(const char * path, c_array * line_buffer,
     }
     // parse std deviations
     if ((fgets((*line_buffer).a, (((*line_buffer).capacity) - 1), f)) == NULL) {
-        fprintf(stderr, "ERROR: found no std_devs in %s\n", path);
+        fprintf(stderr, "ERROR: found no std devs in %s\n", path);
         exit(1);
     }
     split_str_d((*line_buffer).a, std_devs, 0);
@@ -100,6 +105,18 @@ void parse_summary_file(const char * path, c_array * line_buffer,
     if ((*header).length != (*std_devs).length) {
         fprintf(stderr, "ERROR: found %d column headers, but %d std devs in "
                 "file %s\n", (*header).length, (*std_devs).length, path);
+        exit(1);
+    }
+    // parse sample sizes
+    if ((fgets((*line_buffer).a, (((*line_buffer).capacity) - 1), f)) == NULL) {
+        fprintf(stderr, "ERROR: found no sample sizes in %s\n", path);
+        exit(1);
+    }
+    split_str_i((*line_buffer).a, sample_sizes, 0);
+    fclose(f);
+    if ((*header).length != (*sample_sizes).length) {
+        fprintf(stderr, "ERROR: found %d column headers, but %d sample sizes "
+                "in file %s\n", (*header).length, (*sample_sizes).length, path);
         exit(1);
     }
 }

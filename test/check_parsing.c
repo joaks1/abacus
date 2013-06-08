@@ -22,6 +22,9 @@ START_TEST (test_parse_header) {
     append_s_array(expected_header, "stat.4");
     ret = s_arrays_equal(header, expected_header);
     ck_assert_msg((ret != 0), "parsed header is incorrect");
+    free_c_array(line_buffer);
+    free_s_array(header);
+    free_s_array(expected_header);
 }
 END_TEST
 
@@ -57,6 +60,11 @@ START_TEST (test_parse_observed_stats_file) {
     ck_assert_msg((ret != 0), "parsed header is incorrect");
     ret = d_arrays_equal(stats, expected_stats, e);
     ck_assert_msg((ret != 0), "parsed stats are incorrect");
+    free_c_array(line_buffer);
+    free_s_array(header);
+    free_s_array(expected_header);
+    free_d_array(stats);
+    free_d_array(expected_stats);
 }
 END_TEST
 
@@ -92,6 +100,11 @@ START_TEST (test_parse_observed_stats_file_extra_line) {
     ck_assert_msg((ret != 0), "parsed header is incorrect");
     ret = d_arrays_equal(stats, expected_stats, e);
     ck_assert_msg((ret != 0), "parsed stats are incorrect");
+    free_c_array(line_buffer);
+    free_s_array(header);
+    free_s_array(expected_header);
+    free_d_array(stats);
+    free_d_array(expected_stats);
 }
 END_TEST
 
@@ -106,6 +119,8 @@ START_TEST (test_parse_summary_file) {
     d_array * expected_means;
     d_array * std_devs;
     d_array * expected_std_devs;
+    i_array * sample_sizes;
+    i_array * expected_sample_sizes;
     line_buffer = init_c_array(1023);
     header = init_s_array(1);
     expected_header = init_s_array(1);
@@ -125,20 +140,40 @@ START_TEST (test_parse_summary_file) {
     append_d_array(expected_std_devs, 0.3);
     append_d_array(expected_std_devs, 0.3);
     append_d_array(expected_std_devs, 0.4);
+    sample_sizes = init_i_array(1);
+    expected_sample_sizes = init_i_array(1);
+    append_i_array(expected_sample_sizes, 10);
+    append_i_array(expected_sample_sizes, 10);
+    append_i_array(expected_sample_sizes, 10);
+    append_i_array(expected_sample_sizes, 10);
 
-    parse_summary_file(path, line_buffer, header, means, std_devs);
+    parse_summary_file(path, line_buffer, header, means, std_devs,
+            sample_sizes);
     ck_assert_msg((header->length == 4), "header length is %d, "
             "expecting %d", header->length, 4);
     ck_assert_msg((means->length == 4), "means length is %d, "
             "expecting %d", means->length, 4);
     ck_assert_msg((std_devs->length == 4), "std devs length is %d, "
             "expecting %d", std_devs->length, 4);
+    ck_assert_msg((sample_sizes->length == 4), "sample sizes length is %d, "
+            "expecting %d", sample_sizes->length, 4);
     ret = s_arrays_equal(header, expected_header);
     ck_assert_msg((ret != 0), "parsed header is incorrect");
     ret = d_arrays_equal(means, expected_means, e);
     ck_assert_msg((ret != 0), "parsed means are incorrect");
     ret = d_arrays_equal(std_devs, expected_std_devs, e);
     ck_assert_msg((ret != 0), "parsed std_devs are incorrect");
+    ret = i_arrays_equal(sample_sizes, expected_sample_sizes);
+    ck_assert_msg((ret != 0), "parsed sample_sizes are incorrect");
+    free_c_array(line_buffer);
+    free_s_array(header);
+    free_s_array(expected_header);
+    free_d_array(means);
+    free_d_array(expected_means);
+    free_d_array(std_devs);
+    free_d_array(expected_std_devs);
+    free_i_array(sample_sizes);
+    free_i_array(expected_sample_sizes);
 }
 END_TEST
 
