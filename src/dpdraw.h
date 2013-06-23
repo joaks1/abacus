@@ -29,6 +29,7 @@
 
 #include "array_utils.h"
 #include "partition_combinatorics.h"
+#include "partition_combinatorics_random.h"
 #include "abacus.h"
 
 #define DPDRAW_VERSION "0.1.0"

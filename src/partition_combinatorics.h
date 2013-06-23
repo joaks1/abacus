@@ -21,7 +21,6 @@
 #ifndef PARTITION_COMBINATORICS_H
 #define PARTITION_COMBINATORICS_H
 
-#include <gsl/gsl_rng.h>
 #include "array_utils.h"
 
 int cumulative_number_of_int_partitions_by_k(int n, i_array * dest);
