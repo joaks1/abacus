@@ -37,7 +37,7 @@
 typedef struct config_ {
     int num_elements;
     int reps;
-    int alpha;
+    double alpha;
     int seed;
 } config;
 

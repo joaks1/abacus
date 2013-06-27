@@ -75,6 +75,7 @@ void parse_args(config * conf, int argc, char ** argv) {
                 if (end_ptr == optarg) {
                     fprintf(stderr, "ERROR: %s is not a valid number for "
                             "alpha\n", optarg);
+                    exit(1);
                 }
                 break;
             case 's':
