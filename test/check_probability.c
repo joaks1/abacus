@@ -109,6 +109,53 @@ START_TEST (test_draw_gamma_or_uniform_neg_neg) {
 }
 END_TEST
 
+START_TEST (test_get_gamma_or_uniform_mean_pos_pos) {
+    double e, shape, scale, mn;
+    e = 0.0000001;
+    shape = 4.0;
+    scale = 5.0;
+    mn = get_gamma_or_uniform_mean(shape, scale);
+    ck_assert_msg(almost_equal(mn, (shape * scale)), "mean is %lf, expecting "
+            "%lf", mn, (shape * scale));
+}
+END_TEST
+
+START_TEST (test_get_gamma_or_uniform_mean_zero_pos) {
+    double e, shape, scale, mn, exp;
+    e = 0.0000001;
+    shape = 4.0;
+    scale = 0.0;
+    mn = get_gamma_or_uniform_mean(shape, scale);
+    exp = (shape + scale) / 2;
+    ck_assert_msg(almost_equal(mn, exp), "mean is %lf, expecting "
+            "%lf", mn, exp);
+}
+END_TEST
+
+START_TEST (test_get_gamma_or_uniform_mean_neg_pos) {
+    double e, shape, scale, mn, exp;
+    e = 0.0000001;
+    shape = 5.0;
+    scale = -4.0;
+    mn = get_gamma_or_uniform_mean(shape, scale);
+    exp = 4.5;
+    ck_assert_msg(almost_equal(mn, exp), "mean is %lf, expecting "
+            "%lf", mn, exp);
+}
+END_TEST
+
+START_TEST (test_get_gamma_or_uniform_mean_neg_neg) {
+    double e, shape, scale, mn, exp;
+    e = 0.0000001;
+    shape = -4.0;
+    scale = -5.0;
+    mn = get_gamma_or_uniform_mean(shape, scale);
+    exp = 4.5;
+    ck_assert_msg(almost_equal(mn, exp), "mean is %lf, expecting "
+            "%lf", mn, exp);
+}
+END_TEST
+    
 
 Suite * probability_suite(void) {
     Suite * s = suite_create("probability");
@@ -124,6 +171,18 @@ Suite * probability_suite(void) {
     tcase_add_test(tc_draw_gamma_or_uniform,
             test_draw_gamma_or_uniform_neg_neg);
     suite_add_tcase(s, tc_draw_gamma_or_uniform);
+
+    TCase * tc_get_gamma_or_uniform_mean = tcase_create(
+            "get_gamma_or_uniform_mean_test_case");
+    tcase_add_test(tc_get_gamma_or_uniform_mean,
+            test_get_gamma_or_uniform_mean_pos_pos);
+    tcase_add_test(tc_get_gamma_or_uniform_mean,
+            test_get_gamma_or_uniform_mean_zero_pos);
+    tcase_add_test(tc_get_gamma_or_uniform_mean,
+            test_get_gamma_or_uniform_mean_neg_pos);
+    tcase_add_test(tc_get_gamma_or_uniform_mean,
+            test_get_gamma_or_uniform_mean_neg_neg);
+    suite_add_tcase(s, tc_get_gamma_or_uniform_mean);
 
     return s;
 }

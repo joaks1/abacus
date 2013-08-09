@@ -29,5 +29,7 @@
 
 double draw_gamma_or_uniform(const gsl_rng * rng, double shape, double scale);
 
+double get_gamma_or_uniform_mean(double shape, double scale);
+
 #endif /* PROBABILITY_H */
 

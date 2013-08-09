@@ -41,3 +41,17 @@ double draw_gamma_or_uniform(const gsl_rng * rng, double shape, double scale) {
     return draw;
 }
 
+double get_gamma_or_uniform_mean(double shape, double scale) {
+    double mn;
+    if ((shape > 0.0) && (scale > 0.0)) {
+        mn = shape * scale;
+    }
+    else {
+        double tau_a, tau_b;
+        tau_a = fabs(shape);
+        tau_b = fabs(scale);
+        mn = ((tau_a + tau_b) / 2);
+    }
+    return mn;
+}
+
