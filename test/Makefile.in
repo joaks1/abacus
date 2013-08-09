@@ -57,8 +57,10 @@ check_PROGRAMS = check_array_utils$(EXEEXT) check_stats_utils$(EXEEXT) \
 	check_math_utils$(EXEEXT) check_parsing$(EXEEXT) \
 	check_partition_combinatorics$(EXEEXT) check_eureject$(EXEEXT) \
 	$(am__EXEEXT_1)
-@USE_GSL_TRUE@am__append_1 = check_partition_combinatorics_random
-@USE_GSL_TRUE@am__append_2 = check_partition_combinatorics_random
+@USE_GSL_TRUE@am__append_1 = check_partition_combinatorics_random \
+@USE_GSL_TRUE@	check_probability
+@USE_GSL_TRUE@am__append_2 = check_partition_combinatorics_random \
+@USE_GSL_TRUE@	check_probability
 subdir = test
 DIST_COMMON = $(dist_noinst_DATA) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -71,7 +73,8 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 @USE_GSL_TRUE@am__EXEEXT_1 =  \
-@USE_GSL_TRUE@	check_partition_combinatorics_random$(EXEEXT)
+@USE_GSL_TRUE@	check_partition_combinatorics_random$(EXEEXT) \
+@USE_GSL_TRUE@	check_probability$(EXEEXT)
 am_check_array_utils_OBJECTS =  \
 	check_array_utils-check_array_utils.$(OBJEXT) \
 	check_array_utils-test_utils.$(OBJEXT)
@@ -130,6 +133,16 @@ check_partition_combinatorics_random_DEPENDENCIES =
 check_partition_combinatorics_random_LINK = $(CCLD) \
 	$(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+am__check_probability_SOURCES_DIST = check_probability.c \
+	$(top_builddir)/src/array_utils.c test_rng.c test_rng.h
+@USE_GSL_TRUE@am_check_probability_OBJECTS =  \
+@USE_GSL_TRUE@	check_probability-check_probability.$(OBJEXT) \
+@USE_GSL_TRUE@	check_probability-array_utils.$(OBJEXT) \
+@USE_GSL_TRUE@	check_probability-test_rng.$(OBJEXT)
+check_probability_OBJECTS = $(am_check_probability_OBJECTS)
+check_probability_DEPENDENCIES =
+check_probability_LINK = $(CCLD) $(check_probability_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 am_check_stats_utils_OBJECTS =  \
 	check_stats_utils-check_stats_utils.$(OBJEXT) \
 	check_stats_utils-array_utils.$(OBJEXT) \
@@ -150,11 +163,12 @@ SOURCES = $(check_array_utils_SOURCES) $(check_eureject_SOURCES) \
 	$(check_math_utils_SOURCES) $(check_parsing_SOURCES) \
 	$(check_partition_combinatorics_SOURCES) \
 	$(check_partition_combinatorics_random_SOURCES) \
-	$(check_stats_utils_SOURCES)
+	$(check_probability_SOURCES) $(check_stats_utils_SOURCES)
 DIST_SOURCES = $(check_array_utils_SOURCES) $(check_eureject_SOURCES) \
 	$(check_math_utils_SOURCES) $(check_parsing_SOURCES) \
 	$(check_partition_combinatorics_SOURCES) \
 	$(am__check_partition_combinatorics_random_SOURCES_DIST) \
+	$(am__check_probability_SOURCES_DIST) \
 	$(check_stats_utils_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
@@ -320,6 +334,14 @@ check_partition_combinatorics_LDADD = @CHECK_LIBS@ @MATHLDADD@
 
 @USE_GSL_TRUE@check_partition_combinatorics_random_CFLAGS = @CHECK_CFLAGS@ @GSL_CFLAGS@
 @USE_GSL_TRUE@check_partition_combinatorics_random_LDADD = @CHECK_LIBS@ @GSL_LIBS@
+@USE_GSL_TRUE@check_probability_SOURCES = \
+@USE_GSL_TRUE@	check_probability.c \
+@USE_GSL_TRUE@	$(top_builddir)/src/array_utils.c \
+@USE_GSL_TRUE@	test_rng.c \
+@USE_GSL_TRUE@	test_rng.h
+
+@USE_GSL_TRUE@check_probability_CFLAGS = @CHECK_CFLAGS@ @GSL_CFLAGS@
+@USE_GSL_TRUE@check_probability_LDADD = @CHECK_LIBS@ @GSL_LIBS@
 check_eureject_SOURCES = \
 	check_eureject.c \
 	$(top_builddir)/src/array_utils.c \
@@ -387,6 +409,9 @@ check_partition_combinatorics$(EXEEXT): $(check_partition_combinatorics_OBJECTS)
 check_partition_combinatorics_random$(EXEEXT): $(check_partition_combinatorics_random_OBJECTS) $(check_partition_combinatorics_random_DEPENDENCIES) $(EXTRA_check_partition_combinatorics_random_DEPENDENCIES) 
 	@rm -f check_partition_combinatorics_random$(EXEEXT)
 	$(check_partition_combinatorics_random_LINK) $(check_partition_combinatorics_random_OBJECTS) $(check_partition_combinatorics_random_LDADD) $(LIBS)
+check_probability$(EXEEXT): $(check_probability_OBJECTS) $(check_probability_DEPENDENCIES) $(EXTRA_check_probability_DEPENDENCIES) 
+	@rm -f check_probability$(EXEEXT)
+	$(check_probability_LINK) $(check_probability_OBJECTS) $(check_probability_LDADD) $(LIBS)
 check_stats_utils$(EXEEXT): $(check_stats_utils_OBJECTS) $(check_stats_utils_DEPENDENCIES) $(EXTRA_check_stats_utils_DEPENDENCIES) 
 	@rm -f check_stats_utils$(EXEEXT)
 	$(check_stats_utils_LINK) $(check_stats_utils_OBJECTS) $(check_stats_utils_LDADD) $(LIBS)
@@ -420,6 +445,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_partition_combinatorics_random-check_partition_combinatorics_random.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_partition_combinatorics_random-partition_combinatorics.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_partition_combinatorics_random-test_rng.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_probability-array_utils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_probability-check_probability.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_probability-test_rng.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_stats_utils-array_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_stats_utils-check_stats_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_stats_utils-test_utils.Po@am__quote@
@@ -759,6 +787,48 @@ check_partition_combinatorics_random-test_rng.obj: test_rng.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='test_rng.c' object='check_partition_combinatorics_random-test_rng.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_partition_combinatorics_random_CFLAGS) $(CFLAGS) -c -o check_partition_combinatorics_random-test_rng.obj `if test -f 'test_rng.c'; then $(CYGPATH_W) 'test_rng.c'; else $(CYGPATH_W) '$(srcdir)/test_rng.c'; fi`
+
+check_probability-check_probability.o: check_probability.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_probability_CFLAGS) $(CFLAGS) -MT check_probability-check_probability.o -MD -MP -MF $(DEPDIR)/check_probability-check_probability.Tpo -c -o check_probability-check_probability.o `test -f 'check_probability.c' || echo '$(srcdir)/'`check_probability.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_probability-check_probability.Tpo $(DEPDIR)/check_probability-check_probability.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='check_probability.c' object='check_probability-check_probability.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_probability_CFLAGS) $(CFLAGS) -c -o check_probability-check_probability.o `test -f 'check_probability.c' || echo '$(srcdir)/'`check_probability.c
+
+check_probability-check_probability.obj: check_probability.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_probability_CFLAGS) $(CFLAGS) -MT check_probability-check_probability.obj -MD -MP -MF $(DEPDIR)/check_probability-check_probability.Tpo -c -o check_probability-check_probability.obj `if test -f 'check_probability.c'; then $(CYGPATH_W) 'check_probability.c'; else $(CYGPATH_W) '$(srcdir)/check_probability.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_probability-check_probability.Tpo $(DEPDIR)/check_probability-check_probability.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='check_probability.c' object='check_probability-check_probability.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_probability_CFLAGS) $(CFLAGS) -c -o check_probability-check_probability.obj `if test -f 'check_probability.c'; then $(CYGPATH_W) 'check_probability.c'; else $(CYGPATH_W) '$(srcdir)/check_probability.c'; fi`
+
+check_probability-array_utils.o: $(top_builddir)/src/array_utils.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_probability_CFLAGS) $(CFLAGS) -MT check_probability-array_utils.o -MD -MP -MF $(DEPDIR)/check_probability-array_utils.Tpo -c -o check_probability-array_utils.o `test -f '$(top_builddir)/src/array_utils.c' || echo '$(srcdir)/'`$(top_builddir)/src/array_utils.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_probability-array_utils.Tpo $(DEPDIR)/check_probability-array_utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(top_builddir)/src/array_utils.c' object='check_probability-array_utils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_probability_CFLAGS) $(CFLAGS) -c -o check_probability-array_utils.o `test -f '$(top_builddir)/src/array_utils.c' || echo '$(srcdir)/'`$(top_builddir)/src/array_utils.c
+
+check_probability-array_utils.obj: $(top_builddir)/src/array_utils.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_probability_CFLAGS) $(CFLAGS) -MT check_probability-array_utils.obj -MD -MP -MF $(DEPDIR)/check_probability-array_utils.Tpo -c -o check_probability-array_utils.obj `if test -f '$(top_builddir)/src/array_utils.c'; then $(CYGPATH_W) '$(top_builddir)/src/array_utils.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/array_utils.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_probability-array_utils.Tpo $(DEPDIR)/check_probability-array_utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(top_builddir)/src/array_utils.c' object='check_probability-array_utils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_probability_CFLAGS) $(CFLAGS) -c -o check_probability-array_utils.obj `if test -f '$(top_builddir)/src/array_utils.c'; then $(CYGPATH_W) '$(top_builddir)/src/array_utils.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/array_utils.c'; fi`
+
+check_probability-test_rng.o: test_rng.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_probability_CFLAGS) $(CFLAGS) -MT check_probability-test_rng.o -MD -MP -MF $(DEPDIR)/check_probability-test_rng.Tpo -c -o check_probability-test_rng.o `test -f 'test_rng.c' || echo '$(srcdir)/'`test_rng.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_probability-test_rng.Tpo $(DEPDIR)/check_probability-test_rng.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='test_rng.c' object='check_probability-test_rng.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_probability_CFLAGS) $(CFLAGS) -c -o check_probability-test_rng.o `test -f 'test_rng.c' || echo '$(srcdir)/'`test_rng.c
+
+check_probability-test_rng.obj: test_rng.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_probability_CFLAGS) $(CFLAGS) -MT check_probability-test_rng.obj -MD -MP -MF $(DEPDIR)/check_probability-test_rng.Tpo -c -o check_probability-test_rng.obj `if test -f 'test_rng.c'; then $(CYGPATH_W) 'test_rng.c'; else $(CYGPATH_W) '$(srcdir)/test_rng.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/check_probability-test_rng.Tpo $(DEPDIR)/check_probability-test_rng.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='test_rng.c' object='check_probability-test_rng.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_probability_CFLAGS) $(CFLAGS) -c -o check_probability-test_rng.obj `if test -f 'test_rng.c'; then $(CYGPATH_W) 'test_rng.c'; else $(CYGPATH_W) '$(srcdir)/test_rng.c'; fi`
 
 check_stats_utils-check_stats_utils.o: check_stats_utils.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(check_stats_utils_CFLAGS) $(CFLAGS) -MT check_stats_utils-check_stats_utils.o -MD -MP -MF $(DEPDIR)/check_stats_utils-check_stats_utils.Tpo -c -o check_stats_utils-check_stats_utils.o `test -f 'check_stats_utils.c' || echo '$(srcdir)/'`check_stats_utils.c

@@ -202,6 +202,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+EXTRA_DIST = probability.c probability.h
 @USE_GSL_TRUE@dpdraw_SOURCES = \
 @USE_GSL_TRUE@	dpdraw.c \
 @USE_GSL_TRUE@	dpdraw.h \

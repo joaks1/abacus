@@ -81,6 +81,18 @@ check_partition_combinatorics_random_CFLAGS = @CHECK_CFLAGS@ @GSL_CFLAGS@
 check_partition_combinatorics_random_LDADD =  @CHECK_LIBS@ @GSL_LIBS@
 endif
 
+if USE_GSL
+TESTS += check_probability
+check_PROGRAMS += check_probability
+check_probability_SOURCES = \
+	check_probability.c \
+	$(top_builddir)/src/array_utils.c \
+	test_rng.c \
+	test_rng.h
+check_probability_CFLAGS = @CHECK_CFLAGS@ @GSL_CFLAGS@
+check_probability_LDADD =  @CHECK_LIBS@ @GSL_LIBS@
+endif
+
 check_eureject_SOURCES = \
 	check_eureject.c \
 	$(top_builddir)/src/array_utils.c \

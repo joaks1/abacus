@@ -1,3 +1,5 @@
+EXTRA_DIST = probability.c probability.h
+
 bin_PROGRAMS = \
 	eureject \
 	intpart
