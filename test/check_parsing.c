@@ -221,6 +221,7 @@ START_TEST (test_strip) {
     printf("<%s>\n", b);
     ck_assert_msg((strncmp(b, exp, 16) == 0),
             "strip(<%s>) returned <%s>", a, b);
+    free(b);
 
     a = "testing 1 2 3        ";
     exp = "testing 1 2 3";
@@ -229,6 +230,7 @@ START_TEST (test_strip) {
     printf("<%s>\n", b);
     ck_assert_msg((strncmp(b, exp, 16) == 0),
             "strip(<%s>) returned <%s>", a, b);
+    free(b);
 
     a = "      testing 1 2 3";
     exp = "testing 1 2 3";
@@ -237,6 +239,7 @@ START_TEST (test_strip) {
     printf("<%s>\n", b);
     ck_assert_msg((strncmp(b, exp, 16) == 0),
             "strip(<%s>) returned <%s>", a, b);
+    free(b);
 
     a = "     testing 1 2 3       ";
     exp = "testing 1 2 3";
@@ -245,6 +248,7 @@ START_TEST (test_strip) {
     printf("<%s>\n", b);
     ck_assert_msg((strncmp(b, exp, 16) == 0),
             "strip(<%s>) returned <%s>", a, b);
+    free(b);
 
     a = "testing 1 2 3";
     exp = "testing 1 2 3";
@@ -253,6 +257,7 @@ START_TEST (test_strip) {
     printf("<%s>\n", b);
     ck_assert_msg((strncmp(b, exp, 16) == 0),
             "strip(<%s>) returned <%s>", a, b);
+    free(b);
 
     a = "test";
     exp = "test";
@@ -261,6 +266,7 @@ START_TEST (test_strip) {
     printf("<%s>\n", b);
     ck_assert_msg((strncmp(b, exp, 16) == 0),
             "strip(<%s>) returned <%s>", a, b);
+    free(b);
 
     a = "";
     exp = "";
@@ -269,6 +275,7 @@ START_TEST (test_strip) {
     printf("<%s>\n", b);
     ck_assert_msg((strncmp(b, exp, 16) == 0),
             "strip(<%s>) returned <%s>", a, b);
+    free(b);
 
     a = "       ";
     exp = "";
@@ -277,6 +284,7 @@ START_TEST (test_strip) {
     printf("<%s>\n", b);
     ck_assert_msg((strncmp(b, exp, 16) == 0),
             "strip(<%s>) returned <%s>", a, b);
+    free(b);
 
     a = "testing 1 2 3\n";
     exp = "testing 1 2 3";
@@ -285,6 +293,7 @@ START_TEST (test_strip) {
     printf("<%s>\n", b);
     ck_assert_msg((strncmp(b, exp, 16) == 0),
             "strip(<%s>) returned <%s>", a, b);
+    free(b);
 
     a = "  testing 1 2 3  \n";
     exp = "testing 1 2 3";
@@ -293,6 +302,7 @@ START_TEST (test_strip) {
     printf("<%s>\n", b);
     ck_assert_msg((strncmp(b, exp, 16) == 0),
             "strip(<%s>) returned <%s>", a, b);
+    free(b);
 
     a = "  testing 1 2 3  \n\n";
     exp = "testing 1 2 3";
@@ -301,6 +311,7 @@ START_TEST (test_strip) {
     printf("<%s>\n", b);
     ck_assert_msg((strncmp(b, exp, 16) == 0),
             "strip(<%s>) returned <%s>", a, b);
+    free(b);
 
     a = "  testing 1 2 3  \n  \n  ";
     exp = "testing 1 2 3";
@@ -309,6 +320,7 @@ START_TEST (test_strip) {
     printf("<%s>\n", b);
     ck_assert_msg((strncmp(b, exp, 16) == 0),
             "strip(<%s>) returned <%s>", a, b);
+    free(b);
 }
 END_TEST
 

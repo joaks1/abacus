@@ -135,8 +135,10 @@ char * strip(const char * str) {
     char *s;
     int len;
     len = strlen(str);
-    s = (typeof(*s) *) malloc(sizeof(s) * (len));
-
+    if ((s = (typeof(*s) *) malloc(sizeof(s) * (len))) == NULL) {
+        perror("out of memory");
+        exit(1);
+    }
     end = str + len - 1;
     while (isspace(*str)) {
         str++;
