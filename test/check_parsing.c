@@ -217,52 +217,98 @@ START_TEST (test_strip) {
     char * a = " testing 1 2 3 ";
     char * exp = "testing 1 2 3";
     char * b = strip(a);
-    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+    printf("<%s>\n", a);
+    printf("<%s>\n", b);
+    ck_assert_msg((strncmp(b, exp, 16) == 0),
+            "strip(<%s>) returned <%s>", a, b);
 
     a = "testing 1 2 3        ";
     exp = "testing 1 2 3";
     b = strip(a);
-    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+    printf("<%s>\n", a);
+    printf("<%s>\n", b);
+    ck_assert_msg((strncmp(b, exp, 16) == 0),
+            "strip(<%s>) returned <%s>", a, b);
 
     a = "      testing 1 2 3";
     exp = "testing 1 2 3";
     b = strip(a);
-    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+    printf("<%s>\n", a);
+    printf("<%s>\n", b);
+    ck_assert_msg((strncmp(b, exp, 16) == 0),
+            "strip(<%s>) returned <%s>", a, b);
 
     a = "     testing 1 2 3       ";
     exp = "testing 1 2 3";
     b = strip(a);
-    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+    printf("<%s>\n", a);
+    printf("<%s>\n", b);
+    ck_assert_msg((strncmp(b, exp, 16) == 0),
+            "strip(<%s>) returned <%s>", a, b);
 
     a = "testing 1 2 3";
     exp = "testing 1 2 3";
     b = strip(a);
-    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+    printf("<%s>\n", a);
+    printf("<%s>\n", b);
+    ck_assert_msg((strncmp(b, exp, 16) == 0),
+            "strip(<%s>) returned <%s>", a, b);
 
     a = "test";
     exp = "test";
     b = strip(a);
-    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+    printf("<%s>\n", a);
+    printf("<%s>\n", b);
+    ck_assert_msg((strncmp(b, exp, 16) == 0),
+            "strip(<%s>) returned <%s>", a, b);
 
     a = "";
     exp = "";
     b = strip(a);
-    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+    printf("<%s>\n", a);
+    printf("<%s>\n", b);
+    ck_assert_msg((strncmp(b, exp, 16) == 0),
+            "strip(<%s>) returned <%s>", a, b);
 
     a = "       ";
     exp = "";
     b = strip(a);
-    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+    printf("<%s>\n", a);
+    printf("<%s>\n", b);
+    ck_assert_msg((strncmp(b, exp, 16) == 0),
+            "strip(<%s>) returned <%s>", a, b);
 
     a = "testing 1 2 3\n";
     exp = "testing 1 2 3";
     b = strip(a);
-    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+    printf("<%s>\n", a);
+    printf("<%s>\n", b);
+    ck_assert_msg((strncmp(b, exp, 16) == 0),
+            "strip(<%s>) returned <%s>", a, b);
 
     a = "  testing 1 2 3  \n";
     exp = "testing 1 2 3";
     b = strip(a);
-    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+    printf("<%s>\n", a);
+    printf("<%s>\n", b);
+    ck_assert_msg((strncmp(b, exp, 16) == 0),
+            "strip(<%s>) returned <%s>", a, b);
+
+    a = "  testing 1 2 3  \n\n";
+    exp = "testing 1 2 3";
+    b = strip(a);
+    printf("<%s>\n", a);
+    printf("<%s>\n", b);
+    ck_assert_msg((strncmp(b, exp, 16) == 0),
+            "strip(<%s>) returned <%s>", a, b);
+
+    a = "  testing 1 2 3  \n  \n  ";
+    exp = "testing 1 2 3";
+    b = strip(a);
+    printf("<%s>\n", a);
+    printf("<%s>\n", b);
+    ck_assert_msg((strncmp(b, exp, 16) == 0),
+            "strip(<%s>) returned <%s>", a, b);
 }
 END_TEST
 

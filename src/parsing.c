@@ -136,9 +136,6 @@ char * strip(const char * str) {
     int len;
     len = strlen(str);
     s = (typeof(*s) *) malloc(sizeof(s) * (len));
-    if (str[len - 1] == '\n') {
-        len--;
-    }
 
     end = str + len - 1;
     while (isspace(*str)) {
@@ -148,12 +145,12 @@ char * strip(const char * str) {
         *s = 0;
         return s;
     }
-
-    while (end > str && isspace(*end)) {
+    
+    while ((end > str) && (isspace(*end))) {
         end--;
     }
     end++;
-    out_length = (end - str) < len - 1 ? (end - str) : len - 1;
+    out_length = (end - str) < len ? (end - str) : len;
     memcpy(s, str, out_length);
     s[out_length] = '\0';
     return s;
