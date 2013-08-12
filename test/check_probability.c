@@ -115,7 +115,7 @@ START_TEST (test_get_gamma_or_uniform_mean_pos_pos) {
     shape = 4.0;
     scale = 5.0;
     mn = get_gamma_or_uniform_mean(shape, scale);
-    ck_assert_msg(almost_equal(mn, (shape * scale)), "mean is %lf, expecting "
+    ck_assert_msg(almost_equal(mn, (shape * scale), e), "mean is %lf, expecting "
             "%lf", mn, (shape * scale));
 }
 END_TEST
@@ -127,7 +127,7 @@ START_TEST (test_get_gamma_or_uniform_mean_zero_pos) {
     scale = 0.0;
     mn = get_gamma_or_uniform_mean(shape, scale);
     exp = (shape + scale) / 2;
-    ck_assert_msg(almost_equal(mn, exp), "mean is %lf, expecting "
+    ck_assert_msg(almost_equal(mn, exp, e), "mean is %lf, expecting "
             "%lf", mn, exp);
 }
 END_TEST
@@ -139,7 +139,7 @@ START_TEST (test_get_gamma_or_uniform_mean_neg_pos) {
     scale = -4.0;
     mn = get_gamma_or_uniform_mean(shape, scale);
     exp = 4.5;
-    ck_assert_msg(almost_equal(mn, exp), "mean is %lf, expecting "
+    ck_assert_msg(almost_equal(mn, exp, e), "mean is %lf, expecting "
             "%lf", mn, exp);
 }
 END_TEST
@@ -151,7 +151,7 @@ START_TEST (test_get_gamma_or_uniform_mean_neg_neg) {
     scale = -5.0;
     mn = get_gamma_or_uniform_mean(shape, scale);
     exp = 4.5;
-    ck_assert_msg(almost_equal(mn, exp), "mean is %lf, expecting "
+    ck_assert_msg(almost_equal(mn, exp, e), "mean is %lf, expecting "
             "%lf", mn, exp);
 }
 END_TEST
