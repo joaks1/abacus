@@ -213,6 +213,59 @@ START_TEST (test_strcmp_i) {
 }
 END_TEST
 
+START_TEST (test_strip) {
+    char * a = " testing 1 2 3 ";
+    char * exp = "testing 1 2 3";
+    char * b = strip(a);
+    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+
+    a = "testing 1 2 3        ";
+    exp = "testing 1 2 3";
+    b = strip(a);
+    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+
+    a = "      testing 1 2 3";
+    exp = "testing 1 2 3";
+    b = strip(a);
+    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+
+    a = "     testing 1 2 3       ";
+    exp = "testing 1 2 3";
+    b = strip(a);
+    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+
+    a = "testing 1 2 3";
+    exp = "testing 1 2 3";
+    b = strip(a);
+    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+
+    a = "test";
+    exp = "test";
+    b = strip(a);
+    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+
+    a = "";
+    exp = "";
+    b = strip(a);
+    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+
+    a = "       ";
+    exp = "";
+    b = strip(a);
+    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+
+    a = "testing 1 2 3\n";
+    exp = "testing 1 2 3";
+    b = strip(a);
+    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+
+    a = "  testing 1 2 3  \n";
+    exp = "testing 1 2 3";
+    b = strip(a);
+    ck_assert_msg((*b == *exp), "strip(<%s>) returned <%s>", a, b);
+}
+END_TEST
+
 Suite * parsing_suite(void) {
     Suite * s = suite_create("parsing");
 
@@ -232,9 +285,13 @@ Suite * parsing_suite(void) {
     tcase_add_test(tc_parse_summary_file, test_parse_summary_file);
     suite_add_tcase(s, tc_parse_summary_file);
 
-    TCase * tc_strmp_i = tcase_create("strcmp_i_test_case");
-    tcase_add_test(tc_strmp_i, test_strcmp_i);
-    suite_add_tcase(s, tc_strmp_i);
+    TCase * tc_strcmp_i = tcase_create("strcmp_i_test_case");
+    tcase_add_test(tc_strcmp_i, test_strcmp_i);
+    suite_add_tcase(s, tc_strcmp_i);
+
+    TCase * tc_strip = tcase_create("strip_test_case");
+    tcase_add_test(tc_strip, test_strip);
+    suite_add_tcase(s, tc_strip);
 
     return s;
 }

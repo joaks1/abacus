@@ -37,6 +37,7 @@ void parse_summary_file(const char * path,
         d_array * std_devs,
         i_array * sample_sizes);
 int strcmp_i(const char * a, const char * b);
+char * strip(const char * s);
 
 #endif /* PARSING_H */
 
