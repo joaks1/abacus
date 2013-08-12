@@ -177,6 +177,42 @@ START_TEST (test_parse_summary_file) {
 }
 END_TEST
 
+START_TEST (test_strcmp_i) {
+    int r;
+    char * a;
+    char * b;
+    a = "test";
+    b = "test";
+    r = strcmp_i(a, b);
+    ck_assert_msg((r == 0), "strcmp_i(%s, %s) returned %d", a, b, r);
+
+    a = "TeSt";
+    b = "tEsT";
+    r = strcmp_i(a, b);
+    ck_assert_msg((r == 0), "strcmp_i(%s, %s) returned %d", a, b, r);
+
+    a = "testt";
+    b = "test";
+    r = strcmp_i(a, b);
+    ck_assert_msg((r != 0), "strcmp_i(%s, %s) returned %d", a, b, r);
+
+    a = "test";
+    b = "testt";
+    r = strcmp_i(a, b);
+    ck_assert_msg((r != 0), "strcmp_i(%s, %s) returned %d", a, b, r);
+
+    a = "ttest";
+    b = "test";
+    r = strcmp_i(a, b);
+    ck_assert_msg((r != 0), "strcmp_i(%s, %s) returned %d", a, b, r);
+
+    a = "test";
+    b = "ttest";
+    r = strcmp_i(a, b);
+    ck_assert_msg((r != 0), "strcmp_i(%s, %s) returned %d", a, b, r);
+}
+END_TEST
+
 Suite * parsing_suite(void) {
     Suite * s = suite_create("parsing");
 
@@ -195,6 +231,10 @@ Suite * parsing_suite(void) {
     TCase * tc_parse_summary_file = tcase_create("parse_summary_file");
     tcase_add_test(tc_parse_summary_file, test_parse_summary_file);
     suite_add_tcase(s, tc_parse_summary_file);
+
+    TCase * tc_strmp_i = tcase_create("strcmp_i_test_case");
+    tcase_add_test(tc_strmp_i, test_strcmp_i);
+    suite_add_tcase(s, tc_strmp_i);
 
     return s;
 }

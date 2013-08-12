@@ -120,3 +120,12 @@ void parse_summary_file(const char * path,
     }
 }
 
+int strcmp_i(const char * a, const char * b) {
+    for (;; a++, b++) {
+        int x = tolower(*a) - tolower(*b);
+        if (x != 0 || ! *a) {
+            return x;
+        }
+    }
+}
+
