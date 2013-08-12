@@ -132,34 +132,30 @@ int strcmp_i(const char * a, const char * b) {
 char * strip(const char * str) {
     const char *end;
     size_t out_length;
-    char * s, * tmp, * tmp_orig;
+    char *s;
     int len;
     len = strlen(str);
-    tmp = (typeof(*tmp) *) malloc(sizeof(tmp) * (len));
-    tmp_orig = tmp;
     s = (typeof(*s) *) malloc(sizeof(s) * (len));
-    strncpy(tmp, str, len);
-    if (tmp[len - 1] == '\n') {
-        tmp[len - 1] = '\0';
+    if (str[len - 1] == '\n') {
+        len--;
     }
 
-    end = tmp + len - 1;
-    while (isspace(*tmp)) {
-        tmp++;
+    end = str + len - 1;
+    while (isspace(*str)) {
+        str++;
     }
-    if (*tmp == 0) {
+    if (*str == 0) {
         *s = 0;
         return s;
     }
 
-    while (end > tmp && isspace(*end)) {
+    while (end > str && isspace(*end)) {
         end--;
     }
     end++;
-    out_length = (end - tmp) < len - 1 ? (end - tmp) : len - 1;
-    memcpy(s, tmp, out_length);
+    out_length = (end - str) < len - 1 ? (end - str) : len - 1;
+    memcpy(s, str, out_length);
     s[out_length] = '\0';
-    free(tmp_orig);
     return s;
 }
 
