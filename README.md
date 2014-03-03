@@ -13,16 +13,16 @@ Some functions require the GNU Scientific Library
 Acknowledgements
 ================
 
-This software greatly benefited from funding provided to Jamie Oaks from the
-National Science Foundation (DEB 1011423), University of Kansas (KU) Office of
-Graduate Studies, Society of Systematic Biologists, Sigma Xi Scientific
-Research Society, KU Ecology and Evolutionary Biology Department, and the KU
-Biodiversity Institute.
+This software greatly benefited from funding provided to [Jamie
+Oaks](http://www.phyletica.com) from the National Science Foundation (DEB
+1011423), University of Kansas (KU) Office of Graduate Studies, Society of
+Systematic Biologists, Sigma Xi Scientific Research Society, KU Ecology and
+Evolutionary Biology Department, and the KU Biodiversity Institute.
 
 License
 =======
 
-Copyright (C) 2013 Jamie Oaks
+Copyright (C) 2013 [Jamie Oaks](http://www.phyletica.com).
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
