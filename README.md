@@ -2,7 +2,8 @@ Overview
 ========
 
 ABACUS (Approximate BAyesian C UtilitieS) is a collection of C utilities for
-approximate Bayesian computation.
+approximate Bayesian computation. It is written by [Jamie
+Oaks](http://www.phyletica.com).
 
 Requirements
 ============
