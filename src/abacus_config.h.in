@@ -1,0 +1,4 @@
+// The configured options and settings for ABACUS
+
+#define ABACUS_VERSION "@PROJECT_VERSION@"
+
