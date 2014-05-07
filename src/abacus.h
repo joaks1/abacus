@@ -27,7 +27,6 @@
 
 #define ABACUS_NAME "ABACUS"
 #define ABACUS_DESCRIPTION "Approximate BAysian C UtilitieS"
-/* #define ABACUS_VERSION "0.1.0" */
 #define ABACUS_AUTHORS "Jamie Oaks"
 #define ABACUS_COPYRIGHT "Copyright (C) 2013 Jamie Oaks"
 #define ABACUS_LICENSE \

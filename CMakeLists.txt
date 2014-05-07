@@ -12,16 +12,6 @@ set(PROJECT_MINOR_VERSION 1)
 set(PROJECT_PATCH_VERSION 0)
 set(PROJECT_VERSION
     ${PROJECT_MAJOR_VERSION}.${PROJECT_MINOR_VERSION}.${PROJECT_PATCH_VERSION})
-set(PROJECT_NAME "ABACUS")
-set(PROJECT_DESCRIPTION "Approximate BAysian C UtilitieS")
-set(PROJECT_AUTHORS "Jamie Oaks")
-set(PROJECT_COPYRIGHT "Copyright (C) 2013 Jamie Oaks")
-set(PROJECT_LICENSE 
-    "ABACUS comes with ABSOLUTELY NO WARRANTY. ABACUS is free software:\n
-    you can redistribute and/or modify it under the terms of the GNU GPL\n
-    version 3 or later."
-    )
-
 
 # configure a header file to pass CMake settings to source code
 configure_file (
