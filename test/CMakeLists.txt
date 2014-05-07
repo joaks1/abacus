@@ -102,7 +102,10 @@ else (NOT CHECK_FOUND)
     add_test(check_eureject "${CMAKE_CURRENT_BINARY_DIR}/check_eureject")
     add_dependencies (check check_eureject)
 
+    find_package(GSL)
+
     if (GSL_FOUND)
+        include_directories ("${GSL_INCLUDE_DIRS}")
 
         set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GSL_DEFINITIONS}")
 
