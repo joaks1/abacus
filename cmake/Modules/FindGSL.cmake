@@ -2,6 +2,7 @@
 # Once done this will define
 #
 # GSL_FOUND - System has gsl
+# GSL_CBLAS_FOUND - System has gsl_cblas library
 # GSL_INCLUDE_DIRS - The gsl include directories
 # GSL_LIBRARIES - The libraries needed to use gsl
 # GSL_DEFINITIONS - Compiler switches required for using gsl
@@ -40,12 +41,7 @@ find_library (GSL_CBLAS_LIBRARY
     "${PC_GSL_LIBDIR}"
     "${PC_GSL_LIBRARY_DIRS}"
     )
-message(STATUS "GSL_CBLAS_LIBRARY: ${GSL_CBLAS_LIBRARY}")
 
-if (GSL_CBLAS_LIBRARY)
-    set (GSL_CBLAS_FOUND ON)
-endif (GSL_CBLAS_LIBRARY)
-       
 mark_as_advanced (GSL_INCLUDE_DIR GSL_LIBRARY GSL_CBLAS_LIBRARY)
 
 include (FindPackageHandleStandardArgs)
@@ -55,10 +51,19 @@ find_package_handle_standard_args (gsl
     GSL_INCLUDE_DIR
     )
 
+find_package_handle_standard_args (gsl_cblas
+    DEFAULT_MSG
+    GSL_CBLAS_LIBRARY
+    )
+
 if (GSL_FOUND)
-    set (GSL_LIBRARIES ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY})
+    set (GSL_LIBRARIES ${GSL_LIBRARY})
     set (GSL_INCLUDE_DIRS ${GSL_INCLUDE_DIR})
-endif ()
+endif (GSL_FOUND)
+
+if (GSL_CBLAS_FOUND)
+    set (GSL_LIBRARIES ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARY})
+endif (GSL_CBLAS_FOUND)
 
 message(STATUS "GSL_FOUND: ${GSL_FOUND}")
 message(STATUS "GSL_CBLAS_FOUND: ${GSL_CBLAS_FOUND}")
