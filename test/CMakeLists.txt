@@ -1,9 +1,10 @@
-#install (DIRECTORY data "${TEST_DIR}/data")
 find_package (Check)
 
 if (NOT CHECK_FOUND)
     message(STATUS "Check library not found; skipping unit tests...")
 else (NOT CHECK_FOUND)
+
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CHECK_DEFINITIONS}")
 
     enable_testing()
     include_directories ("${CHECK_INCLUDE_DIRS}")
@@ -18,7 +19,6 @@ else (NOT CHECK_FOUND)
         test_utils.c
         test_utils.h
         )
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CHECK_DEFINITIONS}")
     target_link_libraries(check_array_utils
         "${CHECK_LIBRARIES}"
         "${RT_LIBRARY}"
@@ -27,4 +27,117 @@ else (NOT CHECK_FOUND)
     add_test(check_array_utils "${CMAKE_CURRENT_BINARY_DIR}/check_array_utils")
     add_dependencies (check check_array_utils)
 
+    add_executable (check_stats_utils EXCLUDE_FROM_ALL
+        check_stats_utils.c
+        ${PROJECT_SOURCE_DIR}/src/array_utils.c
+        test_utils.c
+        test_utils.h
+        )
+    target_link_libraries(check_stats_utils
+        "${CHECK_LIBRARIES}"
+        "${RT_LIBRARY}"
+        "${MATH_LIBRARY}"
+        )
+    add_test(check_stats_utils "${CMAKE_CURRENT_BINARY_DIR}/check_stats_utils")
+    add_dependencies (check check_stats_utils)
+
+    add_executable (check_math_utils EXCLUDE_FROM_ALL
+        check_math_utils.c
+        ${PROJECT_SOURCE_DIR}/src/array_utils.c
+        test_utils.c
+        test_utils.h
+        )
+    target_link_libraries(check_math_utils
+        "${CHECK_LIBRARIES}"
+        "${RT_LIBRARY}"
+        "${MATH_LIBRARY}"
+        )
+    add_test(check_math_utils "${CMAKE_CURRENT_BINARY_DIR}/check_math_utils")
+    add_dependencies (check check_math_utils)
+
+    add_executable (check_parsing EXCLUDE_FROM_ALL
+        check_parsing.c
+        ${PROJECT_SOURCE_DIR}/src/array_utils.c
+        ${PROJECT_SOURCE_DIR}/src/stats_utils.c
+        test_utils.c
+        test_utils.h
+        )
+    target_link_libraries(check_parsing
+        "${CHECK_LIBRARIES}"
+        "${RT_LIBRARY}"
+        "${MATH_LIBRARY}"
+        )
+    add_test(check_parsing "${CMAKE_CURRENT_BINARY_DIR}/check_parsing")
+    add_dependencies (check check_parsing)
+
+    add_executable (check_partition_combinatorics EXCLUDE_FROM_ALL
+        check_partition_combinatorics.c
+        ${PROJECT_SOURCE_DIR}/src/array_utils.c
+        test_utils.c
+        test_utils.h
+        )
+    target_link_libraries(check_partition_combinatorics
+        "${CHECK_LIBRARIES}"
+        "${RT_LIBRARY}"
+        "${MATH_LIBRARY}"
+        )
+    add_test(check_partition_combinatorics "${CMAKE_CURRENT_BINARY_DIR}/check_partition_combinatorics")
+    add_dependencies (check check_partition_combinatorics)
+
+    add_executable (check_eureject EXCLUDE_FROM_ALL
+        check_eureject.c
+        ${PROJECT_SOURCE_DIR}/src/array_utils.c
+        ${PROJECT_SOURCE_DIR}/src/stats_utils.c
+        ${PROJECT_SOURCE_DIR}/src/math_utils.c
+        ${PROJECT_SOURCE_DIR}/src/parsing.c
+        ${PROJECT_SOURCE_DIR}/src/abacus.c
+        test_utils.c
+        test_utils.h
+        )
+    target_link_libraries(check_eureject
+        "${CHECK_LIBRARIES}"
+        "${RT_LIBRARY}"
+        "${MATH_LIBRARY}"
+        )
+    add_test(check_eureject "${CMAKE_CURRENT_BINARY_DIR}/check_eureject")
+    add_dependencies (check check_eureject)
+
+    if (GSL_FOUND)
+
+        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GSL_DEFINITIONS}")
+
+        add_executable (check_partition_combinatorics_random EXCLUDE_FROM_ALL
+            check_partition_combinatorics_random.c
+            ${PROJECT_SOURCE_DIR}/src/array_utils.c
+            ${PROJECT_SOURCE_DIR}/src/partition_combinatorics.c
+	        test_rng.c
+	        test_rng.h
+            )
+        target_link_libraries(check_partition_combinatorics_random
+            "${CHECK_LIBRARIES}"
+            "${GSL_LIBRARIES}"
+            "${RT_LIBRARY}"
+            "${MATH_LIBRARY}"
+            )
+        add_test(check_partition_combinatorics_random "${CMAKE_CURRENT_BINARY_DIR}/check_partition_combinatorics_random")
+        add_dependencies (check check_partition_combinatorics_random)
+
+        add_executable (check_probability EXCLUDE_FROM_ALL
+            check_probability.c
+            ${PROJECT_SOURCE_DIR}/src/array_utils.c
+	        test_rng.c
+	        test_rng.h
+            )
+        target_link_libraries(check_probability
+            "${CHECK_LIBRARIES}"
+            "${GSL_LIBRARIES}"
+            "${RT_LIBRARY}"
+            "${MATH_LIBRARY}"
+            )
+        add_test(check_probability "${CMAKE_CURRENT_BINARY_DIR}/check_probability")
+        add_dependencies (check check_probability)
+
+    endif (GSL_FOUND)
+
 endif (NOT CHECK_FOUND)
+
