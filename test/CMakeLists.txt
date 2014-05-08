@@ -12,7 +12,6 @@ else (NOT CHECK_FOUND)
 
     find_library (MATH_LIBRARY m)
     find_library (RT_LIBRARY rt)
-    find_package (Threads)
     
     add_executable (check_array_utils EXCLUDE_FROM_ALL
         check_array_utils.c
