@@ -12,6 +12,15 @@ else (NOT CHECK_FOUND)
 
     find_library (MATH_LIBRARY m)
     find_library (RT_LIBRARY rt)
+
+    list (APPEND C_LIBS "${CHECK_LIBRARIES}")
+    if (NOT RT_LIBRARY STREQUAL "RT_LIBRARY-NOTFOUND")
+        list (APPEND C_LIBS "${RT_LIBRARY}")
+    endif ()
+    if (NOT MATH_LIBRARY STREQUAL "MATH_LIBRARY-NOTFOUND")
+        list (APPEND C_LIBS "${MATH_LIBRARY}")
+    endif ()
+    message(STATUS "Check libraries: ${C_LIBS}")
     
     add_executable (check_array_utils EXCLUDE_FROM_ALL
         check_array_utils.c
@@ -19,9 +28,7 @@ else (NOT CHECK_FOUND)
         test_utils.h
         )
     target_link_libraries(check_array_utils
-        "${CHECK_LIBRARIES}"
-        "${RT_LIBRARY}"
-        "${MATH_LIBRARY}"
+        "${C_LIBS}"
         )
     add_test(check_array_utils "${CMAKE_CURRENT_BINARY_DIR}/check_array_utils")
     add_dependencies (check check_array_utils)
@@ -33,9 +40,7 @@ else (NOT CHECK_FOUND)
         test_utils.h
         )
     target_link_libraries(check_stats_utils
-        "${CHECK_LIBRARIES}"
-        "${RT_LIBRARY}"
-        "${MATH_LIBRARY}"
+        "${C_LIBS}"
         )
     add_test(check_stats_utils "${CMAKE_CURRENT_BINARY_DIR}/check_stats_utils")
     add_dependencies (check check_stats_utils)
@@ -47,9 +52,7 @@ else (NOT CHECK_FOUND)
         test_utils.h
         )
     target_link_libraries(check_math_utils
-        "${CHECK_LIBRARIES}"
-        "${RT_LIBRARY}"
-        "${MATH_LIBRARY}"
+        "${C_LIBS}"
         )
     add_test(check_math_utils "${CMAKE_CURRENT_BINARY_DIR}/check_math_utils")
     add_dependencies (check check_math_utils)
@@ -62,9 +65,7 @@ else (NOT CHECK_FOUND)
         test_utils.h
         )
     target_link_libraries(check_parsing
-        "${CHECK_LIBRARIES}"
-        "${RT_LIBRARY}"
-        "${MATH_LIBRARY}"
+        "${C_LIBS}"
         )
     add_test(check_parsing "${CMAKE_CURRENT_BINARY_DIR}/check_parsing")
     add_dependencies (check check_parsing)
@@ -76,9 +77,7 @@ else (NOT CHECK_FOUND)
         test_utils.h
         )
     target_link_libraries(check_partition_combinatorics
-        "${CHECK_LIBRARIES}"
-        "${RT_LIBRARY}"
-        "${MATH_LIBRARY}"
+        "${C_LIBS}"
         )
     add_test(check_partition_combinatorics "${CMAKE_CURRENT_BINARY_DIR}/check_partition_combinatorics")
     add_dependencies (check check_partition_combinatorics)
@@ -94,9 +93,7 @@ else (NOT CHECK_FOUND)
         test_utils.h
         )
     target_link_libraries(check_eureject
-        "${CHECK_LIBRARIES}"
-        "${RT_LIBRARY}"
-        "${MATH_LIBRARY}"
+        "${C_LIBS}"
         )
     add_test(check_eureject "${CMAKE_CURRENT_BINARY_DIR}/check_eureject")
     add_dependencies (check check_eureject)
@@ -116,10 +113,8 @@ else (NOT CHECK_FOUND)
 	        test_rng.h
             )
         target_link_libraries(check_partition_combinatorics_random
-            "${CHECK_LIBRARIES}"
             "${GSL_LIBRARIES}"
-            "${RT_LIBRARY}"
-            "${MATH_LIBRARY}"
+            "${C_LIBS}"
             )
         add_test(check_partition_combinatorics_random "${CMAKE_CURRENT_BINARY_DIR}/check_partition_combinatorics_random")
         add_dependencies (check check_partition_combinatorics_random)
@@ -131,10 +126,8 @@ else (NOT CHECK_FOUND)
 	        test_rng.h
             )
         target_link_libraries(check_probability
-            "${CHECK_LIBRARIES}"
             "${GSL_LIBRARIES}"
-            "${RT_LIBRARY}"
-            "${MATH_LIBRARY}"
+            "${C_LIBS}"
             )
         add_test(check_probability "${CMAKE_CURRENT_BINARY_DIR}/check_probability")
         add_dependencies (check check_probability)
