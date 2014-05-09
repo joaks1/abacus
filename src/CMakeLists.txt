@@ -59,4 +59,8 @@ if (GSL_FOUND)
         "${GSL_LIBRARIES}"
         "${MATH_LIBRARY}"
         )
+    install(TARGETS dpdraw DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
 endif (GSL_FOUND)
+
+install(TARGETS eureject intpart DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
+
