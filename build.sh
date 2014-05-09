@@ -2,10 +2,12 @@
 
 usage () {
     echo ""
-    echo "usage: $0 [-h|--help] [-s|--static] [-p|--prefix <INSTALL-PREFIX>]"
+    echo "usage: $0 [-h|--help] [-p|--prefix <INSTALL-PREFIX>] [-s|--static] [-i|--install] [-t|--test]"
     echo "  -h|--help       show help message and exit."
     echo "  -s|--static     build statically linked binaries."
     echo "  -p|--prefix     install path. Default: '/usr/local'."
+    echo "  -t|--test       run the test suite after building."
+    echo "  -i|--install    install the executables."
     echo ""
 }
 
