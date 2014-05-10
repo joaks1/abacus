@@ -59,7 +59,7 @@ then
 fi
 if [ -n "$static" ]
 then
-    args="${args} -DCMAKE_C_FLAGS=-static"
+    args="${args} -DABACUS_STATIC_LINKING=ON"
 fi
 if [ -n "$extra_args" ]
 then

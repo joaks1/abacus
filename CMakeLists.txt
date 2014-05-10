@@ -13,6 +13,8 @@ set(PROJECT_PATCH_VERSION 0)
 set(PROJECT_VERSION
     ${PROJECT_MAJOR_VERSION}.${PROJECT_MINOR_VERSION}.${PROJECT_PATCH_VERSION})
 
+set (ABACUS_STATIC_LINKING OFF CACHE BOOL "build with static links")
+
 # configure a header file to pass CMake settings to source code
 configure_file (
     "${PROJECT_SOURCE_DIR}/src/abacus_config.h.in"

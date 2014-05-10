@@ -1,8 +1,13 @@
-#EXTRA_DIST = probability.c probability.h
 find_package (GSL)
 
 include_directories("${PROJECT_SOURCE_DIR}/test" "${PROJECT_SOURCE_DIR}/src")
 find_library (MATH_LIBRARY m)
+
+if (ABACUS_STATIC_LINKING)
+    set (CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+    set (CMAKE_EXE_LINKER_FLAGS "-static")
+    set (CMAKE_SKIP_RPATH YES)
+endif (ABACUS_STATIC_LINKING)
 
 add_executable (eureject
 	eureject.c
@@ -60,7 +65,18 @@ if (GSL_FOUND)
         "${MATH_LIBRARY}"
         )
     install(TARGETS dpdraw DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
+    if (ABACUS_STATIC_LINKING)
+        set_target_properties(dpdraw PROPERTIES
+            LINK_SEARCH_END_STATIC ON
+            )
+    endif (ABACUS_STATIC_LINKING)
 endif (GSL_FOUND)
+
+if (ABACUS_STATIC_LINKING)
+    set_target_properties(eureject intpart PROPERTIES
+        LINK_SEARCH_END_STATIC ON
+        )
+endif (ABACUS_STATIC_LINKING)
 
 install(TARGETS eureject intpart DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
 
