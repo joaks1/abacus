@@ -34,15 +34,26 @@ find_library (GSL_LIBRARY
     "${PC_GSL_LIBDIR}"
     "${PC_GSL_LIBRARY_DIRS}"
     )
-
+find_library (GSL_STATIC_LIBRARY
+    NAMES "libgsl.a"
+    HINTS
+    "${PC_GSL_LIBDIR}"
+    "${PC_GSL_LIBRARY_DIRS}"
+    )
 find_library (GSL_CBLAS_LIBRARY
     NAMES "gslcblas"
     HINTS
     "${PC_GSL_LIBDIR}"
     "${PC_GSL_LIBRARY_DIRS}"
     )
+find_library (GSL_CBLAS_STATIC_LIBRARY
+    NAMES "libgslcblas.a"
+    HINTS
+    "${PC_GSL_LIBDIR}"
+    "${PC_GSL_LIBRARY_DIRS}"
+    )
 
-mark_as_advanced (GSL_INCLUDE_DIR GSL_LIBRARY GSL_CBLAS_LIBRARY)
+mark_as_advanced (GSL_INCLUDE_DIR GSL_LIBRARY GSL_CBLAS_LIBRARY GSL_STATIC_LIBRARY GSL_CBLAS_STATIC_LIBRARY)
 
 include (FindPackageHandleStandardArgs)
 find_package_handle_standard_args (gsl
@@ -58,16 +69,19 @@ find_package_handle_standard_args (gsl_cblas
 
 if (GSL_FOUND)
     set (GSL_LIBRARIES ${GSL_LIBRARY})
+    set (GSL_STATIC_LIBRARIES ${GSL_STATIC_LIBRARY})
     set (GSL_INCLUDE_DIRS ${GSL_INCLUDE_DIR})
 endif (GSL_FOUND)
 
 if (GSL_CBLAS_FOUND)
     set (GSL_LIBRARIES ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARY})
+    set (GSL_STATIC_LIBRARIES ${GSL_STATIC_LIBRARIES} ${GSL_CBLAS_STATIC_LIBRARY})
 endif (GSL_CBLAS_FOUND)
 
 message(STATUS "GSL_FOUND: ${GSL_FOUND}")
 message(STATUS "GSL_CBLAS_FOUND: ${GSL_CBLAS_FOUND}")
 message(STATUS "GSL_LIBRARIES: ${GSL_LIBRARIES}")
+message(STATUS "GSL_STATIC_LIBRARIES: ${GSL_STATIC_LIBRARIES}")
 message(STATUS "GSL_INCLUDE_DIRS: ${GSL_INCLUDE_DIRS}")
 message(STATUS "GSL_DEFINITIONS: ${GSL_DEFINITIONS}")
 
