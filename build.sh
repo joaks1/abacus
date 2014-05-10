@@ -59,7 +59,7 @@ then
 fi
 if [ -n "$static" ]
 then
-    args="${args} -DABACUS_STATIC_LINKING=ON"
+    args="${args} -DSTATIC_LINKING=ON"
 fi
 if [ -n "$extra_args" ]
 then

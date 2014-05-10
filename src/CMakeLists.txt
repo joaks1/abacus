@@ -8,7 +8,7 @@ if ("${MATH_STATIC_LIBRARY}" STREQUAL "MATH_STATIC_LIBRARY-NOTFOUND")
     set (MATH_STATIC_LIBRARY "${MATH_LIBRARY}")
 endif ("${MATH_STATIC_LIBRARY}" STREQUAL "MATH_STATIC_LIBRARY-NOTFOUND")
 
-if (ABACUS_STATIC_LINKING)
+if (STATIC_LINKING)
     set (CMAKE_FIND_LIBRARY_SUFFIXES ".a" ${CMAKE_FIND_LIBRARY_SUFFIXES})
     if (APPLE)
         set (CMAKE_EXE_LINKER_FLAGS "-Bstatic")
@@ -18,10 +18,10 @@ if (ABACUS_STATIC_LINKING)
     set (CMAKE_SKIP_RPATH YES)
     set (M_LIB ${MATH_STATIC_LIBRARY})
     set (G_LIBS ${GSL_STATIC_LIBRARIES})
-else (ABACUS_STATIC_LINKING)
+else (STATIC_LINKING)
     set (M_LIB ${MATH_LIBRARY})
     set (G_LIBS ${GSL_LIBRARIES})
-endif (ABACUS_STATIC_LINKING)
+endif (STATIC_LINKING)
 
 add_executable (eureject
 	eureject.c
@@ -79,18 +79,18 @@ if (GSL_FOUND)
         "${M_LIB}"
         )
     install(TARGETS dpdraw DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
-    if (ABACUS_STATIC_LINKING)
+    if (STATIC_LINKING)
         set_target_properties(dpdraw PROPERTIES
             LINK_SEARCH_END_STATIC ON
             )
-    endif (ABACUS_STATIC_LINKING)
+    endif (STATIC_LINKING)
 endif (GSL_FOUND)
 
-if (ABACUS_STATIC_LINKING)
+if (STATIC_LINKING)
     set_target_properties(eureject intpart PROPERTIES
         LINK_SEARCH_END_STATIC ON
         )
-endif (ABACUS_STATIC_LINKING)
+endif (STATIC_LINKING)
 
 install(TARGETS eureject intpart DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
 
