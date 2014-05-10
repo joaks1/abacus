@@ -1,12 +1,26 @@
 find_package (GSL)
 
 include_directories("${PROJECT_SOURCE_DIR}/test" "${PROJECT_SOURCE_DIR}/src")
+
 find_library (MATH_LIBRARY m)
+find_library (MATH_STATIC_LIBRARY libm.a)
+if ("${MATH_STATIC_LIBRARY}" STREQUAL "MATH_STATIC_LIBRARY-NOTFOUND")
+    set (MATH_STATIC_LIBRARY "${MATH_LIBRARY}")
+endif ("${MATH_STATIC_LIBRARY}" STREQUAL "MATH_STATIC_LIBRARY-NOTFOUND")
 
 if (ABACUS_STATIC_LINKING)
-    set (CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-    set (CMAKE_EXE_LINKER_FLAGS "-static")
+    set (CMAKE_FIND_LIBRARY_SUFFIXES ".a" ${CMAKE_FIND_LIBRARY_SUFFIXES})
+    if (APPLE)
+        set (CMAKE_EXE_LINKER_FLAGS "-Bstatic")
+    else (APPLE)
+        set (CMAKE_EXE_LINKER_FLAGS "-static")
+    endif (APPLE)
     set (CMAKE_SKIP_RPATH YES)
+    set (M_LIB ${MATH_STATIC_LIBRARY})
+    set (G_LIBS ${GSL_STATIC_LIBRARIES})
+else (ABACUS_STATIC_LINKING)
+    set (M_LIB ${MATH_LIBRARY})
+    set (G_LIBS ${GSL_LIBRARIES})
 endif (ABACUS_STATIC_LINKING)
 
 add_executable (eureject
@@ -25,7 +39,7 @@ add_executable (eureject
 	abacus.h
     )
 target_link_libraries(eureject
-    "${MATH_LIBRARY}"
+    "${M_LIB}"
     )
 
 add_executable(intpart
@@ -40,7 +54,7 @@ add_executable(intpart
 	abacus.h
     )
 target_link_libraries(intpart
-    "${MATH_LIBRARY}"
+    "${M_LIB}"
     )
 
 if (GSL_FOUND)
@@ -61,8 +75,8 @@ if (GSL_FOUND)
 	    abacus.h
         )
     target_link_libraries(dpdraw
-        "${GSL_LIBRARIES}"
-        "${MATH_LIBRARY}"
+        "${G_LIBS}"
+        "${M_LIB}"
         )
     install(TARGETS dpdraw DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
     if (ABACUS_STATIC_LINKING)
