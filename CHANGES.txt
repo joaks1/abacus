@@ -1,0 +1,16 @@
+Version 0.1.1
+=============
+
+Changes
+-------
+
+-   Minor update to give eureject a larger line buffer for reading files.
+
+
+Version 0.1.0
+=============
+
+Changes
+-------
+
+-   Initial release.

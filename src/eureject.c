@@ -509,7 +509,7 @@ int eureject_main(int argc, char ** argv) {
     s_array * sum_paths_used;
     config * conf;
     FILE * summary_out_stream;
-    line_buffer = init_c_array(pow(2, 14));
+    line_buffer = init_c_array(pow(2, 20));
     obs_header = init_s_array(1);
     obs_stats = init_d_array(1);
     sum_paths_used = init_s_array(1);
