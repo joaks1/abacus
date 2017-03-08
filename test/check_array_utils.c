@@ -971,9 +971,6 @@ START_TEST (test_split_str_i) {
     ret = split_str_i(string, v, 0);
     ck_assert_int_eq(ret, 0);
     printf("Length: %d\n", v->length);
-    printf("Element 1: %lf\n", get_i_array(v, 0));
-    printf("Element 2: %lf\n", get_i_array(v, 1));
-    printf("Element 3: %lf\n", get_i_array(v, 2));
     ck_assert_msg((v->length == 3),
             "Unexpected length %d from split_str_d; expected 3",
             v->length);
