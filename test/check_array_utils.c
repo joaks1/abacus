@@ -938,7 +938,13 @@ START_TEST (test_split_str_d) {
     append_d_array(exp, 200.0);
     ret = split_str_d(string, v, 0);
     ck_assert_int_eq(ret, 0);
-    ck_assert_int_eq(v->length, 3);
+    printf("Length: %d\n", v->length);
+    printf("Element 1: %lf\n", get_d_array(v, 0));
+    printf("Element 2: %lf\n", get_d_array(v, 1));
+    printf("Element 3: %lf\n", get_d_array(v, 2));
+    ck_assert_msg((v->length == 3),
+            "Unexpected length %d from split_str_d; expected 3",
+            v->length);
     ck_assert_msg((d_arrays_equal(v, exp, 0.000001) != 0),
             "unexpected result of `split_str_d`");
     ret = split_str_d(string, v, 3);
@@ -964,7 +970,13 @@ START_TEST (test_split_str_i) {
     append_i_array(exp, -432);
     ret = split_str_i(string, v, 0);
     ck_assert_int_eq(ret, 0);
-    ck_assert_int_eq(v->length, 3);
+    printf("Length: %d\n", v->length);
+    printf("Element 1: %lf\n", get_i_array(v, 0));
+    printf("Element 2: %lf\n", get_i_array(v, 1));
+    printf("Element 3: %lf\n", get_i_array(v, 2));
+    ck_assert_msg((v->length == 3),
+            "Unexpected length %d from split_str_d; expected 3",
+            v->length);
     ck_assert_msg((i_arrays_equal(v, exp) != 0),
             "unexpected result of `split_str_i`");
     ret = split_str_i(string, v, 3);

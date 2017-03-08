@@ -12,6 +12,10 @@ else (NOT CHECK_FOUND)
 
     find_library (MATH_LIBRARY m)
     find_library (RT_LIBRARY rt)
+    find_library (SUBUNIT_LIBRARY NAMES subunit)
+    find_path (SUBUNIT_INCLUDE_DIR subunit/child.h)
+
+    include_directories ("${SUBUNIT_INCLUDE_DIR}")
 
     list (APPEND C_LIBS "${CHECK_LIBRARIES}")
     if (NOT RT_LIBRARY STREQUAL "RT_LIBRARY-NOTFOUND")
@@ -20,6 +24,7 @@ else (NOT CHECK_FOUND)
     if (NOT MATH_LIBRARY STREQUAL "MATH_LIBRARY-NOTFOUND")
         list (APPEND C_LIBS "${MATH_LIBRARY}")
     endif ()
+    list (APPEND C_LIBS "${SUBUNIT_LIBRARY}")
     message(STATUS "Check libraries: ${C_LIBS}")
     
     add_executable (check_array_utils EXCLUDE_FROM_ALL
