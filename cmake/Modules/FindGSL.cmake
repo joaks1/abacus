@@ -25,30 +25,36 @@ endif (PKG_CONFIG_FOUND)
 find_path (GSL_INCLUDE_DIR
     "gsl/gsl_randist.h"
     HINTS
+    $ENV{GSL_PREFIX}
+    $ENV{GSL_PREFIX}/include
     "${PC_GSL_INCUDEDIR}"
     "${PC_GSL_INCLUDE_DIRS}"
     )
 find_library (GSL_LIBRARY
     NAMES "gsl"
     HINTS
+    $ENV{GSL_PREFIX}/libs
     "${PC_GSL_LIBDIR}"
     "${PC_GSL_LIBRARY_DIRS}"
     )
 find_library (GSL_STATIC_LIBRARY
     NAMES "libgsl.a"
     HINTS
+    $ENV{GSL_PREFIX}/libs
     "${PC_GSL_LIBDIR}"
     "${PC_GSL_LIBRARY_DIRS}"
     )
 find_library (GSL_CBLAS_LIBRARY
     NAMES "gslcblas"
     HINTS
+    $ENV{GSL_PREFIX}/libs
     "${PC_GSL_LIBDIR}"
     "${PC_GSL_LIBRARY_DIRS}"
     )
 find_library (GSL_CBLAS_STATIC_LIBRARY
     NAMES "libgslcblas.a"
     HINTS
+    $ENV{GSL_PREFIX}/libs
     "${PC_GSL_LIBDIR}"
     "${PC_GSL_LIBRARY_DIRS}"
     )
